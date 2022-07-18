@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+  <nav class="navbar navbar-light bg-primary">
+    <div class="av navbar-nav navbar-right">
+      <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+      <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                class="navbar-brand"/></strong></form>
+      <input type="button" value="Powrót" name="backButton"
+             onClick="javascript:window.location.href='/index'" class="navbar-brand">
+    </div>
+  </nav>
+</header>
+
+<div class="container">
+  <h3>Lista lokalizacji</h3>
+  </hr>
+  <a th:href="@{/addLocationForm}" class="btn btn-primary">Dodaj lokalizacje</a>
+  <table class="table table-bordered table striped">
+    <thead>
+    <tr style="text-align: center; ">
+      <th>Nazwa</th>
+      <th>Ulica</th>
+      <th>Numer</th>
+      <th>Miasto</th>
+      <th>Kod pocztowy</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="key : ${locationList}" style="text-align: center; ">
+
+      <td th:text="${key.nameOfLocation}"></td>
+      <td th:text="${key.street}"></td>
+      <td th:text="${key.number}"></td>
+      <td th:text="${key.city}"></td>
+      <td th:text="${key.postalCode}"></td>
+      <td><a th:href="@{/deleteLocation/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
+      <td>
+        <a th:href="@{/showUpdateLocationForm(locationId=${key.id})}" class="btn btn-info">Update</a>
+      </td>
+    </tr>
+    </tbody>
+
+  </table>
+</div>
+
+<!--<form th:action="@{/addLocation}" th:object="${location}" method="post">
+  <td>Lokalizacja: </td>
+  <input id="location" th:field="*{nameOfLocation}" type="text">
+
+  <input type="button" value="Powrót" name="backButton"
+         onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+  <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>!-->
+
+</body>
+</html>

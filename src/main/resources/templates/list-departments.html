@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<form th:action="@{/list-departments}" th:object="${temp}" method="post">
+    <p class="error" th:text="${commonError}"></p>
+    <div class="container">
+
+        <h3>Lista działów</h3>
+
+        <hr/>
+        <a th:href="@{/addDepartmentForm}" class="btn btn-primary">Dodaj dział</a>
+        <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+        <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+        <a class="navbar-brand" th:text="${allert}"></a>
+        <br/><br/>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr style="text-align: center; ">
+                <th>Nazwa</th>
+                <th>Lokalizacja</th>
+                <th>MPK</th>
+            </thead>
+            <tbody>
+            <tr th:each="key : ${departmentList}">
+
+                <td th:text="${key.nameOfDepartment}"></td>
+                <td th:text="${key.locations}"></td>
+                <td th:text="${key.MPK}"></td>
+                <td><a th:href="@{/deleteDepartment/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
+                <td>
+                    <a th:href="@{/showUpdateDepartmentForm(departmentId=${key.id})}" class="btn btn-info">Update</a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</form>
+</body>
+</html>

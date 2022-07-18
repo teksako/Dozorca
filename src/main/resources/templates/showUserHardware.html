@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<body>
+
+<table border="1" class="table table-striped table-responsive-md">
+    <tbody>
+    <tr th:each="pc : ${computer}">
+        <td th:text="${pc.employee}"></td>
+        <td th:text="${pc.officeKey.officeVersion}"></td>
+        <td th:text="${pc.officeKey.officeKey}"></td>
+        <td th:text="${pc.windowsKey}"></td>
+        <td th:text="${pc.hostname}"></td>
+        <td th:text="${pc.model}"></td>
+        <td th:text="${pc.manufacturer}"></td>
+
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+--------------------------------------------------------------------
+
+<table border="1" class="table table-striped table-responsive-md">
+    <tbody>
+    <tr th:each="pc : ${laptop}">
+        <td th:text="${pc.employee}"></td>
+        <td th:text="${pc.officeKey}"></td>
+        <td th:text="${pc.windowsKey}"></td>
+        <td th:text="${pc.hostname}"></td>
+        <td th:text="${pc.model}"></td>
+        <td th:text="${pc.manufacturer}"></td>
+
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+
+
+</body>
+</html>

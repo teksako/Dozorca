@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+        </div>
+    </nav>
+</header>
+
+<div class="progress">
+    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0"
+         aria-valuemax="100"></div>
+</div>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<hr/>
+
+
+
+<table class="table" >
+    <tbody >
+    <tr th:each="key : ${counter}" style="text-align: center; ">
+
+        <td th:text="${key}"></td>
+
+    </tr>
+    <tr th:text="${printer}"></tr>
+    <tr>
+    <div th:if="${printerIP =='-'}">
+        <p></p>
+    </div>
+    <div th:unless="${printerIP=='-'}">
+        <p th:text="${printerIP}" class="navbar-brand" ></p>
+        </hr>
+        <a th:href="${'https://'+printerIP}" class="btn btn-primary">Zarządzaj</a>
+    </div>
+    </tr>
+    </tbody>
+</table>
+
+<p>Wydaj toner.</p>
+<form th:action="@{/removeMagazine2}" th:object="${temp}" method="post">
+
+    <select id="tonerlist" th:field="*{id_1}" class="form-control col-4 mb-4">
+
+        <option value="">Wybierz toner</option>
+        <option th:each="Key : ${tonerList}"
+                th:value="${Key.id}"
+                th:text="${Key.tonerName}"></option>
+    </select>
+
+    <div th:with="idPrinter=${printerId}">
+
+        <input type="hidden" th:value="${idPrinter}" th:name="id_2" th:id="id_2"/>
+    </div>
+    <input id="subtoner" th:field="*{radio}" type="text">
+    <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
+</form>
+<div class="font-weight-bold">
+    <p th:text="${allert}" class="text-danger"></p>
+</div>
+<a th:href="@{/list-printers}">Back to list</a>
+<a th:href="@{/list-counters(printerId=${printerId})}" class="btn btn-info">Liczniki</a>
+
+
+
+</body>
+</html>

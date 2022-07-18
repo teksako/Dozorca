@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<body>
+<form th:action="@{/addEmployee}" th:object="${employee}" method="post">
+    <p class="error" th:text="${commonErrro}"></p>
+
+    <td>Imie: </td>
+    <input id="firstname" type="text" th:field="*{firstname}">
+
+    <td>Nazwisko: </td>
+    <input id="lastname" type="text" th:field="*{lastname}">
+
+    <td> Stanowisko: </td>
+    <input id="workplace" type="text" th:field="*{workplace}">
+
+    <td>Dział: </td>
+
+    <select name="department" id="department" th:field="*{department}">
+        <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
+        <option value="">Wybierz dział</option>
+        <option th:each="Key : ${departmentList}"
+                th:value="${Key.id}"
+                th:text="${Key.nameOfDepartment}"></option>
+    </select>
+    </td>
+
+<input type="button" value="Powrót" name="backButton"
+       onClick="javascript:window.location.href='/index'" class="myButton shortButton" >
+<input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+</body>
+</html>

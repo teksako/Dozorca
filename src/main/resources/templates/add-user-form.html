@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+            <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+        </div>
+    </nav>
+</header>
+<div sec:authorize="hasAuthority('ADMIN')">
+    <div class="container">
+
+        <h3>Dodaj użytkownika</a></h3>
+        <hr/>
+        <form th:action="@{/saveUser}" th:object="${user}" method="post">
+            <p class="error" th:text="${commonError}"></p>
+
+            <input type="text" th:field="*{fullname}" class="form-control col-4 mb-4" placeholder="Imię i nazwisko">
+            <input id="username" type="text" th:field="*{login}" class="form-control col-4 mb-4" placeholder="Login">
+            <input id="password" type="password" th:field="*{password}" class="form-control col-4 mb-4" placeholder="Hasło">
+            <label>Aktywny</label>
+            <input id="enabled" type="checkbox" th:field="*{enabled}" placeholder="Aktywny">
+
+            <select id="roles" th:field="*{roles}" class="form-control col-4 mb-4">
+                <option value="">Rodzaj konta</option>
+                <option th:each="Key : ${roleList}"
+                        th:value="${Key.id}"
+                        th:text="${Key.getRole()}"></option>
+            </select>
+            </td>
+
+            <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
+            <input type="hidden" th:field="*{id}"/>
+            <br>
+            <a class="navbar-brand" th:text="${info}"></a>
+        </form>
+
+        <!--
+    ----------------------RESETUJ UŻYTKOWNIKA HASŁO UŻYTKOWNIKA----------------------
+        <form th:action="@{/resetPassword}" th:object="${user}" method="post">
+            <p class="error" th:text="${commonError}"></p>
+
+
+            <td>
+                <select name="replacement" id="replacement" th:field="*{id}">
+                    komentarz<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">
+                    <option value="">Użytkownik</option>
+                    <option th:each="user : ${users}"
+                            th:value="${user.id}"
+                            th:text="${user.fullname}"></option>
+                </select>
+            </td>
+
+            <input  id="changepassword" type="text" th:field="*{password}" class="myPasswordButton" value="Nowe123">
+            <div class="error" th:errors="*{password}" ></div>
+            </td>
+
+            <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+
+        </form>
+    </div>
+    <div sec:authorize="isAuthenticated()">
+    <form th:action="@{/saveUser}" th:object="${user}" method="post">
+        <p class="error" th:text="${commonError}"></p>
+    ----------------------ZMIEŃ SWOJE HASŁO----------------------
+        <br>
+        <td>Nowe hasło: </td>
+        <input type="password" th:field="*{password}">
+
+        <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+        <input type="hidden" th:field="*{id}"/>
+    </form>
+    </div>
+        -->
+
+
+        <hr/>
+        <a th:href="@{/list-users}">Back to list</a>
+    </div>
+</div>
+</body>
+</html>

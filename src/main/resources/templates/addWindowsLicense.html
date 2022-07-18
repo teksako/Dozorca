@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<body>
+
+<form th:action="@{/addWindowsLicense}" th:object="${windows}" method="post"}>
+      <p class="error" th:text="${commonErrro}"></p>
+
+    <td>Wersja Windowsa:</td>
+    <input id="windowsVersion" type="text" th:field="*{windowsVersion}">
+    <div class="error" th:error="*{windowsVersion}"></div>
+
+    <td>Klucz:</td>
+    <input id="windowsKey" type="text" th:field="*{windowsKey}">
+    <div class="error" th:error="*{windowsKey}"></div>
+
+
+
+    <input type="button" value="Powrót" name="backButton"
+           onClick="javascript:window.location.href='/index'" class="myButton shortButton" >
+    <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<div class="container">
+    <h3>Dodaj nowy dział</h3>
+    <hr/>
+    <form th:action="@{/saveDepartment}" th:object="${department}" method="post">
+        <p class="error" th:text="${commonErrro}"></p>
+        <input type="text" th:field="*{nameOfDepartment}" class="form-control col-4 mb-4" placeholder="Nazwa">
+        <input type="text" th:field="*{MPK}" class="form-control col-4 mb-4" placeholder="MPK">
+
+        <table id="pliki" class="container">
+            <tbody>
+            <tr>
+                <td >
+                <select id="location" th:field="*{locations}" class="form-control col-4 mb-4">
+                    <option value="">Lokalizacja</option>
+                    <option th:each="key : ${locationList}"
+                            th:value="${key.id}"
+                            th:text="${key.getNameOfLocation()}">
+                    </option>
+                </select>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
+        <div>
+            <input type="button" id="copy" value="Dodaj kolejną lokalizacje" onclick=""/>
+            <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+        </div>
+
+
+        <input type="hidden" th:field="*{id}"/>
+    </form>
+    <script type='text/javascript'>
+$("#copy").click(function() {
+  $('#pliki tr').eq(-1).before('<tr>'+$("#pliki tr:last").html()+'</tr>');
+
+});
+
+    </script>
+    <hr/>
+    <a th:href="@{/list-departments}">Back to list</a>
+</div>
+
+</body>
+</html>

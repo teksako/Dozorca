@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<body>
+
+<form th:action="@{/addOfficeLicense}" th:object="${office}" method="post"}>
+      <p class="error" th:text="${commonErrro}"></p>
+
+    <td>Wersja Office:</td>
+    <input id="officeVersion" type="text" th:field="*{officeVersion}">
+    <div class="error" th:error="*{officeVersion}"></div>
+
+    <td>Klucz:</td>
+    <input id="officeKey" type="text" th:field="*{officeKey}">
+    <div class="error" th:error="*{officeKey}"></div>
+
+
+
+    <input type="button" value="Powrót" name="backButton"
+           onClick="javascript:window.location.href='/index'" class="myButton shortButton" >
+    <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+
+</body>
+</html>

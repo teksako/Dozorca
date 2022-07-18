@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<body>
+<form th:action="@{/addLaptop}" th:object="${laptop}" method="post">
+    <p class="error" th:text="${commonErrro}"></p>
+
+    <td>Producent:</td>
+    <input id="laptopManufacturer" type="text" th:field="*{manufacturer}">
+    <td>Model:</td>
+    <input id="laptopModel" type="text" th:field="*{model}">
+    <td>Numer seryjny:</td>
+    <input id="laptopSerial" type="text" th:field="*{serialNumber}">
+    <td>MAC adres:</td>
+    <input id="macAdress" type="text" th:field="*{MACAdress}">
+    <td>IP adres:</td>
+    <input id="IPAdress" type="text" th:field="*{IPAdress}">
+    <td>Hostname:</td>
+    <input id="hostname" type="text" th:field="*{hostname}">
+
+    <td>Klucz Windows</td>
+
+    <select name="windowsKey" id="windowsKey" th:field="*{windowsKey}">
+        <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
+        <option value="">Wybierz: </option>
+        <option th:each="Key : ${Keys}"
+                th:value="${Key.id}"
+                th:text="${Key.windowsVersion+ '  '+ Key.windowsKey }"></option>
+    </select>
+    </td>
+
+    <td>Klucz Office</td>
+
+    <select name="officeKey" id="officeKey" th:field="*{officeKey}">
+        <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
+        <option value="">Wybierz: </option>
+        <option th:each="Key : ${officeKeys}"
+                th:value="${Key.id}"
+                th:text="${Key.officeVersion+ '  '+ Key.officeKey}"></option>
+    </select>
+    </td>
+
+    <td>Użytkownik</td>
+
+    <select name="employee" id="employee" th:field="*{employee}">
+        <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
+        <option value="">Wybierz: </option>
+        <option th:each="Key : ${owners}"
+                th:value="${Key.id}"
+                th:text="${Key.firstname+ '  '+ Key.lastname}"></option>
+    </select>
+    </td>
+
+
+    <br>
+    <input type="button" value="Powrót" name="backButton"
+           onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+    <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+
+</body>
+</html>

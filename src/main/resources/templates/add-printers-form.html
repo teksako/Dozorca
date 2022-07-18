@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<div class="container">
+
+    <h3>Dodaj nową drukarkę</h3>
+    <hr/>
+    <div class="font-weight-bold">
+        <p th:text="${exception}" class="text-danger"></p>
+    </div>
+    <form th:action="@{/savePrinter}" th:object="${printer}" method="post">
+
+
+        <input th:field="*{manufacturer}" type="text" class="form-control col-4 mb-4" placeholder="Producent">
+        <input th:field="*{model}" type="text" class="form-control col-4 mb-4" placeholder="Model">
+        <input th:field="*{IPAdress}" type="text" class="form-control col-4 mb-4" placeholder="Adres IP">
+        <input th:field="*{MACAdress}" type="text" class="form-control col-4 mb-4" placeholder="MAC adres">
+        <input th:field="*{serialNumber}" type="text" class="form-control col-4 mb-4" placeholder="Numer seryjny">
+        <input th:field="*{inventoryNumber}" type="text" class="form-control col-4 mb-4"
+               placeholder="Numer inwentarzowy">
+        <input id="user" th:field="*{user}" type="text" class="form-control col-4 mb-4" placeholder="Użytkownik">
+
+
+        <select  th:field="*{department}" class="form-control col-4 mb-4" >
+            <option value="">Wybierz dział</option>
+            <option th:each="Key : ${departments}"
+                    th:value="${Key.id}"
+                    th:text="${Key.nameOfDepartment+' '+Key.Locations}"></option>
+        </select>
+
+             <label>Zbieraj liczniki</label><input id="enabled" type="checkbox" th:field="*{collectCounter}" placeholder="Aktywny">
+        <!--
+       <select class="form-control" th:field="*{collectCounter}">
+           <option th:value="1" >true</option>
+           <option th:value="0" >false</option>
+       </select>
+
+                    <input type="checkbox" name="collectCounter" th:checked="*{collectCounter}" class="form-control col-1 mb
+
+
+
+           <select id="toner" th:field="*{toner}" class="form-control col-4 mb-4">
+                        <option value="">Wybierz toner</option>
+                        <option th:each="Key : ${toners}"
+                                th:value="${Key.id}"
+                                th:text="${Key.tonerName}"></option>
+                    </select>
+
+            -->
+        <table id="pliki" class="container">
+            <tbody>
+            <tr>
+                <td >
+                    <select id="oid" th:field="*{oid}" class="form-control col-4 mb-4">
+                        <option value="">Wybierz licznik</option>
+                        <option th:each="Key : ${oidlist}"
+                                th:value="${Key.id}"
+                                th:text="${Key.oidName}"></option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <table id="pliki2" class="container">
+            <tbody>
+            <tr>
+                <td >
+                    <select id="tonerlist" th:field="*{tonerList}" class="form-control col-4 mb-4">
+                        <option value="">Wybierz toner</option>
+                        <option th:each="Key : ${toners}"
+                                th:value="${Key.id}"
+                                th:text="${Key.tonerName}"></option>
+                    </select>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+
+        <div>
+        <input type="button" id="copy" value="Dodaj kolejny licznik" onclick="" class="btn btn-primary"/>
+            <input type="button" id="copy2" value="Dodaj kolejny toner" onclick="" class="btn btn-primary"/>
+        <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
+</div>
+        <input type="hidden" th:field="*{id}" />
+    </form>
+    <script type='text/javascript'>
+$("#copy").click(function() {
+  $('#pliki tr').eq(-1).before('<tr>'+$("#pliki tr:last").html()+'</tr>');
+
+});
+</script>
+
+    <script type='text/javascript'>
+$("#copy2").click(function() {
+  $('#pliki2 tr').eq(-1).before('<tr>'+$("#pliki2 tr:last").html()+'</tr>');
+
+});
+
+    </script>
+
+    <hr/>
+    <a th:href="@{/list-printers}">Back to list</a>
+</div>
+</body>
+</html>

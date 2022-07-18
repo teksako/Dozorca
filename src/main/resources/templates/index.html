@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link rel="stylesheet" href="css/main.css" type="text/css" />
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+
+        <a th:href="@{/index}" class="navbar-brand" >
+            <img src="css/logo.png" width="50" height="50" alt="" class="d-inline-block"></a>
+<!--            <a class="navbar-brand" href="#">-->
+<!--            <img th:src="@{jpg/LOGO - SELT/SELT - logo.jpg}" width="30" height="30" alt="">-->
+<!--        </a>-->
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<img th:src="@{/src/main/java/logo.jpg}" width="30" height="30">
+<h1>Menu</h1>
+<div sec:authorize="hasAuthority('ADMIN')">
+    <!-- <a th:href="@{/addLaptop}">Dodaj laptopa</a><br>
+     <a th:href="@{/addWindowsLicense}">Dodaj licencje Windows</a><br>
+     <a th:href="@{/addOfficeLicense}">Dodaj licencje Office</a><br>
+     <a th:href="@{/showLaptops}">Wyświetl laptopy</a><br>
+     <a th:href="@{/addEmployee}">Dodaj pracownika</a><br>
+     <a th:href="@{/addComputer}">Dodaj komputer</a><br>
+     <a th:href="@{/showUserHardware}">Pokaz sprzęty pracownika</a><br>
+     <a th:href="@{/addPhone}">Dodaj telefon</a><br>
+     <a th:href="@{/addPhoneNumber}">Dodaj SIM</a><br>-->
+    <a th:href="@{/list-departments}">Dział</a><br>
+    <a th:href="@{/list-locations}">Lokalizacje</a><br>
+    <a th:href="@{/list-toners}">Tonery i tusze</a><br>
+    <a th:href="@{/list-printers}">Drukarki</a><br>
+    <a th:href="@{/Magazine}">Magazyn</a><br>
+</div>
+
+<div sec:authorize="isAuthenticated()">
+    <a th:href="@{/list-users}">Zarządzanie użytkownikiem</a><br>
+    <a th:href="@{/Raport}">Raport</a><br>
+    <a th:href="@{/help}">Pomoc</a><br>
+</div>
+
+</body>
+</html>

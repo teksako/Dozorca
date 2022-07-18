@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+
+
+
+<form th:action="@{/list-users}" th:object="${temp}" method="post">
+
+
+    <div class="container">
+
+        <h3>Lista użytkowników</h3>
+
+        <hr/>
+        <a th:href="@{/addUserForm}" class="btn btn-primary">Dodaj użytkownika</a>
+      <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+        <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+        <a class="navbar-brand" th:text="${allert}"></a>
+        <br/><br/>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr style="text-align: center; ">
+
+                <th>Pełna nazwa</th>
+                <th>Login</th>
+                <th>Data utworzenia</th>
+                <th>Aktywny</th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="key : ${userList}" style="text-align: center; ">
+
+                <td th:text="${key.fullname}"></td>
+                <td th:text="${key.login}"></td>
+                <td th:text="${key.createDate}"></td>
+                <td th:text="${key.enabled}"></td>
+                <td><a th:href="@{/deleteUser/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
+                <td>
+                    <a th:href="@{/showUpdateUserForm(userId=${key.id})}" class="btn btn-info">Update</a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</form>
+<a class="navbar-brand" th:text="${info}"></a>
+</body>
+</html>

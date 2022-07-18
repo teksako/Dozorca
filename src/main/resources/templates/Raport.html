@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Raport</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script>
+        function myFunction() {
+            const checkBox = document.getElementById("search");
+            const text = document.getElementById("display");
+
+            if (checkBox.checked == true) {
+                text.style.display = "block";
+
+
+            } else if (checkBox.checked == false) {
+                text.style.display = "none";
+
+            }
+        }
+
+        function myFunction2() {
+            const searchDate = document.getElementById("searchDate");
+            const text = document.getElementById("displayDate");
+            const text2 = document.getElementById("displayOtherSearch");
+            if (searchDate.checked == true) {
+                text.style.display = "block";
+                text2.style.display = "none";
+
+            } else if (searchDate.checked == false) {
+                text.style.display = "none";
+                text2.style.display = "block";
+
+            }
+        }
+
+        $(function () {
+            $('#from').datepicker({
+                showOnFocus: false,
+                showTrigger: '#calImg',
+                beforeShowDay: $.datepicker.noWeekends,
+                pickerClass: 'noPrevNext',
+                numberOfMonths: 1,
+                dateFormat: 'yy-mm-dd',
+                //altFormat: "DD, d MM, yy",
+
+                onSelect: function (dateStr) {
+                    var min = $(this).datepicker('getDate');
+                    $('#to').datepicker('option');
+                    datepicked();
+                }
+            });
+            $('#to').datepicker({
+                showOnFocus: false,
+                showTrigger: '#calImg',
+                beforeShowDay: $.datepicker.noWeekends,
+                pickerClass: 'noPrevNext',
+                numberOfMonths: 1,
+                dateFormat: 'yy-mm-dd',
+                //altFormat: "DD, d MM, yy",
+
+                onSelect: function (dateStr) {
+                    var max = $(this).datepicker('getDate');
+                    $('#from').datepicker('option');
+                    datepicked();
+                }
+            });
+        });
+
+    </script>
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+
+
+        <a class="navbar-brand" href="#">
+            <img th:src="@{jpg/LOGO - SELT/SELT - logo.jpg}" width="30" height="30" alt="">
+        </a>
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+
+        </div>
+
+    </nav>
+
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<form th:action="@{/Raport}" th:object="${temp}" method="post">
+    <ul>
+        <li>
+            <input id="features" name="features" type="radio" th:field="*{radio}" th:value="${0}"
+                   onclick="myFunction()"/>
+
+            <label for="features">Pokaz poprzedni miesiąc</label>
+        </li>
+        <li>
+            <input id="features1" name="features" type="radio" th:field="*{radio}" th:value="${1}"
+                   onclick="myFunction()"/>
+
+            <label for="features1">Pokaz aktualny miesiąc</label>
+        </li>
+        <li>
+            <input id="features2" name="features" type="radio" th:field="*{radio}" th:value="${2}"
+                   onclick="myFunction()"/>
+
+            <label for="features2">Pokaż wszystko</label>
+        </li>
+
+        <li>
+            <input id="search" name="features" type="radio" th:field="*{radio}" th:value="${4}"
+                   onclick="myFunction() "/>
+
+            <label for="search">Wyszukaj</label>
+        </li>
+    </ul>
+
+
+    <div id="display" style="display:none">
+        <ul>
+
+            <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
+                   onclick="myFunction2()"/>
+            <label for="searchDate">Po dacie</label>
+
+            <input id="searchPrinter" name="features" type="radio" th:field="*{radio}" th:value="${5}"
+                   onclick="myFunction2()"/>
+            <label for="searchPrinter">Po drukarce</label>
+
+            <input id="searchToner" name="features" type="radio" th:field="*{radio}" th:value="${6}"
+                   onclick="myFunction2()"/>
+            <label for="searchToner">Po tonerze</label>
+
+            <input id="searchDepartment" name="features" type="radio" th:field="*{radio}" th:value="${7}"
+                   onclick="myFunction2()"/>
+            <label for="searchDepartment">Po dziale</label>
+
+
+        </ul>
+    </div>
+    <div id="displayDate" style="display:none">
+        <label for="from">Dzień rozpoczęcia:</label>
+        <input type="text" id="from" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
+
+        <label for="from">Dzień zakończenia:</label>
+        <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
+
+    </div>
+
+    <div id="displayOtherSearch" style="display:none">
+        <p>Wpisz fraze:</p>
+        <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
+    </div>
+    <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
+</form>
+
+<a th:text="${allert}"></a>
+<p>---------RAPORT----------</p>
+<a th:text="${allert}"></a>
+<table class="table table-bordered table-striped" >
+
+    <thead>
+    <tr style="text-align: center; ">
+        <div sec:authorize="isAuthenticated()">
+        <th>Toner</th>
+        <th>Ilość</th>
+        <th>Drukarka</th>
+        <th>Nr. inwentarzowy</th>
+        <th>Dział</th>
+        <th>MPK</th>
+        <th>Data</th>
+        </div>
+        <div sec:authorize="hasAuthority('ADMIN')">
+        <th>Wydający</th>
+        </div>
+    </tr>
+    </thead>
+    <tbody>
+    <!--<tr th:each="key : ${raport}" style="text-align: center; ">
+        <div sec:authorize="isAuthenticated()">
+            <td th:text="${key.Printers.getToner().getTonerName()}"></td>
+            <td th:text="${key.count}"></td>
+            <td th:text="${key.Printers.getManufacturer()+' '+key.Printers.getModel()}"></td>
+            <td th:text="${key.Printers.getDepartment().getNameOfDepartment()}"></td>
+            <td th:text="${key.Printers.getDepartment().getMPK()}"></td>
+            <td th:text="${key.Printers.getInventoryNumber()}"></td>
+            <td th:text="${key.date}"></td>
+        </div>-->
+    <tr th:each="key : ${raport}" style="text-align: center;">
+        <div sec:authorize="isAuthenticated()">
+            <td th:text="${key.toner}"></td>
+            <td th:text="${key.count}"></td>
+            <td th:text="${key.printer}"></td>
+            <td th:text="${key.inventoryNumber}"></td>
+            <td th:text="${key.department}"></td>
+            <td th:text="${key.MPK}"></td>
+            <td th:text="${key.date}"></td>
+        </div>
+
+        <div sec:authorize="hasAuthority('ADMIN')">
+            <td th:text="${key.user}"></td>
+        </div>
+
+
+    </tr>
+    </tbody>
+</table>
+<a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
+</body>
+</html>

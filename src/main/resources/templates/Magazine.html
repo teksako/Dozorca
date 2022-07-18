@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Magazyn</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="av navbar-nav navbar-right">
+
+            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></strong></form>
+            <input type="button" value="Powrót" name="backButton"
+                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+        </div>
+    </nav>
+</header>
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+<p th:text="${allert}"></p>
+<p th:text="${exception}"></p>
+<p>Dodaj do magazynu ilość</p>
+<form th:action="@{/addMagazine}" th:object="${magazine}" method="post">
+
+    <td>Toner</td>
+
+    <select id="dodaj" th:field="*{id}">
+        <option value="">Wybierz:</option>
+        <option th:each="Key : ${tonerList}"
+                th:value="${Key.id}"
+                th:text="${Key.getToner().getTonerName()+' '+ Key.count}"></option>
+    </select>
+    </td>
+    <input id="newtoner" th:field="*{count}" type="text">
+
+    <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
+</form>
+<!--<p>Wydaj toner.</p>
+<form th:action="@{/removeMagazine}" th:object="${magazine}" method="post">
+
+    <td>Drukarka:</td>
+    <select id="wydaj" th:field="*{id}">
+        <option value="">Wybierz:</option>
+        <option th:each="Key : ${printer}"
+                th:value="${Key.id}"
+                th:text="${Key.manufacturer+' '+Key.model+' '+ Key.getDepartment().getNameOfDepartment()+' '+ Key.getToner().getTonerName()}"></option>
+    </select>
+    th:value="${Key.getToner().getId()}"
+
+    </td>
+
+    <input id="subtoner" th:field="*{count}" type="text">
+
+    <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
+
+</form>
+-->
+</form>
+<p>---------MAGAZYN----------</p>
+<form th:action="@{/getMagazine}" th:object="${temp}" method="post">
+    <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
+    <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
+</form>
+<a th:text="${error}"></a>
+<table class="table table-bordered table striped" >
+    <tbody>
+    <thead>
+    <tr>
+        <th>Toner</th>
+        <th>Ilość</th>
+
+    </tr>
+    </thead>
+    <tr th:each="key : ${tonerLists}">
+
+        <td th:text="${key.Toner.getTonerName()}"></td>
+        <td th:text="${key.count}"></td>
+
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

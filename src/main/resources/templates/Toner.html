@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+  <meta charset="UTF-8">
+  <title>SELT</title>
+</head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<body>
+<header>
+  <nav class="navbar navbar-light bg-primary">
+    <div class="av navbar-nav navbar-right">
+      <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+      <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
+                                                                class="navbar-brand"/></strong></form>
+    </div>
+  </nav>
+</header>
+
+<form th:action="@{/addToner}" th:object="${toner}" method="post">
+  <td>Toner: </td>
+  <input id="toner" th:field="*{tonerName}" type="text">
+
+  <input type="button" value="Powrót" name="backButton"
+         onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+  <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+
+<form th:action="@{/updateToner}" th:object="${toner}" method="post">
+
+  <td>Toner</td>
+
+  <select  id="toner2" th:field="*{id}">
+    <option value="">Wybierz: </option>
+    <option th:each="Key : ${tonerList}"
+            th:value="${Key.id}"
+            th:text="${Key.tonerName }"></option>
+  </select>
+  </td>
+
+  <input id="toner22" th:field="*{tonerName}" type="text">
+  <input type="button" value="Powrót" name="backButton"
+         onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+  <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
+</form>
+
+<form th:action="@{/deleteToner}" th:object="${toner}" method="post">
+
+  <td>Toner</td>
+
+  <select  id="toner3" th:field="*{id}">
+    <option value="">Wybierz: </option>
+    <option th:each="Key : ${tonerList}"
+            th:value="${Key.id}"
+            th:text="${Key.tonerName }"></option>
+  </select>
+  </td>
+
+  <input type="button" value="Powrót" name="backButton"
+         onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+  <input type="submit" value="Usuń" name="saveButton" class="mySubmitButton">
+</form>
+
+</body>
+</html>
