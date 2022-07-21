@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,12 @@ public class SeltApplication implements CommandLineRunner {
 
 
 
+
+
+
+
+
+
         if (userRepository.findAll().size() == 0) {
             UserRole userRole = new UserRole();
             userRole.setRole(Role.ADMIN);
@@ -88,7 +95,7 @@ public class SeltApplication implements CommandLineRunner {
             admin.setEnabled(true);
             userRepository.save(admin);
         }
-
+     //oidRepo.deleteAll();
         if(oidRepo.findAll().size()==0){
             OID oid = new OID();
             oid.setOidName("Black Toner Level");
@@ -121,22 +128,59 @@ public class SeltApplication implements CommandLineRunner {
             oidRepo.save(oid4);
 
             OID oid5 = new OID();
-            oid5.setOidName("Black toner level Epson");
-            oid5.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.1");
-            oid5.setOidProducent("Epson");
+            oid5.setOidName("Total Counter");
+            oid5.setOidValue(".1.3.6.1.2.1.1.16.1.1.1");
+            oid5.setOidProducent("HP");
             oidRepo.save(oid5);
 
             OID oid6 = new OID();
-            oid6.setOidName("Yellow toner level Epson");
-            oid6.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.1");
-            oid6.setOidProducent("Epson");
+            oid6.setOidName("Black Actual Level");
+            oid6.setOidValue("");
+            oid6.setOidProducent("Xerox");
             oidRepo.save(oid6);
 
             OID oid7 = new OID();
-            oid7.setOidName("Total Counter");
-            oid7.setOidValue(".1.3.6.1.2.1.1.16.1.1.1");
-            oid7.setOidProducent("HP");
+            oid7.setOidName("Black Max Level");
+            oid7.setOidValue("");
+            oid7.setOidProducent("Xerox");
             oidRepo.save(oid7);
+
+            OID oid8 = new OID();
+            oid8.setOidName("Cyan Actual Level");
+            oid8.setOidValue("");
+            oid8.setOidProducent("Xerox");
+            oidRepo.save(oid8);
+
+            OID oid9 = new OID();
+            oid9.setOidName("Cyan Max Level");
+            oid9.setOidValue("");
+            oid9.setOidProducent("Xerox");
+            oidRepo.save(oid9);
+
+            OID oid10 = new OID();
+            oid10.setOidName("Magenta Actual Level");
+            oid10.setOidValue("");
+            oid10.setOidProducent("Xerox");
+            oidRepo.save(oid10);
+
+            OID oid11 = new OID();
+            oid11.setOidName("Magenta Max Level");
+            oid11.setOidValue("");
+            oid11.setOidProducent("Xerox");
+            oidRepo.save(oid11);
+
+            OID oid12 = new OID();
+            oid12.setOidName("Yellow Max Level");
+            oid12.setOidValue("");
+            oid12.setOidProducent("Xerox");
+            oidRepo.save(oid12);
+
+            OID oid13 = new OID();
+            oid13.setOidName("Yellow Actual Level");
+            oid13.setOidValue("");
+            oid13.setOidProducent("Xerox");
+            oidRepo.save(oid13);
+
 
 
         }

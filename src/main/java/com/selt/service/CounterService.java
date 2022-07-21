@@ -1,6 +1,7 @@
 package com.selt.service;
 
 import com.selt.model.Counter;
+import com.selt.model.OID;
 import com.selt.model.Printer;
 import com.selt.model.Raport;
 import com.selt.repository.CounterRepo;
@@ -15,6 +16,7 @@ import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Service
@@ -58,12 +60,12 @@ public class CounterService {
 
     public Long getPrintCounter(String ip, String community, String oidval) {
 
-       return SNMP4J.snmpGetCount(ip, community, oidval);
+        return SNMP4J.snmpGet(ip, community, oidval);
 
     }
 
-    //@Scheduled(cron = "30 * * * ? ?")
-    @Scheduled(cron = "0 00 12 * * MON-SUN")
+    //@Scheduled(cron = "30 * * ? * ?")
+    //@Scheduled(cron = "0 00 12 * * MON-SUN")
     public void save() {
         //String oidValue;
         List<Printer> printerList = printerService.findAll();
@@ -71,12 +73,12 @@ public class CounterService {
             Counter counter = new Counter();
             counter.setDate(LocalDate.now());
 
-            if(printer.getCollectCounter().equals(true)){
+            if (printer.getCollectCounter().equals(true)) {
 
                 //oidValue = oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()),"Total Counter").getOidValue();
                 counter.setPrinter(printer);
-                //counter.setCounter((long) printerService.randomNumber());
-                counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
+                counter.setCounter((long) printerService.randomNumber());
+                //counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
                 System.out.println("Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
                 //System.out.println(printer.getModel() + " " + printer.getIPAdress() +" public "+ oidRepo.findOidByoidProducentAndOidName(printer.getManufacturer(),"Total Counter").getOidValue());
                 counterRepo.save(counter);
@@ -84,6 +86,61 @@ public class CounterService {
 
         }
 
+    }
+
+    //----------------HP,Xerox-------------------------
+
+    public String getTonerLevel(String ip, String oid1, String oid2) {
+        return String.valueOf(((getPrintCounter(ip, "public", oid1) / getPrintCounter(ip, "public", oid2)) * 100));
+        //return String.valueOf(printerService.randomNumber());
+    }
+
+
+    //-------------------
+
+    public List<String> getActualCounter(long id) {
+
+        Optional<Printer> printer = printerService.findById(id);
+        List<OID> oidList = printer.get().getOid();
+        List<String> countList = new ArrayList<>();
+        String community = "public";
+        String oidName;
+        if (printer.get().getIPAdress().equals("-")) {
+            countList.add("Drukarka nie podłączona do sieci!");
+        } else {
+            if (printer.get().getManufacturer().equals("Konica Minolta")) {
+                for (OID oid : oidList) {
+                    oidName = oidRepo.findOIDById(oid.getId()).getOidName();
+                    countList.add(SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.getOidValue(), oidName));
+
+                }
+            } else {
+                for (OID oid : oidList) {
+                    if (oidRepo.findOIDById(oid.getId()).getOidName().equals("TotalCounter")) {
+                        oidName = oidRepo.findOIDById(oid.getId()).getOidName();
+                        countList.add(SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.getOidValue(), oidName));
+
+                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Black Actual Level"))) {
+                        String oid1 = oidRepo.findAllByOidName("Black Max Level").get(0).getOidValue();
+                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+
+                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Cyan Actual Level"))) {
+                        String oid1 = oidRepo.findAllByOidName("Cyan Max Level").get(0).getOidValue();
+                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+
+                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Magenta Actual Level"))) {
+                        String oid1 = oidRepo.findAllByOidName("Magenta Max Level").get(0).getOidValue();
+                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+
+                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Yellow Actual Level"))) {
+                        String oid1 = oidRepo.findAllByOidName("Yellow Max Level").get(0).getOidValue();
+                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+
+                    }
+                }
+            }
+        }
+        return countList;
     }
 
     public List<Counter> findAllByActualMonth(long id) {
@@ -111,7 +168,7 @@ public class CounterService {
             }
 
         }
-       return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id,start,end);
+        return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id, start, end);
 
     }
 
@@ -119,7 +176,7 @@ public class CounterService {
         LocalDate start;
         LocalDate end = null;
         int year = LocalDate.now().getYear();
-        int month = LocalDate.now().getMonthValue()-1;
+        int month = LocalDate.now().getMonthValue() - 1;
         start = LocalDate.of(year, month, 1);
         int day;
 
@@ -140,18 +197,27 @@ public class CounterService {
             }
 
         }
-        return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id,start,end);
+        return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id, start, end);
 
     }
 
-    public List<Counter> findAllByDateBetween(long id,LocalDate start, LocalDate end) {
-        return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id,start,end);
+    public List<Counter> findAllByDateBetween(long id, LocalDate start, LocalDate end) {
+        return counterRepo.findAllByPrinter_idIsLikeAndDateIsBetween(id, start, end);
 
     }
 
     public List<Counter> findAllByPrinterId(long id) {
 
         return counterRepo.findAllByPrinter_idIsLike(id);
+    }
+
+    public Counter findByPrinter_IdIsLikeAndDateIsLike(long id, LocalDate date) {
+        return counterRepo.findByPrinter_IdIsLikeAndDateIsLike(id, date);
+    }
+
+    public Long subCounter(Counter counter, Counter counter2) {
+
+        return counter2.getCounter() - counter.getCounter();
     }
 
 

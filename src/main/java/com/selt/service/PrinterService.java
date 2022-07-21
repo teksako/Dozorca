@@ -6,7 +6,6 @@ import com.selt.repository.PrinterRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,24 +28,7 @@ public class PrinterService {
     }
 
     public List<Printer> findAll() {
-        List<Printer> list = printerRepo.findAll();
-//        List<Printer> finalList = new ArrayList<>();
-//        for (Printer printer : list) {
-//            if(finalList.size()==0){
-//                finalList.add(printer);
-//            }
-//            else {
-//                for (Printer printer1 : finalList) {
-//                    if (!printer.getManufacturer().equals(printer1.getManufacturer()) && !printer.getModel().equals(printer1.getModel())) {
-//                        finalList.add(printer);
-//                    }
-//
-//                }
-//            }
-//
-//        }
-
-        return list;
+        return printerRepo.findAll();
     }
 
 //    @Scheduled(fixedDelay = 1000)
@@ -105,41 +87,9 @@ public class PrinterService {
     }
 
 
-    public List<String> getActualCounter(long id) {
-
-        Optional<Printer> printer = printerRepo.findById(id);
-        List<OID> oidList = printer.get().getOid();
-        List<String> countList = new ArrayList<>();
-        String community = "public";
-        String oidName;
-        if (printer.get().getIPAdress().equals("-")) {
-            countList.add("Drukarka nie podłączona do sieci!");
-        } else {
-            for (OID oid : oidList) {
-                oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-
-                countList.add(SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.getOidValue(), oidName));
-            }
-        }
-        return countList;
+    public Optional<Printer> findById(long id) {
+        return printerRepo.findById(id);
     }
-
-//    public String getActualTonerLevel(long id, String oidName){
-//        Optional<Printer> printer = printerRepo.findById(id);
-//        //Optional<OID> oid= oidRepo.findAllByOidName(oidName);
-//
-//        String community = "public";
-////        String oidBlack =".1.3.6.1.2.1.43.11.1.1.9.1.4";
-////        String oidCyan =".1.3.6.1.2.1.43.11.1.1.9.1.3";
-////        String oidMagenta=".1.3.6.1.2.1.43.11.1.1.9.1.2";
-////        String oidYellow=".1.3.6.1.2.1.43.11.1.1.9.1.1";
-//        if(printer.get().getIPAdress().equals("-")){
-//            return "Drukarka nie podłączona do sieci!";
-//        }
-//        else {
-//            return SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.get()) + "%";
-//        }
-//    }
 
 
     public void save(Printer printer) {

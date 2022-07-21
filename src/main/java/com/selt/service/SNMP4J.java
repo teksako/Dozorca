@@ -64,7 +64,7 @@ public class SNMP4J {
             PDU response = respEvent.getResponse();
 
             if (response == null) {
-                info = "response is null, request time out";
+                info = "Minął czas oczekiwania, odczyt nie powiódł się.";
             } else {
 
                 // Vector<VariableBinding> vbVect =
@@ -103,7 +103,7 @@ public class SNMP4J {
     }
 
 
-    public static Long snmpGetCount(String ip, String community, String oidValue) {
+    public static Long snmpGet(String ip, String community, String oidValue) {
 
 
         String info = null;

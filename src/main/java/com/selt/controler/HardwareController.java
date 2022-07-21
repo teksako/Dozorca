@@ -31,8 +31,7 @@ public class HardwareController {
     private final UserService userService;
     private final PrinterRepo printerRepo;
     private final OIDRepo oidRepo;
-
-
+    private final CounterService counterService;
 
 
     @ResponseBody
@@ -74,13 +73,13 @@ public class HardwareController {
     public ModelAndView showInfoForm(@RequestParam long id, String allert) {
         ModelAndView model = new ModelAndView("info-printer-form");
         Temp temp = new Temp();
-        model.addObject("temp", temp);
-        model.addObject("printerIP", printerRepo.findById(id).get().getIPAdress());
-        model.addObject("collectCounter", printerRepo.findById(id).get().getCollectCounter());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("counter", printerService.getActualCounter(id));
-        model.addObject("printer", printerRepo.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
-        model.addObject("printerId", printerRepo.findById(id).get().getId().toString());
+        model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
+        model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
+        //model.addObject("collectCounter", printerRepo.findById(id).get().getCollectCounter());
+        model.addObject("counter", counterService.getActualCounter(id));
+        model.addObject("printerId", id);
+        model.addObject("temp", temp);
         model.addObject("tonerList", printerService.findAlltoner(id));
         model.addObject("allert", allert);
         return model;
@@ -94,7 +93,7 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("printer", printer);
         List<Department> departmentList = departmentService.findAll();
-        List<OID> oidList=oidRepo.findAll();
+        List<OID> oidList = oidRepo.findAll();
         List<Toner> tonerList = tonerService.findAll();
         model.addObject("oidlist", oidList);
         model.addObject("toners", tonerList);
@@ -103,6 +102,7 @@ public class HardwareController {
         return model;
 
     }
+
     @PostMapping({"/savePrinter"})
     public String savePrinter(@ModelAttribute Printer printer) {
         printerService.save(printer);
@@ -159,29 +159,21 @@ public class HardwareController {
 
             } else if (printerRepo.findAllByManufacturerIsLike(mattern).size() != 0) {
                 printerList = printerRepo.findAllByManufacturerIsLike(mattern);
-            }
-            else if(printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
-            }
-            else if(printerRepo.findAllByMACAdressIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByMACAdressIsLike(mattern);
-            }
-            else if (printerRepo.findAllBySerialNumberIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllBySerialNumberIsLike(mattern);
-            }
-            else if( printerRepo.findAllByUserIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByUserIsLike(mattern);
-            }
-            else if( printerRepo.findAllByInventoryNumberIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByInventoryNumberIsLike(mattern);
-            }
-            else if(printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
-            }
-            else if(printerRepo.findAllByTonerList_TonerNameIsLike(mattern).size()!=0){
-                printerList=printerRepo.findAllByTonerList_TonerNameIsLike(mattern);
-            }
-            else {
+            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
+            } else if (printerRepo.findAllByMACAdressIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByMACAdressIsLike(mattern);
+            } else if (printerRepo.findAllBySerialNumberIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllBySerialNumberIsLike(mattern);
+            } else if (printerRepo.findAllByUserIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByUserIsLike(mattern);
+            } else if (printerRepo.findAllByInventoryNumberIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByInventoryNumberIsLike(mattern);
+            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
+            } else if (printerRepo.findAllByTonerList_TonerNameIsLike(mattern).size() != 0) {
+                printerList = printerRepo.findAllByTonerList_TonerNameIsLike(mattern);
+            } else {
                 printerList = printerRepo.findAllByIPAdressIsLike(mattern);
             }
 
@@ -199,7 +191,7 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         List<Department> departmentList = departmentService.findAll();
         List<Toner> tonerList = tonerService.findAll();
-       // model.addObject("onlineList", onlineService.findAll());
+        // model.addObject("onlineList", onlineService.findAll());
         model.addObject("printer", printer);
         model.addObject("oidlist", oidRepo.findAll());
         model.addObject("toners", tonerList);

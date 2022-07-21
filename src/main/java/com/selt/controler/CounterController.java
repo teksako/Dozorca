@@ -36,12 +36,28 @@ public class CounterController {
         return model;
     }
 
+    @PostMapping({"/subCounter"})
+    public ModelAndView subCounter(@ModelAttribute("temp") Temp temp){
+        ModelAndView model = new ModelAndView("list-counters");
+        Long printerId = temp.getId_2();
+        List<Counter> counterList = null;
+        Long sub;
+        LocalDate date1=LocalDate.parse(temp.getStart());
+        LocalDate date2= LocalDate.parse(temp.getEnd());
+        sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date2));
+        System.out.println("różnica = " + sub);
+        String allert="Ilość wydruków: " + sub;
+        counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1);
+        //counterList.add(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1));
+        //counterList.add(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date2));
+        return getCounters(printerId,(ArrayList<Counter>) counterList,allert);
+    }
+
     @PostMapping({"/sortCounter"})
     public ModelAndView sortCounter(@ModelAttribute("temp") Temp temp) {
 
         ModelAndView model = new ModelAndView("list-counters");
         Long printerId = temp.getId_2();
-        //System.out.println("id drukarki= " + printerId);
         List<Counter> counterList = null;
         String allert = null;
         try{
