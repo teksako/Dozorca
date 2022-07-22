@@ -3,7 +3,6 @@ package com.selt.service;
 import com.selt.model.Counter;
 import com.selt.model.OID;
 import com.selt.model.Printer;
-import com.selt.model.Raport;
 import com.selt.repository.CounterRepo;
 import com.selt.repository.OIDRepo;
 import lombok.Data;
@@ -65,7 +64,7 @@ public class CounterService {
     }
 
     //@Scheduled(cron = "30 * * ? * ?")
-    //@Scheduled(cron = "0 00 12 * * MON-SUN")
+    @Scheduled(cron = "0 48 15 * * MON-SUN")
     public void save() {
         //String oidValue;
         List<Printer> printerList = printerService.findAll();
@@ -77,8 +76,8 @@ public class CounterService {
 
                 //oidValue = oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()),"Total Counter").getOidValue();
                 counter.setPrinter(printer);
-                counter.setCounter((long) printerService.randomNumber());
-                //counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
+                //counter.setCounter((long) printerService.randomNumber());
+                counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
                 System.out.println("Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
                 //System.out.println(printer.getModel() + " " + printer.getIPAdress() +" public "+ oidRepo.findOidByoidProducentAndOidName(printer.getManufacturer(),"Total Counter").getOidValue());
                 counterRepo.save(counter);
@@ -91,7 +90,12 @@ public class CounterService {
     //----------------HP,Xerox-------------------------
 
     public String getTonerLevel(String ip, String oid1, String oid2) {
-        return String.valueOf(((getPrintCounter(ip, "public", oid1) / getPrintCounter(ip, "public", oid2)) * 100));
+
+        Long value1 =  (getPrintCounter(ip, "public", oid1));
+        Long value2 =  (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
+        double value3 = ((double)value1/(double)value2)*100l;
+        System.out.println(value1 +" "+ value2 + " "+ value3);
+        return String.valueOf((long)value3)+"%";
         //return String.valueOf(printerService.randomNumber());
     }
 
@@ -105,36 +109,42 @@ public class CounterService {
         List<String> countList = new ArrayList<>();
         String community = "public";
         String oidName;
+        String ip = printer.get().getIPAdress();
         if (printer.get().getIPAdress().equals("-")) {
             countList.add("Drukarka nie podłączona do sieci!");
         } else {
             if (printer.get().getManufacturer().equals("Konica Minolta")) {
                 for (OID oid : oidList) {
                     oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-                    countList.add(SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.getOidValue(), oidName));
+                    countList.add(SNMP4J.snmpGet(ip, community, oid.getOidValue(), oidName));
 
                 }
             } else {
                 for (OID oid : oidList) {
-                    if (oidRepo.findOIDById(oid.getId()).getOidName().equals("TotalCounter")) {
+                    if (oid.getOidName().equals("Total Counter")) {
                         oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-                        countList.add(SNMP4J.snmpGet(printer.get().getIPAdress(), community, oid.getOidValue(), oidName));
+                        countList.add(SNMP4J.snmpGet(ip, community, oid.getOidValue(), oidName));
+                        System.out.println(countList);
 
-                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Black Actual Level"))) {
+                    } else if ((oid.getOidName().equals("Black Actual Level"))) {
                         String oid1 = oidRepo.findAllByOidName("Black Max Level").get(0).getOidValue();
-                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), oid1));
+                        System.out.println(countList);
 
-                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Cyan Actual Level"))) {
+                    } else if ((oid.getOidName().equals("Cyan Actual Level"))) {
                         String oid1 = oidRepo.findAllByOidName("Cyan Max Level").get(0).getOidValue();
-                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        countList.add("Poziom niebieskiego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        System.out.println(countList);
 
-                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Magenta Actual Level"))) {
+                    } else if ((oid.getOidName().equals("Magenta Actual Level"))) {
                         String oid1 = oidRepo.findAllByOidName("Magenta Max Level").get(0).getOidValue();
-                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        countList.add("Poziom czerwonego toneru: " +getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        System.out.println(countList);
 
-                    } else if ((oidRepo.findOIDById(oid.getId()).getOidName().equals("Yellow Actual Level"))) {
+                    } else if ((oid.getOidName().equals("Yellow Actual Level"))) {
                         String oid1 = oidRepo.findAllByOidName("Yellow Max Level").get(0).getOidValue();
-                        countList.add(getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        countList.add("Poziom żółtego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        System.out.println(countList);
 
                     }
                 }

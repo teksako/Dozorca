@@ -79,7 +79,10 @@ public class CounterController {
         }
         catch (NullPointerException exception){
             counterList = counterService.findAllByPrinterId(printerId);
-            //allert="Brak wyników spełniających kryteria!";
+            if(counterList.size()==0){
+                allert="Brak wyników spełniających kryteria!";
+            }
+
         }
 
         return getCounters(printerId,(ArrayList<Counter>) counterList,allert);

@@ -73,7 +73,7 @@
                         <option value="">Wybierz licznik</option>
                         <option th:each="Key : ${oidlist}"
                                 th:value="${Key.id}"
-                                th:text="${Key.oidName}"></option>
+                                th:text="${Key.oidName +' '+ Key.oidProducent}"></option>
                     </select>
                 </td>
             </tr>
