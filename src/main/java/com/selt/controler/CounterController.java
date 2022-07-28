@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,9 @@ public class CounterController {
         Long printerId = temp.getId_2();
         List<Counter> counterList = null;
         String allert = null;
+        Long sub;
+        //LocalDate date1=LocalDate.parse(temp.getStart());
+        // LocalDate date2= LocalDate.parse(temp.getEnd());
         try{
 
             if (temp.getRadio() == 0) {
@@ -74,6 +78,9 @@ public class CounterController {
 
             if (temp.getRadio() == 3) {
                 counterList = counterService.findAllByDateBetween(printerId,LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
+                sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getStart())),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getEnd())));
+                System.out.println("różnica = " + sub);
+                allert="Ilość wydruków: " + sub;
             }
 
         }
@@ -84,6 +91,7 @@ public class CounterController {
             }
 
         }
+
 
         return getCounters(printerId,(ArrayList<Counter>) counterList,allert);
 

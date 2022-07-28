@@ -44,7 +44,7 @@
             $('#from').datepicker({
                 showOnFocus: false,
                 showTrigger: '#calImg',
-                beforeShowDay: $.datepicker.noWeekends,
+                //beforeShowDay: $.datepicker.noWeekends,
                 pickerClass: 'noPrevNext',
                 numberOfMonths: 1,
                 dateFormat: 'yy-mm-dd',
@@ -59,7 +59,7 @@
             $('#to').datepicker({
                 showOnFocus: false,
                 showTrigger: '#calImg',
-                beforeShowDay: $.datepicker.noWeekends,
+                //beforeShowDay: $.datepicker,
                 pickerClass: 'noPrevNext',
                 numberOfMonths: 1,
                 dateFormat: 'yy-mm-dd',
@@ -81,7 +81,6 @@
 <header>
     <nav class="navbar navbar-light bg-primary">
         <div class="av navbar-nav navbar-right">
-            <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
             <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
                                                                       class="navbar-brand"/></strong></form>
             <input type="button" value="Powrót" name="backButton"
@@ -89,7 +88,7 @@
         </div>
     </nav>
 </header>
-
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
 <form th:action="@{/sortCounter}" th:object="${temp}" method="post">
     <div th:with="idPrinter=${printerId}">
 
@@ -116,37 +115,26 @@
         </li>
 
         <li>
-            <input id="search" name="features" type="radio" th:field="*{radio}" th:value="${4}"
-                   onclick="myFunction() "/>
+            <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
+                   onclick="myFunction2() "/>
+            <label for="searchDate">Wyszukaj</label>
 
-            <label for="search">Wyszukaj</label>
         </li>
     </ul>
 
-
-    <div id="display" style="display:none">
-        <ul>
-
-            <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
-                   onclick="myFunction2()"/>
-            <label for="searchDate">Po dacie</label>
-
-
-        </ul>
     </div>
+
     <div id="displayDate" style="display:none">
         <label for="from">Dzień rozpoczęcia:</label>
-        <input type="text" id="from1" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
+        <input type="text" id="from" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
 
-        <label for="from">Dzień zakończenia:</label>
-        <input type="text" id="to1" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
+        <label for="to">Dzień zakończenia:</label>
+        <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
 
     </div>
 
-    <div id="displayOtherSearch" style="display:none">
-        <p>Wpisz fraze:</p>
-        <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
-    </div>
+
+
     <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
 </form>
 <div class="font-weight-bold">
@@ -176,6 +164,7 @@
         </tbody>
     </table>
 </div>
+<!--
 <form th:action="@{/subCounter}" th:object="${temp}" method="post">
     <div th:with="idPrinter=${printerId}">
         <input type="hidden" th:value="${idPrinter}" th:name="id_2" th:id="id_2"/>
@@ -188,6 +177,6 @@
         <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
         <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
     </div>
-</form>
+</form>-->
 </body>
 </html>
