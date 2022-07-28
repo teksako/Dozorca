@@ -61,37 +61,43 @@ public class CounterController {
         Long printerId = temp.getId_2();
         List<Counter> counterList = null;
         String allert = null;
-        Long sub;
+        Long sub = null;
         //LocalDate date1=LocalDate.parse(temp.getStart());
         // LocalDate date2= LocalDate.parse(temp.getEnd());
         try{
 
             if (temp.getRadio() == 0) {
                 counterList = counterService.findAllByPreviousMonth(printerId);
+                sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
             }
             if (temp.getRadio() == 2) {
                 counterList = counterService.findAllByPrinterId(printerId);
+                sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
             }
             if (temp.getRadio() == 1) {
                 counterList = counterService.findAllByActualMonth(printerId);
+                sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
             }
 
             if (temp.getRadio() == 3) {
                 counterList = counterService.findAllByDateBetween(printerId,LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
                 sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getStart())),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getEnd())));
-                System.out.println("różnica = " + sub);
-                allert="Ilość wydruków: " + sub;
+
             }
 
         }
         catch (NullPointerException exception){
             counterList = counterService.findAllByPrinterId(printerId);
+            sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
             if(counterList.size()==0){
                 allert="Brak wyników spełniających kryteria!";
             }
-
         }
-
+        catch (IndexOutOfBoundsException exception){
+            allert="Brak wyników spełniających kryteria!";
+        }
+        System.out.println("różnica = " + sub);
+        allert="Ilość wydruków: " + sub;
 
         return getCounters(printerId,(ArrayList<Counter>) counterList,allert);
 
