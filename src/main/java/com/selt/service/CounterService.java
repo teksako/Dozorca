@@ -217,6 +217,16 @@ public class CounterService {
     }
 
     public List<Counter> findAllByPrinterId(long id) {
+        List<Counter> counterList = counterRepo.findAllByPrinter_idIsLike(id);
+        for (Counter counter: counterList
+             ) {
+            System.out.println(counter.getDate().getDayOfWeek());
+            if(counter.getDate().getDayOfWeek().toString()=="MONDAY"){
+            System.out.println(counter.getCounter());
+        }
+
+        }
+
 
         return counterRepo.findAllByPrinter_idIsLike(id);
     }
