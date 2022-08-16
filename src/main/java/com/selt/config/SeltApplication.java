@@ -4,6 +4,7 @@ import com.selt.model.*;
 import com.selt.repository.OIDRepo;
 import com.selt.repository.RoleRepo;
 import com.selt.repository.UserRepo;
+import com.selt.service.MailService;
 import com.selt.service.PrinterService;
 import com.selt.service.SNMP4J;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -40,7 +43,14 @@ public class SeltApplication implements CommandLineRunner {
     private OIDRepo oidRepo;
     private SNMP4J snmp4J;
     private PrinterService printerService;
+    private final MailService mailService;
 
+    @Autowired
+    public SeltApplication(MailService mailService) {
+
+        this.mailService = mailService;
+
+    }
 
     public static void main(String[] args) {
         SpringApplication.run(SeltApplication.class, args);
@@ -56,14 +66,6 @@ public class SeltApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-
-
-
-
-
-
-
 
         if (userRepository.findAll().size() == 0) {
             UserRole userRole = new UserRole();
