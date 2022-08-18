@@ -64,7 +64,7 @@
                                 th:text="${Key.tonerName}"></option>
                     </select>
 
-            -->
+
         <table id="pliki" class="container">
             <tbody>
             <tr>
@@ -79,11 +79,13 @@
             </tr>
             </tbody>
         </table>
-
+ -->
         <table id="pliki2" class="container">
             <tbody>
             <tr>
                 <td >
+
+
                     <select id="tonerlist" th:field="*{tonerList}" class="form-control col-4 mb-4">
                         <option value="">Wybierz toner</option>
                         <option th:each="Key : ${toners}"
@@ -91,13 +93,14 @@
                                 th:text="${Key.tonerName}"></option>
                     </select>
                 </td>
-            </tr>
+                </td>
+                </tr>
+
             </tbody>
         </table>
 
-
         <div>
-        <input type="button" id="copy" value="Dodaj kolejny licznik" onclick="" class="btn btn-primary"/>
+
             <input type="button" id="copy2" value="Dodaj kolejny toner" onclick="" class="btn btn-primary"/>
         <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
 </div>

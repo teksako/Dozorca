@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Data
 @Service
@@ -27,6 +28,20 @@ public class CounterService {
     private final CounterRepo counterRepo;
     private final PrinterService printerService;
     private final OIDRepo oidRepo;
+    private final MailService mailService;
+
+    @Scheduled(fixedDelay = 100000)
+    public void validateTonerLevel(){
+        List<Printer> printerList = onlineList();
+        for (Printer printer: printerList) {
+            int value = printerService.randomNumber();
+            if (value < 15) {
+                mailService.sendSimpleEmail("teksako@op.pl",
+                        "Niski poziom toneru",
+                        "Poziom toneru " + value + " w drukarce" + printer.getManufacturer() + " w "+ printer.getDepartment().getNameOfDepartment());
+            }
+        }
+    }
 
     public List<Printer> onlineList() {
         List<Printer> findAll = printerService.findAll();
@@ -91,14 +106,15 @@ public class CounterService {
 
     public String getTonerLevel(String ip, String oid1, String oid2) {
 
-        Long value1 =  (getPrintCounter(ip, "public", oid1));
-        Long value2 =  (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
-        double value3 = ((double)value1/(double)value2)*100l;
-        System.out.println(value1 +" "+ value2 + " "+ value3);
-        return String.valueOf((long)value3)+"%";
+        Long value1 = (getPrintCounter(ip, "public", oid1));
+        Long value2 = (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
+        double value3 = ((double) value1 / (double) value2) * 100l;
+        System.out.println(value1 + " " + value2 + " " + value3);
+        return String.valueOf((long) value3) + "%";
         //return String.valueOf(printerService.randomNumber());
     }
 
+        //return String.valueOf(printerService.randomNumber());
 
     //-------------------
 
@@ -138,7 +154,7 @@ public class CounterService {
 
                     } else if ((oid.getOidName().equals("Magenta Actual Level"))) {
                         String oid1 = oidRepo.findAllByOidName("Magenta Max Level").get(0).getOidValue();
-                        countList.add("Poziom czerwonego toneru: " +getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
+                        countList.add("Poziom czerwonego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1));
                         System.out.println(countList);
 
                     } else if ((oid.getOidName().equals("Yellow Actual Level"))) {
@@ -217,18 +233,21 @@ public class CounterService {
     }
 
     public List<Counter> findAllByPrinterId(long id) {
-        List<Counter> counterList = counterRepo.findAllByPrinter_idIsLike(id);
-        for (Counter counter: counterList
-             ) {
-            System.out.println(counter.getDate().getDayOfWeek());
-            if(counter.getDate().getDayOfWeek().toString()=="MONDAY"){
-            System.out.println(counter.getCounter());
+             return counterRepo.findAllByPrinter_idIsLike(id);
+    }
+
+    public List<Counter> findAllWeekly(long id) {
+        List<Counter> counterList = new ArrayList<>();
+        String day;
+        for (Counter counter: counterRepo.findAllByPrinter_idIsLike(id)
+        ) {
+            day =counter.getDate().getDayOfWeek().toString();
+            if(day.equals("MONDAY")){
+                counterList.add(counter);
+                System.out.println(counter);
+            }
         }
-
-        }
-
-
-        return counterRepo.findAllByPrinter_idIsLike(id);
+        return counterList;
     }
 
     public Counter findByPrinter_IdIsLikeAndDateIsLike(long id, LocalDate date) {

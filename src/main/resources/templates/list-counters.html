@@ -113,7 +113,12 @@
 
             <label for="features2">Pokaż wszystko</label>
         </li>
+        <li>
+            <input id="weekly" name="features" type="radio" th:field="*{radio}" th:value="${4}"
+                   onclick="myFunction()"/>
 
+            <label for="weekly">Tygodniowe wydruki</label>
+        </li>
         <li>
             <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
                    onclick="myFunction2() "/>

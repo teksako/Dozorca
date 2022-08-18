@@ -5,6 +5,7 @@ import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,12 @@ import java.util.*;
 @Transactional
 public class PrinterService {
 
-
+    @Autowired
     private final PrinterRepo printerRepo;
+    @Autowired
     private final OIDRepo oidRepo;
+    @Autowired
+    private final OIDService oidService;
 
 
     public Optional<Printer> findById(Long id) {
@@ -97,6 +101,7 @@ public class PrinterService {
         if (printer.getIPAdress().isBlank()) {
             printer.setIPAdress("-");
         }
+        printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
         printerRepo.save(printer);
     }
 
