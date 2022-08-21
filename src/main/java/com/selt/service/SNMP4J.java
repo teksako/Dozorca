@@ -42,7 +42,6 @@ public class SNMP4J {
     }
 
     public static String snmpGet(String ip, String community, String oidValue, String oidName) {
-        //String oidName=oidRepo.findOIDByOidValue(oidValue).getOidName();
 
         String info = new String();
 
@@ -50,45 +49,21 @@ public class SNMP4J {
         Snmp snmp = null;
         try {
             PDU pdu = new PDU();
-            // pdu.add(new VariableBinding(new OID(new int[]
-            // {1,3,6,1,2,1,1,2})));
             pdu.add(new VariableBinding(new OID(oidValue)));
-
             DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
             snmp = new Snmp(transport);
             snmp.listen();
-
             pdu.setType(PDU.GET);
             ResponseEvent respEvent = snmp.send(pdu, target);
-
             PDU response = respEvent.getResponse();
 
-            if (response == null) {
-                info = "Minął czas oczekiwania, odczyt nie powiódł się.";
-            } else {
-
-                // Vector<VariableBinding> vbVect =
-                // response.getVariableBindings();
-                // System.out.println("vb size:" + vbVect.size());
-                // if (vbVect.size() == 0) {
-                // System.out.println("response vb size is 0 ");
-                // } else {
-                // VariableBinding vb = vbVect.firstElement();
-                // System.out.println(vb.getOid() + " = " + vb.getVariable());
-                // }
-
-                //info = "response pdu size is " + response.size();
-                for (int i = 0; i < response.size(); i++) {
-                    VariableBinding vb = response.get(i);
-                    info = oidName + " " + vb.getVariable();
-
-                }
-
+            for (int i = 0; i < response.size(); i++) {
+                VariableBinding vb = response.get(i);
+                info = oidName + " " + vb.getVariable();
             }
-            //System.out.println("SNMP GET one OID value finished !");
         } catch (Exception e) {
             e.printStackTrace();
-            //System.out.println("SNMP Get Exception:" + e);
+
         } finally {
             if (snmp != null) {
                 try {
@@ -97,7 +72,6 @@ public class SNMP4J {
                     snmp = null;
                 }
             }
-
         }
         return info;
     }
@@ -105,25 +79,18 @@ public class SNMP4J {
 
     public static Long snmpGet(String ip, String community, String oidValue) {
 
-
         String info = null;
-
         CommunityTarget target = createDefault(ip, community);
         Snmp snmp = null;
         try {
             PDU pdu = new PDU();
-
             pdu.add(new VariableBinding(new OID(oidValue)));
-
             DefaultUdpTransportMapping transport = new DefaultUdpTransportMapping();
             snmp = new Snmp(transport);
             snmp.listen();
-
             pdu.setType(PDU.GET);
             ResponseEvent respEvent = snmp.send(pdu, target);
-
             PDU response = respEvent.getResponse();
-
             if (response == null) {
                 info = "0";
             } else {
@@ -131,11 +98,8 @@ public class SNMP4J {
                 for (int i = 0; i < response.size(); i++) {
                     VariableBinding vb = response.get(i);
                     info = String.valueOf(vb.getVariable());
-
                 }
-
             }
-
         } catch (Exception e) {
             e.printStackTrace();
 

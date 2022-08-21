@@ -11,15 +11,15 @@
 <header>
   <nav class="navbar navbar-light bg-primary">
     <div class="av navbar-nav navbar-right">
-      <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
-      <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
-                                                                class="navbar-brand"/></strong></form>
-      <input type="button" value="Powrót" name="backButton"
-             onClick="javascript:window.location.href='/index'" class="navbar-brand">
+
+      <form th:action="@{/logout}" method="post"><input type="submit" value="Wyloguj"
+                                                                class="navbar-brand"/>
+      </form>
+
     </div>
   </nav>
 </header>
-
+<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
 <div class="container">
   <h3>Lista lokalizacji</h3>
   </hr>
