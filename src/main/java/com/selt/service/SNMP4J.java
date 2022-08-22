@@ -91,7 +91,7 @@ public class SNMP4J {
             pdu.setType(PDU.GET);
             ResponseEvent respEvent = snmp.send(pdu, target);
             PDU response = respEvent.getResponse();
-            if (response == null) {
+            if (response == null || response.equals("noSuchInstance")) {
                 info = "0";
             } else {
 
@@ -113,6 +113,12 @@ public class SNMP4J {
             }
 
         }
-        return Long.parseLong(info);
+        try {
+            return Long.parseLong(info);
+        }catch (NumberFormatException e){
+            info ="0";
+            return Long.parseLong(info);
+        }
+
     }
 }

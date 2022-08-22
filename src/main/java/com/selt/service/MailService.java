@@ -20,7 +20,7 @@ public class MailService {
     public void sendSimpleEmail(String to, String subject, String content) {
         SimpleMailMessage msg = new SimpleMailMessage();
         msg.setTo(to);
-        msg.setFrom("Dozorca Selt <pk@infokiosk.com.pl>");
+        msg.setFrom("Dozorca Selt <pawel.kwapisinski@selt.com>");
         msg.setSubject(subject);
         msg.setText(content);
         javaMailSender.send(msg);

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,8 @@ public class CounterService {
     private final OIDRepo oidRepo;
     private final MailService mailService;
 
-    @Scheduled(fixedDelay = 10000)
+    //@Scheduled(fixedDelay = 10000)
+    @Scheduled(cron = "0 27 11 * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList=new ArrayList<>();
         for (Printer printer : onlineList()) {
@@ -39,7 +41,7 @@ public class CounterService {
             if(printer.getManufacturer().equals("Konica Minolta")){
                 for (OID oid:printer.getOid()) {
                     if(oid.getOidName().contains("Toner Level")){
-                        if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 50) {
+                        if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 10) {
                             mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
                         }
                     }
@@ -48,7 +50,7 @@ public class CounterService {
             else if(printer.getManufacturer().equals("Xerox")||printer.getManufacturer().equals("HP")){
                 for (OID oid:printer.getOid()) {
                     if(oid.getOidName().contains("Toner Level")){
-                        if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 50) {
+                        if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 10) {
                             mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
                         }
                     }
@@ -58,9 +60,9 @@ public class CounterService {
 
        }
         if(mailList.size()!=0) {
-            mailService.sendSimpleEmail("teksako@op.pl",
+            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
                     "Niski poziom toneru",
-                    mailList.toString());
+                    String.valueOf(mailList));
             System.out.println("Wysłao wiadomość email!");
        }
     }
@@ -75,21 +77,53 @@ public class CounterService {
         }
         return onlineList;
     }
+//    @Scheduled(fixedDelay = 100)
+//    public void getCounter(){
+//        List<Printer> printerList =printerService.findAllByOnlineIs();
+//        List<OID> oidList= new ArrayList<>();
+//        String oidValue = new String();
+//        for (Printer printer:printerList) {
+//            oidList = printer.getOid();
+//            for (OID oid: oidList) {
+//                if(oid.getOidName()=="Total Counter"){
+//                    oidValue=oid.getOidValue();
+//                }
+//
+//            }
+//            System.out.println(printer.getManufacturer()+ " " + printer.getModel() +" "+printerService.getPrintCounter(printer.getIPAdress(),oidValue));
+//
+//        }
+//
+//    }
+
 
 
     //@Scheduled(cron = "30 * * ? * ?")
-    @Scheduled(cron = "0 48 15 * * MON-SUN")
+    @Scheduled(cron = "0 30 8 * * MON-SUN")
     public void save() {
-
+        //String oidValue;
         List<Printer> printerList = printerService.findAll();
         for (Printer printer : printerList) {
             Counter counter = new Counter();
             counter.setDate(LocalDate.now());
+
             if (printer.getCollectCounter().equals(true)) {
+
+                //oidValue = oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()),"Total Counter").getOidValue();
                 counter.setPrinter(printer);
-                counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
-                System.out.println("Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
-                counterRepo.save(counter);
+                //counter.setCounter((long) printerService.randomNumber());
+                try {
+                    counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
+                    System.out.println(LocalDateTime.now() + " " + "Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
+                    //System.out.println(printer.getModel() + " " + printer.getIPAdress() +" public "+ oidRepo.findOidByoidProducentAndOidName(printer.getManufacturer(),"Total Counter").getOidValue());
+                    counterRepo.save(counter);
+                }
+                catch (NullPointerException e){
+                    System.out.println(LocalDateTime.now() + " " + "Nie wykonano zadania dla " + printer.getManufacturer() + " "+ printer.getIPAdress() + " "  + printer.getDepartment().getNameOfDepartment());
+                }
+                catch (NumberFormatException e){
+                    System.out.println(LocalDateTime.now() + " " + "Nie wykonano zadania dla " + printer.getManufacturer() + " "+ printer.getIPAdress() + " " + printer.getDepartment().getNameOfDepartment());
+                }
             }
 
         }
@@ -151,7 +185,6 @@ public class CounterService {
                         countList.add("Poziom żółtego toneru: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
                     }
 
-                    //oidName = oidRepo.findOIDById(oid.getId()).getOidName();
                 }
             } else {
                 for (OID oid : oidList) {
@@ -193,6 +226,7 @@ public class CounterService {
         int year = LocalDate.now().getYear();
         int month = LocalDate.now().getMonthValue();
         start = LocalDate.of(year, month, 1);
+        int day;
 
         if (year % 4 == 0) {
 

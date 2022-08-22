@@ -16,7 +16,7 @@ public class MailApi {
 
     @GetMapping("/sendMail")
     public String sendMail() throws MessagingException {
-        mailService.sendSimpleEmail("teksako@op.pl",
+        mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
                 "Wygrałeś",
                 "<b>1000 000 zł</b><br>:P");
         return "wysłano";

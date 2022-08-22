@@ -46,7 +46,7 @@ public class CounterController {
         LocalDate date1=LocalDate.parse(temp.getStart());
         LocalDate date2= LocalDate.parse(temp.getEnd());
         sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date2));
-        System.out.println("różnica = " + sub);
+        //System.out.println("różnica = " + sub);
         String allert="Ilość wydruków: " + sub;
         counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1);
         //counterList.add(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1));
@@ -91,7 +91,7 @@ public class CounterController {
 
 
             sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
-            allert="Ilość wydruków: " + sub;
+            //allert="Ilość wydruków: " + sub;
         }
         catch (NullPointerException exception){
             counterList = counterService.findAllByPrinterId(printerId);
