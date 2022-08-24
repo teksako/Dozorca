@@ -178,10 +178,28 @@ public class SeltApplication implements CommandLineRunner {
             oidRepo.save(oid12);
 
             OID oid13 = new OID();
-            oid13.setOidName("Yellow Actual Level");
+            oid13.setOidName("Max Toner Capacity");
             oid13.setOidValue("");
-            oid13.setOidProducent("Xerox");
+            oid13.setOidProducent("Konica Minolta");
             oidRepo.save(oid13);
+
+            OID oid14 = new OID();
+            oid14.setOidName("Actual Toner Capacity");
+            oid14.setOidValue("");
+            oid14.setOidProducent("Konica Minolta");
+            oidRepo.save(oid14);
+
+            OID oid15 = new OID();
+            oid15.setOidName("Actual Drum Condition");
+            oid15.setOidValue("");
+            oid15.setOidProducent("Konica Minolta");
+            oidRepo.save(oid15);
+
+            OID oid16 = new OID();
+            oid16.setOidName("Actual Drum Condition");
+            oid16.setOidValue("");
+            oid14.setOidProducent("Konica Minolta");
+            oidRepo.save(oid16);
 
 
 

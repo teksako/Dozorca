@@ -101,13 +101,18 @@ public class PrinterService {
         if (printer.getIPAdress().isBlank()) {
             printer.setIPAdress("-");
         }
-        printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
+        if(printer.getManufacturer().contains("Konica Minolta")) {
+            printer.setOid(oidService.findAllByPrinterModel(printer));
+        }else{
+            printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
+        }
+
         printerRepo.save(printer);
     }
 
     public void deletePrinter(long id) {
-        Optional<Printer> printer1 = printerRepo.findById(id);
-        printerRepo.delete(printer1.get());
+        Optional<Printer> printer = printerRepo.findById(id);
+        printerRepo.delete(printer.get());
     }
 
     public void editPrinter(long id) {
