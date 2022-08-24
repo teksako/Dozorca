@@ -137,71 +137,75 @@ public class SeltApplication implements CommandLineRunner {
 
             OID oid6 = new OID();
             oid6.setOidName("Black Actual Level");
-            oid6.setOidValue("");
+            oid6.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.1");
             oid6.setOidProducent("Xerox");
             oidRepo.save(oid6);
 
             OID oid7 = new OID();
             oid7.setOidName("Black Max Level");
-            oid7.setOidValue("");
+            oid7.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.1");
             oid7.setOidProducent("Xerox");
             oidRepo.save(oid7);
 
             OID oid8 = new OID();
             oid8.setOidName("Cyan Actual Level");
-            oid8.setOidValue("");
+            oid8.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.2");
             oid8.setOidProducent("Xerox");
             oidRepo.save(oid8);
 
             OID oid9 = new OID();
             oid9.setOidName("Cyan Max Level");
-            oid9.setOidValue("");
+            oid9.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.2");
             oid9.setOidProducent("Xerox");
             oidRepo.save(oid9);
 
             OID oid10 = new OID();
             oid10.setOidName("Magenta Actual Level");
-            oid10.setOidValue("");
+            oid10.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.3");
             oid10.setOidProducent("Xerox");
             oidRepo.save(oid10);
 
             OID oid11 = new OID();
             oid11.setOidName("Magenta Max Level");
-            oid11.setOidValue("");
+            oid11.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.4");
             oid11.setOidProducent("Xerox");
             oidRepo.save(oid11);
 
             OID oid12 = new OID();
             oid12.setOidName("Yellow Max Level");
-            oid12.setOidValue("");
+            oid12.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.4");
             oid12.setOidProducent("Xerox");
             oidRepo.save(oid12);
 
             OID oid13 = new OID();
             oid13.setOidName("Max Toner Capacity");
-            oid13.setOidValue("");
+            oid13.setOidValue(".1.3.6.1.2.1.43.11.1.1.8.1.1");
             oid13.setOidProducent("Konica Minolta");
             oidRepo.save(oid13);
 
             OID oid14 = new OID();
             oid14.setOidName("Actual Toner Capacity");
-            oid14.setOidValue("");
+            oid14.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.1");
             oid14.setOidProducent("Konica Minolta");
             oidRepo.save(oid14);
 
             OID oid15 = new OID();
-            oid15.setOidName("Actual Drum Condition");
-            oid15.setOidValue("");
+            oid15.setOidName("Max Drum Condition");
+            oid15.setOidValue(".1.3.6.1.2.1.43.11.1.1.8.1.2");
             oid15.setOidProducent("Konica Minolta");
             oidRepo.save(oid15);
 
             OID oid16 = new OID();
             oid16.setOidName("Actual Drum Condition");
-            oid16.setOidValue("");
+            oid16.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.2");
             oid14.setOidProducent("Konica Minolta");
             oidRepo.save(oid16);
 
-
+            OID oid17 = new OID();
+            oid17.setOidName("Total Counter");
+            oid17.setOidValue("1.3.6.1.4.1.253.8.53.13.2.1.6.1.20.34");
+            oid17.setOidProducent("Xerox");
+            oidRepo.save(oid17);
 
         }
 

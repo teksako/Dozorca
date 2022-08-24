@@ -59,9 +59,6 @@ public class PrinterService {
         return IPAdress;
     }
 
-    //@Scheduled(cron = "0 39 14 ? * TUE")
-    //@Scheduled(fixedDelay = 1000000)
-
 
     public List<Toner> findAlltoner(long id) {
         Optional<Printer> printer = printerRepo.findById(id);
@@ -101,12 +98,12 @@ public class PrinterService {
         if (printer.getIPAdress().isBlank()) {
             printer.setIPAdress("-");
         }
-        if(printer.getManufacturer().contains("Konica Minolta")) {
-            printer.setOid(oidService.findAllByPrinterModel(printer));
-        }else{
-            printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
-        }
-
+//        if(printer.getManufacturer().contains("Konica Minolta")) {
+//            printer.setOid(oidService.findAllByPrinterModel(printer));
+//        }else{
+//            printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
+//        }
+        printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
         printerRepo.save(printer);
     }
 
