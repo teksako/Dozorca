@@ -196,6 +196,20 @@ public class CounterService {
                             countList.add("Kondycja bębna: " + getTonerLevel(ip, oid.getOidValue(), oid1) + "%");
                         }
                     }
+                } else if (printer.get().getModel().contains("20")) {
+                    for (OID oid : oidList) {
+                        if (oid.getOidName().equals("Total Counter")) {
+                            oidName = oidRepo.findOIDById(oid.getId()).getOidName();
+                            countList.add("ILość wydrukowanych stron: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
+
+
+                        } else if ((oid.getOidName().equals("Drum Page Counter"))) {
+                            oidName = oidRepo.findOIDById(oid.getId()).getOidName();
+                            countList.add("Kondycja bębna: " + (long)(((double)SNMP4J.snmpGet(ip, community, oid.getOidValue())/25000)*100)+"%");
+                            //ystem.out.println(SNMP4J.snmpGet(ip, community, oid.getOidValue()).getClass());
+
+                        }
+                    }
                 } else {
                     for (OID oid : oidList) {
                         if (oid.getOidName().equals("Total Counter")) {
@@ -240,7 +254,7 @@ public class CounterService {
                         System.out.println(countList);
                     }
                 }
-            } else {
+            }  else {
                 for (OID oid : oidList) {
                     if (oid.getOidName().equals("Total Counter")) {
                         oidName = oidRepo.findOIDById(oid.getId()).getOidName();

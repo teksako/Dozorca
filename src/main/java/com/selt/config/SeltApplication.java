@@ -207,6 +207,12 @@ public class SeltApplication implements CommandLineRunner {
             oid17.setOidProducent("Xerox");
             oidRepo.save(oid17);
 
+            OID oid18 = new OID();
+            oid18.setOidName("Drum Page Counter");
+            oid18.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.2");
+            oid18.setOidProducent("Konica Minolta");
+            oidRepo.save(oid18);
+
         }
 
 
