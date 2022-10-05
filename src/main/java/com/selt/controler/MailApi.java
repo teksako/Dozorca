@@ -1,5 +1,6 @@
 package com.selt.controler;
 
+import com.selt.service.CounterService;
 import com.selt.service.MailService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,12 +14,15 @@ import javax.mail.MessagingException;
 @RestController
 public class MailApi {
     private final MailService mailService;
+    private final CounterService counterService;
 
     @GetMapping("/sendMail")
     public String sendMail() throws MessagingException {
-        mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
-                "Wygrałeś",
-                "<b>1000 000 zł</b><br>:P");
+//        mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
+//                "Wygrałeś",
+//                "<b>1000 000 zł</b><br>:P");
+        counterService.validateTonerLevel();
+
         return "wysłano";
 
     }

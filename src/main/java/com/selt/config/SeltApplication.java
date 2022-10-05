@@ -67,6 +67,16 @@ public class SeltApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+       final List<String> printerList = new ArrayList<>();
+        printerList.add("454");
+        printerList.add("284");
+        printerList.add("253");
+        printerList.add("360");
+        final List<String> printerList1 = new ArrayList<>();
+        printerList1.add("3300P");
+        printerList1.add("4700P");
+        printerList1.add("bizhub 20");
+        printerList1.add("bizhub 20P");
         if (userRepository.findAll().size() == 0) {
             UserRole userRole = new UserRole();
             userRole.setRole(Role.ADMIN);
@@ -97,84 +107,96 @@ public class SeltApplication implements CommandLineRunner {
             admin.setEnabled(true);
             userRepository.save(admin);
         }
-     //oidRepo.deleteAll();
+
         if(oidRepo.findAll().size()==0){
             OID oid = new OID();
             oid.setOidName("Black Toner Level");
             oid.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.4");
             oid.setOidProducent("Konica Minolta");
+            oid.setPrinterModel(printerList);
             oidRepo.save(oid);
 
             OID oid1 = new OID();
             oid1.setOidName("Cyan Toner Level");
             oid1.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.3");
             oid1.setOidProducent("Konica Minolta");
+            oid1.setPrinterModel(printerList);
             oidRepo.save(oid1);
 
             OID oid2 = new OID();
             oid2.setOidName("Magenta Toner Level");
             oid2.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.2");
             oid2.setOidProducent("Konica Minolta");
+            oid2.setPrinterModel(printerList);
             oidRepo.save(oid2);
 
             OID oid3 = new OID();
             oid3.setOidName("Yellow Toner Level");
-            oid3.setOidValue(".1.3.6.1.2.1.43.11.1.1.9.1.1");
+            oid3.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.1");
             oid3.setOidProducent("Konica Minolta");
+            oid3.setPrinterModel(printerList);
             oidRepo.save(oid3);
 
             OID oid4 = new OID();
             oid4.setOidName("Total Counter");
-            oid4.setOidValue(".1.3.6.1.2.1.43.10.2.1.4.1.1");
+            oid4.setOidValue("1.3.6.1.2.1.43.10.2.1.4.1.1");
             oid4.setOidProducent("Konica Minolta");
             oidRepo.save(oid4);
 
             OID oid5 = new OID();
-            oid5.setOidName("Total Counter");
-            oid5.setOidValue(".1.3.6.1.2.1.1.16.1.1.1");
-            oid5.setOidProducent("HP");
+            oid5.setOidName("Cyan Drum Condition");
+            oid5.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.5");
+            oid5.setOidProducent("Konica Minolta");
+            oid5.setPrinterModel(printerList);
             oidRepo.save(oid5);
 
             OID oid6 = new OID();
-            oid6.setOidName("Black Actual Level");
-            oid6.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.1");
-            oid6.setOidProducent("Xerox");
+            oid6.setOidName("Magenta Drum Condition");
+            oid6.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.7");
+            oid6.setOidProducent("Konica Minolta");
+            oid6.setPrinterModel(printerList);
             oidRepo.save(oid6);
 
             OID oid7 = new OID();
-            oid7.setOidName("Black Max Level");
-            oid7.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.1");
-            oid7.setOidProducent("Xerox");
+            oid7.setOidName("Yellow Drum Condition");
+            oid7.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.9");
+            oid7.setOidProducent("Konica Minolta");
+            oid.setPrinterModel(printerList);
             oidRepo.save(oid7);
 
             OID oid8 = new OID();
-            oid8.setOidName("Cyan Actual Level");
-            oid8.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.2");
-            oid8.setOidProducent("Xerox");
+            oid8.setOidName("Black Drum Condition");
+            oid8.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.11");
+            oid8.setOidProducent("Konica Minolta");
+            oid8.setPrinterModel(printerList);
             oidRepo.save(oid8);
 
             OID oid9 = new OID();
-            oid9.setOidName("Cyan Max Level");
-            oid9.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.2");
-            oid9.setOidProducent("Xerox");
+            oid9.setOidName("Cyan Developer Condition");
+            oid9.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.6");
+            oid9.setOidProducent("Konica Minolta");
+            oid9.setPrinterModel(printerList);
             oidRepo.save(oid9);
 
             OID oid10 = new OID();
-            oid10.setOidName("Magenta Actual Level");
-            oid10.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.3");
-            oid10.setOidProducent("Xerox");
+            oid10.setOidName("Magenta Developer Condition");
+            oid10.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.8");
+            oid10.setOidProducent("Konica Minolta");
+            oid10.setPrinterModel(printerList);
             oidRepo.save(oid10);
 
             OID oid11 = new OID();
-            oid11.setOidName("Magenta Max Level");
-            oid11.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.4");
-            oid11.setOidProducent("Xerox");
+            oid11.setOidName("Yellow Developer Condiotion");
+            oid11.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.10");
+            oid11.setOidProducent("Konica Minolta");
+            oid11.setPrinterModel(printerList);
             oidRepo.save(oid11);
 
             OID oid12 = new OID();
-            oid12.setOidName("Yellow Max Level");
-            oid12.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.4");
-            oid12.setOidProducent("Xerox");
+            oid12.setOidName("Black Developer Condition");
+            oid12.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.12");
+            oid12.setOidProducent("Konica Minolta");
+            oid12.setPrinterModel(printerList);
             oidRepo.save(oid12);
 
             OID oid13 = new OID();

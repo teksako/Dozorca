@@ -38,11 +38,11 @@ public class CounterService {
         List<String> mailList=new ArrayList<>();
         for (Printer printer : onlineList()) {
             long value= printerService.randomNumber();
-            if(printer.getManufacturer().equals("Konica Minolta")){
+            if(printer.getManufacturer().equals("Konica Minolta")||!printer.getModel().contains("bizhub 20")){
                 for (OID oid:printer.getOid()) {
                     if(oid.getOidName().contains("Toner Level")){
                         if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 10) {
-                            mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
+                            mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer()+" "+ printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
                         }
                     }
                 }
@@ -51,7 +51,7 @@ public class CounterService {
                 for (OID oid:printer.getOid()) {
                     if(oid.getOidName().contains("Toner Level")){
                         if (getTonerLevel(printer.getIPAdress(),oid.getOidValue()) < 10) {
-                            mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
+                            mailList.add("Poziom toneru " + oid.getOidName()+" "+ getTonerLevel(printer.getIPAdress(),oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment()+ "\n");
                         }
                     }
                 }
@@ -59,12 +59,13 @@ public class CounterService {
             }
 
        }
-        if(mailList.size()!=0) {
-            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
-                    "Niski poziom toneru",
-                    String.valueOf(mailList));
-            System.out.println("Wysłano wiadomość email!");
-       }
+        System.out.println(mailList);
+//        if(mailList.size()!=0) {
+//            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
+//                    "Niski poziom toneru",
+//                    String.valueOf(mailList));
+//            System.out.println("Wysłano wiadomość email!");
+//       }
     }
 
     public List<Printer> onlineList() {
@@ -115,7 +116,6 @@ public class CounterService {
                 try {
                     counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
                     System.out.println(LocalDateTime.now() + " " + "Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
-                    //System.out.println(printer.getModel() + " " + printer.getIPAdress() +" public "+ oidRepo.findOidByoidProducentAndOidName(printer.getManufacturer(),"Total Counter").getOidValue());
                     counterRepo.save(counter);
                 }
                 catch (NullPointerException e){
@@ -206,7 +206,7 @@ public class CounterService {
                         } else if ((oid.getOidName().equals("Drum Page Counter"))) {
                             oidName = oidRepo.findOIDById(oid.getId()).getOidName();
                             countList.add("Kondycja bębna: " + (long)(((double)SNMP4J.snmpGet(ip, community, oid.getOidValue())/25000)*100)+"%");
-                            //ystem.out.println(SNMP4J.snmpGet(ip, community, oid.getOidValue()).getClass());
+
 
                         }
                     }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Data
@@ -24,4 +25,7 @@ public class OID {
 
     @Column
     private String oidProducent;
+
+    @Column
+    private List<String> printerModel;
 }
