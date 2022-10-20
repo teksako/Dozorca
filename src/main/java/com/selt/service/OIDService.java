@@ -21,9 +21,24 @@ public class OIDService {
 
     public List<OID> findAllByOidProducent(String producent){
 
-        return oidRepo.findAllByOidProducent(producent);
+        return oidRepo.findAllByOidProducentIsLike(producent);
     }
 
+
+    public List<OID> findAllByPrinterModel(String prinerModel, List<OID> oidList){
+
+        List<OID> finalOidList=new ArrayList<>();
+        for (OID oid: oidList) {
+            for (String model:oid.getPrinterModel())
+                  {
+                if(prinerModel.contains(model)){
+                    finalOidList.add(oid);
+                }
+            }
+
+        }
+        return finalOidList;
+    }
 //    public List<OID> findAllByPrinterModel(Printer printer) {
 //
 //        List<OID> oidList = new ArrayList<>();

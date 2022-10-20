@@ -44,6 +44,9 @@ public class Printer {
     @Column
     private Boolean collectCounter;
 
+    @Column
+    private Long serviceCounter;
+
 
 
     @OneToOne

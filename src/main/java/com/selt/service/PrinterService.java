@@ -5,6 +5,7 @@ import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.ietf.jgss.Oid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Service;
@@ -88,22 +89,33 @@ public class PrinterService {
     }
 
 
+    public void resetServiceCounter(Printer printer){
+        printer.getServiceCounter();
+    }
+
     public Optional<Printer> findById(long id) {
         return printerRepo.findById(id);
     }
 
+
+    public void reload(){
+        for (Printer printer:printerRepo.findAll()
+             ) {
+            if(printer.getCollectCounter().equals(true)){
+                save(printer);
+            }
+        }
+
+    }
 
     public void save(Printer printer) {
 
         if (printer.getIPAdress().isBlank()) {
             printer.setIPAdress("-");
         }
-//        if(printer.getManufacturer().contains("Konica Minolta")) {
-//            printer.setOid(oidService.findAllByPrinterModel(printer));
-//        }else{
-//            printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
-//        }
-        printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer()));
+
+        printer.setOid(oidService.findAllByPrinterModel(printer.getModel(),oidService.findAllByOidProducent(printer.getManufacturer())));
+        //printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer(),printer.getModel()));
         printerRepo.save(printer);
     }
 
