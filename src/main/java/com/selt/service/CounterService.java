@@ -1,5 +1,6 @@
 package com.selt.service;
 
+import com.selt.model.Configuration;
 import com.selt.model.Counter;
 import com.selt.model.OID;
 import com.selt.model.Printer;
@@ -8,6 +9,7 @@ import com.selt.repository.OIDRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.ietf.jgss.Oid;
+import org.snmp4j.smi.Null;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -31,40 +33,68 @@ public class CounterService {
     private final PrinterService printerService;
     private final OIDRepo oidRepo;
     private final MailService mailService;
+    //private final Configuration configuration;
 
     //@Scheduled(fixedDelay = 10000)
-    @Scheduled(cron = "0 0 10 * * MON-SUN")
+    @Scheduled(cron = "0 0 " + 10 + " * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList = new ArrayList<>();
         for (Printer printer : onlineList()) {
-            long value = printerService.randomNumber();
-            if (printer.getManufacturer().equals("Konica Minolta") || !printer.getModel().contains("bizhub 20")) {
-                for (OID oid : printer.getOid()) {
-                    if (oid.getOidName().contains("Toner Level")) {
-                        if (getTonerLevel(printer.getIPAdress(), oid.getOidValue()) < 10) {
-                            mailList.add("Poziom toneru " + getTonerLevel(printer.getIPAdress(), oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                        }
+            //long value = printerService.randomNumber();
+            Long tonerLevel=0l;
+            try{
+            for (OID oid : printer.getOid()) {
+                if (oid.getOidName().contains("Toner Level")) {
+                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue());
+                    if (tonerLevel < 10) {
+                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel  + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                    }
+                } else if ((oid.getOidName().equals("Actual Toner Capacity"))) {
+                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Toner Capacity").getOidValue());
+                    if ( tonerLevel< 10) {
+                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel+ "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                    }
+                } else if ((oid.getOidName().equals("Actual Cyan Toner Capacity"))) {
+                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Cyan Toner Capacity").getOidValue());
+                    if ( tonerLevel< 10) {
+                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                    }
+                } else if ((oid.getOidName().equals("Actual Magenta Toner Capacity"))) {
+                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Magenta Toner Capacity").getOidValue());
+                    if (tonerLevel < 10) {
+                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                    }
+                } else if ((oid.getOidName().equals("Actual Yellow Toner Capacity"))) {
+                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Yellow Toner Capacity").getOidValue());
+                    if ( tonerLevel< 10) {
+                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
                     }
                 }
-            } else if (printer.getManufacturer().equals("Xerox") || printer.getManufacturer().equals("HP")) {
-                for (OID oid : printer.getOid()) {
-                    if (oid.getOidName().contains("Toner Level")) {
-                        if (getTonerLevel(printer.getIPAdress(), oid.getOidValue()) < 10) {
-                            mailList.add("Poziom toneru " + oid.getOidName() + " " + getTonerLevel(printer.getIPAdress(), oid.getOidValue()) + "% w drukarce " + printer.getManufacturer() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                        }
-                    }
-                }
-
             }
-
+        }
+            catch (NullPointerException exception){
+                System.out.println("nie udało sie wykonać zadania dla " + printer.getIPAdress());
+            }
         }
         System.out.println(mailList);
-//        if(mailList.size()!=0) {
-//            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
-//                    "Niski poziom toneru",
-//                    String.valueOf(mailList));
-//            System.out.println("Wysłano wiadomość email!");
-//       }
+        if (mailList.size() != 0) {
+            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
+                    "Dozorca - niski poziom toneru!",
+                    String.valueOf(mailList));
+            System.out.println("Wysłano wiadomość email!");
+        }
+    }
+
+    public String translate(OID oid) {
+        if (oid.getOidName().contains("Cyan")) {
+            return "niebieskiego";
+        } else if (oid.getOidName().contains("Magenta")) {
+            return "czerwonego";
+        } else if (oid.getOidName().contains("Yellow")) {
+            return "żółtego";
+        } else {
+            return "czarnego";
+        }
     }
 
     public List<Printer> onlineList() {
@@ -100,17 +130,14 @@ public class CounterService {
     //@Scheduled(cron = "30 * * ? * ?")
     @Scheduled(cron = "0 10 9 * * MON-SUN")
     public void save() {
-        //String oidValue;
+
         List<Printer> printerList = printerService.findAll();
         for (Printer printer : printerList) {
             Counter counter = new Counter();
             counter.setDate(LocalDate.now());
 
             if (printer.getCollectCounter().equals(true)) {
-
-                //oidValue = oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()),"Total Counter").getOidValue();
                 counter.setPrinter(printer);
-                //counter.setCounter((long) printerService.randomNumber());
                 try {
                     counter.setCounter(getPrintCounter(printer.getIPAdress(), "public", oidRepo.findOIDByoidProducentAndOidName((printer.getManufacturer()), "Total Counter").getOidValue()));
                     System.out.println(LocalDateTime.now() + " " + "Wykonano zadanie dla " + printer.getManufacturer() + " " + printer.getDepartment().getNameOfDepartment());
@@ -127,20 +154,36 @@ public class CounterService {
     }
 
     public Long getPrintCounter(String ip, String community, String oidval) {
-
-        return SNMP4J.snmpGet(ip, community, oidval);
+try {
+    return SNMP4J.snmpGet(ip, community, oidval);
+}
+catch (NullPointerException e){
+    System.out.println(ip);
+    return 0l;
+}
 
     }
 
     //----------------HP,Xerox-------------------------
 
     public Long getTonerLevel(String ip, String oid1, String oid2) {
+        double value3;
+        Long value1 = null;
+        Long value2 = null;
+        try {
+           value1 = (getPrintCounter(ip, "public", oid1));
+            value2 = (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
+    value3 = ((double) value1 / (double) value2) * 100l;
 
-        Long value1 = (getPrintCounter(ip, "public", oid1));
-        Long value2 = (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
-        double value3 = ((double) value1 / (double) value2) * 100l;
-        System.out.println(value1 + " " + value2 + " " + value3);
+    System.out.println(ip + " " +value1 + " " + value2 + " " + value3);
+}
+catch (NullPointerException e){
+    System.out.println(ip);
+    value3 = ((double) value1 / (double) value2) * 100l;
+
+}
         return (long) value3;
+
 
     }
 
@@ -148,7 +191,6 @@ public class CounterService {
     public Long getTonerLevel(String ip, String oid) {
         return getPrintCounter(ip, "public", oid);
     }
-
 
 
     public OID findOID(List<OID> oidList, String variable) {
@@ -168,7 +210,6 @@ public class CounterService {
         List<OID> oidList = printer.get().getOid();
         List<String> countList = new ArrayList<>();
         String community = "public";
-        String oidName;
         String ip = printer.get().getIPAdress();
         if (printer.get().getIPAdress().equals("-")) {
             countList.add("Drukarka nie podłączona do sieci!");
@@ -195,90 +236,25 @@ public class CounterService {
                     } else {
                         countList.add("Kondycja bębna: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Drum Page Counter").getOidValue()) + "%");
                     }
+                } else if ((oid.getOidName().equals("Actual Cyan Toner Capacity"))) {
+                    //String oid1 = oidRepo.findAllByOidName("Cyan Max Level").get(0).getOidValue();
+                    countList.add("Poziom niebieskiego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Cyan Toner Capacity").getOidValue()) + "%");
+                    System.out.println(countList);
 
+                } else if ((oid.getOidName().equals("Actual Magenta Toner Capacity"))) {
+                    //String oid1 = oidRepo.findAllByOidName("Magenta Max Level").get(0).getOidValue();
+                    countList.add("Poziom czerwonego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Magenta Toner Capacity").getOidValue()) + "%");
 
+                    System.out.println(countList);
+
+                } else if ((oid.getOidName().equals("Actual Yellow Toner Capacity"))) {
+                    //String oid1 = oidRepo.findAllByOidName("Yellow Max Level").get(0).getOidValue();
+                    countList.add("Poziom żółtego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Yellow Toner Capacity").getOidValue()) + "%");
+                    System.out.println(countList);
                 }
 
             }
-//                }  else {
-//                    for (OID oid : oidList) {
-//                        if (oid.getOidName().equals("Total Counter")) {
-//                            countList.add("ILość wydrukowanych stron: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
-//                        }
-//                    }
-//                }
-//
-//            } else if (printer.get().getModel().contains("3335")) {
-//                for (OID oid : oidList) {
-//                    if (oid.getOidName().equals("Total Counter")) {
-//                        oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-//                        countList.add("ILość wydrukowanych stron: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Black Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Black Max Level").get(0).getOidValue();
-//                        countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Actual Drum Condition"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Max Drum Condition").get(0).getOidValue();
-//                        countList.add("Kondycja bębna: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//                    }
-//                }
-//            } else if (printer.get().getModel().contains("B235")) {
-//                for (OID oid : oidList) {
-//                    if (oid.getOidName().equals("Total Counter")) {
-//                        oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-//                        countList.add("ILość wydrukowanych stron: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Black Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Black Max Level").get(0).getOidValue();
-//                        countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Actual Drum Condition B235"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Max Drum Condition B235").get(0).getOidValue();
-//                        countList.add("Kondycja bębna: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//                    }
-//                }
-//            }  else {
-//                for (OID oid : oidList) {
-//                    if (oid.getOidName().equals("Total Counter")) {
-//                        oidName = oidRepo.findOIDById(oid.getId()).getOidName();
-//                        countList.add("ILość wydrukowanych stron: " + SNMP4J.snmpGet(ip, community, oid.getOidValue()));
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Black Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Black Max Level").get(0).getOidValue();
-//                        countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Cyan Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Cyan Max Level").get(0).getOidValue();
-//                        countList.add("Poziom niebieskiego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Magenta Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Magenta Max Level").get(0).getOidValue();
-//                        countList.add("Poziom czerwonego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        ;
-//                        System.out.println(countList);
-//
-//                    } else if ((oid.getOidName().equals("Yellow Actual Level"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Yellow Max Level").get(0).getOidValue();
-//                        countList.add("Poziom żółtego toneru: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//                    } else if ((oid.getOidName().equals("Actual Drum Condition"))) {
-//                        String oid1 = oidRepo.findAllByOidName("Max Drum Condition").get(0).getOidValue();
-//                        countList.add("Kondycja bębna: " + getTonerLevel(printer.get().getIPAdress(), oid.getOidValue(), oid1) + "%");
-//                        System.out.println(countList);
-//                    }
-//                }
-//            }
-//        }
+
         }
         return countList;
     }

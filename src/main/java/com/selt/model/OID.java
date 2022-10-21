@@ -26,6 +26,8 @@ public class OID {
     @Column
     private String oidProducent;
 
+    @ElementCollection
     @Column
-    private List<String> printerModel;
+    private List <String> printerModel;
+
 }
