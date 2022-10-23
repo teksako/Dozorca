@@ -5,9 +5,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
-@NoArgsConstructor
 @Entity
+@Data
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@NoArgsConstructor
 public class Configuration {
     @Id
     @Column(name = "id")
@@ -19,4 +20,12 @@ public class Configuration {
 
     @Column
     private String email;
+
+    @Column
+    private Long time;
+
+    @Column
+    private Long serviceCallcounter;
+
+
 }

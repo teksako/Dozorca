@@ -94,14 +94,14 @@ public class SNMP4Jcopy {
      *
      * @param args
      */
-    public static void main(String[] args) {
-
-        String ip = "192.168.13.90";
-        String community = "public";
-        String oidval = ".1.3.6.1.2.1.43.10.2.1.4.1.1";
-
-
-        SNMP4Jcopy.snmpGet(ip, community, oidval);
-
-    }
+//    public static void main(String[] args) {
+//
+//        String ip = "192.168.13.90";
+//        String community = "public";
+//        String oidval = ".1.3.6.1.2.1.43.10.2.1.4.1.1";
+//
+//
+//        SNMP4Jcopy.snmpGet(ip, community, oidval);
+//
+//    }
 }

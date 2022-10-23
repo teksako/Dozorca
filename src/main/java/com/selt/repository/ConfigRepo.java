@@ -1,8 +1,11 @@
 package com.selt.repository;
 
+import com.selt.model.Configuration;
 import org.springframework.data.jpa.repository.JpaRepository;
-import javax.servlet.jsp.jstl.core.Config;
+import org.springframework.stereotype.Repository;
 
 
-public interface ConfigRepo extends JpaRepository<Config, Long> {
+
+@Repository
+public interface ConfigRepo extends JpaRepository<Configuration, Long> {
 }

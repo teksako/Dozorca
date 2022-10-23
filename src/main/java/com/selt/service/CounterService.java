@@ -33,52 +33,53 @@ public class CounterService {
     private final PrinterService printerService;
     private final OIDRepo oidRepo;
     private final MailService mailService;
-    //private final Configuration configuration;
+    private final ConfigService configService;
+
 
     //@Scheduled(fixedDelay = 10000)
-    @Scheduled(cron = "0 0 " + 10 + " * * MON-SUN")
+    @Scheduled(cron = "0 0 10 * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList = new ArrayList<>();
+        Long tonerPercent = configService.getConfigRepo().getById(1l).getTonerPercent();
         for (Printer printer : onlineList()) {
             //long value = printerService.randomNumber();
-            Long tonerLevel=0l;
-            try{
-            for (OID oid : printer.getOid()) {
-                if (oid.getOidName().contains("Toner Level")) {
-                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue());
-                    if (tonerLevel < 10) {
-                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel  + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                    }
-                } else if ((oid.getOidName().equals("Actual Toner Capacity"))) {
-                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Toner Capacity").getOidValue());
-                    if ( tonerLevel< 10) {
-                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel+ "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                    }
-                } else if ((oid.getOidName().equals("Actual Cyan Toner Capacity"))) {
-                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Cyan Toner Capacity").getOidValue());
-                    if ( tonerLevel< 10) {
-                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                    }
-                } else if ((oid.getOidName().equals("Actual Magenta Toner Capacity"))) {
-                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Magenta Toner Capacity").getOidValue());
-                    if (tonerLevel < 10) {
-                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
-                    }
-                } else if ((oid.getOidName().equals("Actual Yellow Toner Capacity"))) {
-                    tonerLevel=getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Yellow Toner Capacity").getOidValue());
-                    if ( tonerLevel< 10) {
-                        mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+            Long tonerLevel = 0l;
+            try {
+                for (OID oid : printer.getOid()) {
+                    if (oid.getOidName().contains("Toner Level")) {
+                        tonerLevel = getTonerLevel(printer.getIPAdress(), oid.getOidValue());
+                        if (tonerLevel < tonerPercent) {
+                            mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                        }
+                    } else if ((oid.getOidName().equals("Actual Toner Capacity"))) {
+                        tonerLevel = getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Toner Capacity").getOidValue());
+                        if (tonerLevel < tonerPercent) {
+                            mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                        }
+                    } else if ((oid.getOidName().equals("Actual Cyan Toner Capacity"))) {
+                        tonerLevel = getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Cyan Toner Capacity").getOidValue());
+                        if (tonerLevel < tonerPercent) {
+                            mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                        }
+                    } else if ((oid.getOidName().equals("Actual Magenta Toner Capacity"))) {
+                        tonerLevel = getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Magenta Toner Capacity").getOidValue());
+                        if (tonerLevel < tonerPercent) {
+                            mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                        }
+                    } else if ((oid.getOidName().equals("Actual Yellow Toner Capacity"))) {
+                        tonerLevel = getTonerLevel(printer.getIPAdress(), oid.getOidValue(), findOID(printer.getOid(), "Max Yellow Toner Capacity").getOidValue());
+                        if (tonerLevel < tonerPercent) {
+                            mailList.add("Poziom toneru " + translate(oid) + " wynosi " + tonerLevel + "% w drukarce " + printer.getManufacturer() + " " + printer.getModel() + " w " + printer.getDepartment().getNameOfDepartment() + "\n");
+                        }
                     }
                 }
-            }
-        }
-            catch (NullPointerException exception){
+            } catch (NullPointerException exception) {
                 System.out.println("nie udało sie wykonać zadania dla " + printer.getIPAdress());
             }
         }
         System.out.println(mailList);
         if (mailList.size() != 0) {
-            mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
+            mailService.sendSimpleEmail(configService.getConfigRepo().getById(1l).getEmail(),
                     "Dozorca - niski poziom toneru!",
                     String.valueOf(mailList));
             System.out.println("Wysłano wiadomość email!");
@@ -154,13 +155,12 @@ public class CounterService {
     }
 
     public Long getPrintCounter(String ip, String community, String oidval) {
-try {
-    return SNMP4J.snmpGet(ip, community, oidval);
-}
-catch (NullPointerException e){
-    System.out.println(ip);
-    return 0l;
-}
+        try {
+            return SNMP4J.snmpGet(ip, community, oidval);
+        } catch (NullPointerException e) {
+            System.out.println(ip);
+            return 0l;
+        }
 
     }
 
@@ -171,17 +171,16 @@ catch (NullPointerException e){
         Long value1 = null;
         Long value2 = null;
         try {
-           value1 = (getPrintCounter(ip, "public", oid1));
+            value1 = (getPrintCounter(ip, "public", oid1));
             value2 = (getPrintCounter(ip, "public", oid2));// getPrintCounter(ip, "public", oid2)*100);
-    value3 = ((double) value1 / (double) value2) * 100l;
+            value3 = ((double) value1 / (double) value2) * 100l;
 
-    System.out.println(ip + " " +value1 + " " + value2 + " " + value3);
-}
-catch (NullPointerException e){
-    System.out.println(ip);
-    value3 = ((double) value1 / (double) value2) * 100l;
+            System.out.println(ip + " " + value1 + " " + value2 + " " + value3);
+        } catch (NullPointerException e) {
+            System.out.println(ip);
+            value3 = ((double) value1 / (double) value2) * 100l;
 
-}
+        }
         return (long) value3;
 
 
