@@ -103,6 +103,7 @@ public class CounterController {
         catch (IndexOutOfBoundsException exception){
             allert="Brak wyników spełniających kryteria!";
         }
+        allert="W wybranym okresie zostało wydrukowanych "+sub.toString()+" stron.";
         System.out.println("różnica = " + sub);
 
 

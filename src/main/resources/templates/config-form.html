@@ -20,8 +20,10 @@
 </nav>
 </header>
 <form th:action="@{/saveConfig}" th:object="${config}" method="post">
-    <input type="text" th:field="*{email}" class="form-control col-4 mb-4" placeholder="Nazwa">
-    <input type="text" th:field="*{tonerPercent}" class="form-control col-4 mb-4" placeholder="Nazwa">
+    <input type="text" th:field="*{email}" class="form-control col-4 mb-4" placeholder="E-mail">
+    <input type="text" th:field="*{tonerPercent}" class="form-control col-4 mb-4" placeholder="Poziom % raportowania tonerów">
+    <input type="text" th:field="*{time}" class="form-control col-4 mb-4" placeholder="Czas odczyty SNMP">
+    <input type="text" th:field="*{serviceCallcounter}" class="form-control col-4 mb-4" placeholder="Licznik przeglądów">
 
     <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
     <input type="hidden" th:field="*{id}"/>

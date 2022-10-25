@@ -36,6 +36,10 @@ public class CounterService {
     private final ConfigService configService;
 
 
+    public String test(){
+        return "0 0 10 * * MON-SUN";
+    }
+
     //@Scheduled(fixedDelay = 10000)
     @Scheduled(cron = "0 0 10 * * MON-SUN")
     public void validateTonerLevel() {
