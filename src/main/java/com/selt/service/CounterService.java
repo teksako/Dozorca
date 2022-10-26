@@ -233,7 +233,7 @@ public class CounterService {
                     //String oid1 = oidRepo.findAllByOidName("Max Toner Capacity").get(0).getOidValue();
                     countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Toner Capacity").getOidValue()) + "%");
                 } else if ((oid.getOidName().equals("Actual Drum Page Counter"))) {
-                    if (printer.get().getModel().contains("20")) {
+                    if (printer.get().getModel().equals("20")||printer.get().getModel().equals("20p")) {
                         countList.add("Kondycja bębna: " + (long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100) + "%");
                         System.out.println(Math.ceil((long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100)) + "%");
                     } else {

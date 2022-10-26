@@ -23,7 +23,7 @@ public class MailApi {
 //        mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
 //                "Wygrałeś",
 //                "<b>1000 000 zł</b><br>:P");
-        counterService.validateTonerLevel();
+       // counterService.validateTonerLevel();
         printerService.reload();
         return "wysłano";
 

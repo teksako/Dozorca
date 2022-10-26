@@ -3,6 +3,7 @@ package com.selt.service;
 import com.selt.model.*;
 import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
+import com.sun.jdi.VoidValue;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.ietf.jgss.Oid;
@@ -26,6 +27,7 @@ public class PrinterService {
     private final OIDRepo oidRepo;
     @Autowired
     private final OIDService oidService;
+    //private final CounterService counterService;
 
 
     public Optional<Printer> findById(Long id) {
@@ -89,8 +91,16 @@ public class PrinterService {
     }
 
 
-    public void resetServiceCounter(Printer printer){
-        printer.getServiceCounter();
+    public void resetServiceCounter(Long id){
+        Printer printer=printerRepo.getById(id);
+        String oidValue = null;
+        for (OID oid: printer.getOid()
+             ) {if(oid.getOidName().equals("Total Counter")){
+                oidValue=oid.getOidValue();
+        }
+
+        }
+        printer.setServiceCounter(SNMP4J.snmpGet(printer.getIPAdress(),"community",oidValue ));
     }
 
     public Optional<Printer> findById(long id) {

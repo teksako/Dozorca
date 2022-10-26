@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.mail.MessagingException;
 import java.util.List;
 
 @Controller
@@ -82,7 +83,15 @@ public class HardwareController {
         model.addObject("temp", temp);
         model.addObject("tonerList", printerService.findAlltoner(id));
         model.addObject("allert", allert);
+        model.addObject("serviceCounter", printerService.findById(id).get().getServiceCounter());
         return model;
+    }
+
+    @GetMapping("/resetCounter")
+    public void reset(@RequestParam Long printerId) {
+
+        printerService.resetServiceCounter(printerId);
+
     }
 
 

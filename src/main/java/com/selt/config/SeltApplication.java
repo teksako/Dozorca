@@ -127,6 +127,10 @@ public class SeltApplication implements CommandLineRunner {
         printerList10.addAll(printerList9);
         printerList10.addAll(printerList8);
 
+        final List<String> printerList12=new ArrayList<>();
+        printerList12.add("M203dn");
+        printerList12.add("M227sdn");
+
 
 
         if (userRepository.findAll().size() == 0) {
@@ -478,6 +482,19 @@ public class SeltApplication implements CommandLineRunner {
             oid43.setOidProducent("Xerox");
             oidRepo.save(oid43);
 
+            OID oid44 = new OID();
+            oid44.setOidName("Max Drum Page Counter");
+            oid44.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.5");//203,227
+            oid44.setPrinterModel(printerList12);
+            oid44.setOidProducent("HP");
+            oidRepo.save(oid44);
+
+            OID oid45 = new OID();
+            oid45.setOidName("Actual Drum Page Counter");
+            oid45.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.5");//235
+            oid45.setPrinterModel(printerList12);
+            oid45.setOidProducent("HP");
+            oidRepo.save(oid45);
 
         }
 

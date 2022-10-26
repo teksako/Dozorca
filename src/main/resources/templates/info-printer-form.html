@@ -39,6 +39,8 @@
 
     </tr>
     <tr th:text="${printer}"></tr>
+    <p>
+    <tr th:text="${serviceCounter}"></tr></p>
     <tr>
         <div th:if="${printerIP =='-'}">
             <p></p>
@@ -51,7 +53,7 @@
     </tr>
     </tbody>
 </table>
-
+<a th:href="@{/resetCounter}" class="btn btn-primary">Zeruj licznik</a>
 <p>Wydaj toner.</p>
 <form th:action="@{/removeMagazine2}" th:object="${temp}" method="post">
 

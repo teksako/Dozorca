@@ -91,7 +91,7 @@ public class CounterController {
 
 
             sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
-            //allert="Ilość wydruków: " + sub;
+
         }
         catch (NullPointerException exception){
             counterList = counterService.findAllByPrinterId(printerId);
