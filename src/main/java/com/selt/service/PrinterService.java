@@ -27,7 +27,7 @@ public class PrinterService {
     private final OIDRepo oidRepo;
     @Autowired
     private final OIDService oidService;
-    //private final CounterService counterService;
+    private final ConfigService configService;
 
 
     public Optional<Printer> findById(Long id) {
@@ -91,16 +91,39 @@ public class PrinterService {
     }
 
 
-    public void resetServiceCounter(Long id){
-        Printer printer=printerRepo.getById(id);
+    public void resetServiceCounter(Long id) {
+        Printer printer = printerRepo.getById(id);
         String oidValue = null;
-        for (OID oid: printer.getOid()
-             ) {if(oid.getOidName().equals("Total Counter")){
-                oidValue=oid.getOidValue();
-        }
+        for (OID oid : printer.getOid()
+        ) {
+            if (oid.getOidName().equals("Total Counter")) {
+                oidValue = oid.getOidValue();
+            }
 
         }
-        printer.setServiceCounter(SNMP4J.snmpGet(printer.getIPAdress(),"community",oidValue ));
+        printer.setServiceCounter(SNMP4J.snmpGet(printer.getIPAdress(), "public", oidValue));
+    }
+
+    public String validateServiceCounter(long id) {
+        Printer printer = printerRepo.getById(id);
+        String oidValue = null;
+        for (OID oid : printer.getOid()
+        ) {
+            if (oid.getOidName().equals("Total Counter")) {
+                oidValue = oid.getOidValue();
+            }
+
+        }
+        Long counte1 = (SNMP4J.snmpGet(printer.getIPAdress(), "public", oidValue));
+        Long counter2 = printer.getServiceCounter();
+
+        if (counte1 - counter2 < configService.getConfigRepo().getById(1l).getServiceCallcounter()) {
+            return counte1 - counter2 + " stron do przeglądu";
+        } else {
+            return "Wykonaj przegląd!";
+        }
+
+
     }
 
     public Optional<Printer> findById(long id) {
@@ -108,10 +131,10 @@ public class PrinterService {
     }
 
 
-    public void reload(){
-        for (Printer printer:printerRepo.findAll()
-             ) {
-            if(printer.getCollectCounter().equals(true)){
+    public void reload() {
+        for (Printer printer : printerRepo.findAll()
+        ) {
+            if (printer.getCollectCounter().equals(true)) {
                 save(printer);
             }
         }
@@ -124,7 +147,7 @@ public class PrinterService {
             printer.setIPAdress("-");
         }
 
-        printer.setOid(oidService.findAllByPrinterModel(printer.getModel(),oidService.findAllByOidProducent(printer.getManufacturer())));
+        printer.setOid(oidService.findAllByPrinterModel(printer.getModel(), oidService.findAllByOidProducent(printer.getManufacturer())));
         //printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer(),printer.getModel()));
         printerRepo.save(printer);
     }

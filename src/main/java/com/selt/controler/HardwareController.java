@@ -83,14 +83,16 @@ public class HardwareController {
         model.addObject("temp", temp);
         model.addObject("tonerList", printerService.findAlltoner(id));
         model.addObject("allert", allert);
-        model.addObject("serviceCounter", printerService.findById(id).get().getServiceCounter());
+        model.addObject("serviceCounter", printerService.validateServiceCounter(id));
         return model;
     }
 
     @GetMapping("/resetCounter")
-    public void reset(@RequestParam Long printerId) {
+    public ModelAndView reset(@RequestParam Long printerId) {
 
         printerService.resetServiceCounter(printerId);
+        String allert="Wyzerowano licznik!";
+        return showInfoForm(printerId,allert);
 
     }
 
