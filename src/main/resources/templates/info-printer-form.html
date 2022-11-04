@@ -1,27 +1,54 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml"
+      xmlns:javascript="http://www.w3.org/1999/xhtml">
 
 <head>
     <meta charset="UTF-8">
     <title>SELT</title>
 </head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 
 <body>
+
+<nav class="navbar navbar-expand-lg bg-primary">
+
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#"  onClick="javascript:window.location.href='/index'">Home</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" th:href="${'http://'+printerIP}" >Zarządzaj</a>
+                <a class="nav-link" th:href="@{/list-counters(printerId=${printerId})}" >Liczniki</a>
+                <a class="nav-link" th:href="@{/list-printers}">Back to list</a>
+                <a class="nav-link disabled">Disabled</a>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+
+</nav>
+<!--
 <header>
     <nav class="navbar navbar-light bg-primary">
-        <div class="av navbar-nav navbar-right">
+        <div class="nav navbar-nav navbar-left">
 
-            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
-                                                                      class="navbar-brand"/></strong></form>
-            <input type="button" value="Powrót" name="backButton"
-                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
+            <form th:action="@{/logout}" method="post"><input type="submit" value="Wyloguj"
+                                                                      class="navbar-brand"/></form>
+
+
         </div>
     </nav>
 </header>
-<!--
+
 <div class="progress">
     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="50" aria-valuemin="0"
          aria-valuemax="100"></div>
@@ -40,9 +67,7 @@
     </tr>
     <tr th:text="${printer}"></tr>
     <p>
-       <label>
-           Ostatni przegląd przy :
-       </label> <tr th:text="${serviceCounter}"></tr>
+        <tr th:text="${serviceCounter}"></tr>
     </p>
     <tr>
         <div th:if="${printerIP =='-'}">
@@ -78,8 +103,7 @@
 <div class="font-weight-bold">
     <p th:text="${allert}" class="text-danger"></p>
 </div>
-<a th:href="@{/list-printers}">Back to list</a>
-<a th:href="@{/list-counters(printerId=${printerId})}" class="btn btn-info">Liczniki</a>
+
 
 
 </body>

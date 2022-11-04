@@ -118,7 +118,7 @@ public class PrinterService {
         Long counter2 = printer.getServiceCounter();
 
         if (counte1 - counter2 < configService.getConfigRepo().getById(1l).getServiceCallcounter()) {
-            return counte1 - counter2 + " stron do przeglądu";
+            return configService.getConfigRepo().getById(1l).getServiceCallcounter()-(counte1 - counter2) + " stron do przeglądu";
         } else {
             return "Wykonaj przegląd!";
         }
