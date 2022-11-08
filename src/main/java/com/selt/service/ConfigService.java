@@ -5,6 +5,7 @@ import com.selt.repository.ConfigRepo;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -19,6 +20,9 @@ public class ConfigService {
     }
     public Optional<Configuration> findById(){
         return configRepo.findById(1l);
+    }
+    public List<Configuration> findAll(){
+        return configRepo.findAll();
     }
 
 

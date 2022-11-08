@@ -1,6 +1,7 @@
 package com.selt.config;
 
 import com.selt.model.*;
+import com.selt.repository.ConfigRepo;
 import com.selt.repository.OIDRepo;
 import com.selt.repository.RoleRepo;
 import com.selt.repository.UserRepo;
@@ -13,13 +14,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -30,7 +28,6 @@ import java.util.List;
 @EntityScan("com.selt.model")
 @EnableJpaRepositories("com.selt.repository")
 @EnableScheduling
-@Import(SecurityConfig.class)
 public class SeltApplication implements CommandLineRunner {
 
     @Autowired
@@ -43,10 +40,13 @@ public class SeltApplication implements CommandLineRunner {
     private OIDRepo oidRepo;
     private SNMP4J snmp4J;
     private PrinterService printerService;
+    @Autowired
+    private final ConfigRepo configRepo;
     private final MailService mailService;
 
     @Autowired
-    public SeltApplication(MailService mailService) {
+    public SeltApplication(ConfigRepo configRepo, MailService mailService) {
+        this.configRepo = configRepo;
 
         this.mailService = mailService;
 
@@ -56,13 +56,6 @@ public class SeltApplication implements CommandLineRunner {
         SpringApplication.run(SeltApplication.class, args);
     }
 
-    //@Scheduled(cron = "0 13 21 ? * MON")
-//
-//    public void writeSomething1() {
-//        //printerService.getCounter();
-//       //System.out.println("test");
-//        printerService.test();
-//    }
 
     @Override
     public void run(String... args) throws Exception {
@@ -131,6 +124,14 @@ public class SeltApplication implements CommandLineRunner {
         printerList12.add("M203dn");
         printerList12.add("M227sdn");
 
+        if(configRepo.findAll().size()==0){
+            Configuration configuration = new Configuration();
+            configuration.setEmail("admin@admin.com");
+            configuration.setServiceCallcounter(10000l);
+            configuration.setTime(100l);
+            configuration.setTonerPercent(10l);
+            configRepo.save(configuration);
+        }
 
 
         if (userRepository.findAll().size() == 0) {

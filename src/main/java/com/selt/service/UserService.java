@@ -46,9 +46,7 @@ public class UserService {
     }
 
     public void saveUpdate(@NotNull User user, String password){
-        Date date;
-        date = user.getCreateDate();
-        user.setCreateDate(date);
+        user.setCreateDate(user.getCreateDate());
         user.setPassword(passwordEncoder.encode(password));
         userRepo.save(user);
     }

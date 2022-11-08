@@ -19,7 +19,7 @@ public class MainController {
     @GetMapping({"/", "/index"})
     public String mainPage(Model model){
        model.addAttribute("username",  userService.findUserByUsername().getFullname());
-
+       model.addAttribute("id", userService.findUserByUsername().getId());
         return "index";
     }
 
