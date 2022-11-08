@@ -27,11 +27,12 @@
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color:#ff0000;">
+<nav class="navbar navbar-expand-lg bg-success navbar-light fixed-top">
 
     <div class="container-fluid">
 
-        <a class="navbar-brand" href="#" onClick="javascript:window.location.href='/index'">Home</a>
+        <a class="navbar-brand" href="#" onClick="javascript:window.location.href='/index'"><i
+                class="bi bi-house-fill"></i> Home</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -39,8 +40,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" th:href="${'http://'+printerIP}" >Zarządzaj</a>
-                <a class="nav-link" th:href="@{/list-counters(printerId=${printerId})}" >Liczniki</a>
+                <a class="nav-link" th:href="${'http://'+printerIP}">Zarządzaj</a>
+                <a class="nav-link" th:href="@{/list-counters(printerId=${printerId})}">Liczniki</a>
                 <a class="nav-link" th:href="@{/list-printers}">Back to list</a>
             </div>
         </div>
@@ -52,8 +53,8 @@
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                   aria-expanded="false">
-                    Profile
+                   aria-expanded="false"><i class="bi bi-person-circle" th:text="${' '+ username}"></i>
+
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -69,14 +70,9 @@
 
         </ul>
     </div>
-
-
 </nav>
-
-<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
-<hr/>
-
-
+<br>
+<br><br>
 <table class="table">
     <tbody>
     <tr th:each="key : ${counter}" style="text-align: center; ">
