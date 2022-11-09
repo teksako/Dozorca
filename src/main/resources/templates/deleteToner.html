@@ -5,18 +5,10 @@
   <meta charset="UTF-8">
   <title>SELT</title>
 </head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 <body>
-<header>
-  <nav class="navbar navbar-light bg-primary">
-    <div class="av navbar-nav navbar-right">
-      <a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
-      <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
-                                                                class="navbar-brand"/></strong></form>
-    </div>
-  </nav>
-</header>
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
 
 <form th:action="@{/deleteToner}" th:object="${toner}" method="post">
 

@@ -75,26 +75,9 @@
     </script>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-primary">
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
 
-
-        <a class="navbar-brand" href="#">
-            <img th:src="@{jpg/LOGO - SELT/SELT - logo.jpg}" width="30" height="30" alt="">
-        </a>
-        <div class="av navbar-nav navbar-right">
-
-            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
-                                                                      class="navbar-brand"/></strong></form>
-            <input type="button" value="Powrót" name="backButton"
-                   onClick="javascript:window.location.href='/index'" class="navbar-brand">
-
-        </div>
-
-    </nav>
-
-</header>
-<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
 <form th:action="@{/Raport}" th:object="${temp}" method="post">
     <ul>
         <li>

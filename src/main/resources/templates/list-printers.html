@@ -5,37 +5,11 @@
     <meta charset="UTF-8">
     <title>SELT</title>
 </head>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script>
-    function myFunction() {
-  // Get the checkbox
-  var checkBox = document.getElementById("myCheck");
-  // Get the output text
-  var text = document.getElementById("text");
 
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-    text.style.display = "none";
-  }
-}
-</script>
 <body>
-<header>
-    <nav class="navbar navbar-light bg-primary">
-        <div class="av navbar-nav navbar-right">
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
 
-            <form th:action="@{/logout}" method="post"><strong><input type="submit" value="Wyloguj"
-                                                                      class="navbar-brand"/></strong></form>
-            <input type="button" value="Powrót" name="backButton"
-            onClick="javascript:window.location.href='/index'" class="navbar-brand">
-        </div>
-    </nav>
-</header>
-
-<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
 
 <form th:action="@{/list-printers}" th:object="${temp}" method="post">
 
