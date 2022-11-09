@@ -40,9 +40,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link" th:href="${'http://'+printerIP}">Zarządzaj</a>
-                <a class="nav-link" th:href="@{/list-counters(printerId=${printerId})}">Liczniki</a>
-                <a class="nav-link" th:href="@{/list-printers}">Back to list</a>
+                <a class="nav-link" th:href="${'http://'+printerIP}"><i class="bi bi-box-arrow-in-right"></i> Zarządzaj</a>
+                <a class="nav-link" th:href="@{/list-counters(printerId=${printerId})}"><i class="bi bi-bar-chart-fill"></i> Liczniki</a>
+                <a class="nav-link" th:href="@{/list-printers}"><i class="bi bi-list-task"></i> Back to list</a>
             </div>
         </div>
 
@@ -59,7 +59,7 @@
 
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                     <li>
-                        <a class="dropdown-item" href="#">My account</a>
+                        <a class="dropdown-item" th:href="@{/showUpdateUserForm(userId=${id})}">My account</a>
                     </li>
 
                     <li>
