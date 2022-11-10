@@ -34,6 +34,7 @@ public class CounterController {
         model.addObject("allert", allert);
         model.addObject("counterList", counterList);
         model.addObject("printerId", printerId);
+        model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 

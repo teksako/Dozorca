@@ -44,7 +44,8 @@ public class RaportController {
     @GetMapping({"/Raport"})
     public String getRaport(Model model) {
         model.addAttribute("temp", new Temp());
-        model.addAttribute("username", userService.findUserByUsername().getFullname());
+        model.addAttribute("id", userService.findUserByUsername().getId());
+
         return "/Raport";
     }
 

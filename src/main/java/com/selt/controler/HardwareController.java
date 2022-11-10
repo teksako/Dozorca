@@ -66,6 +66,7 @@ public class HardwareController {
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("printerList", printerService.findAll());
+        model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 

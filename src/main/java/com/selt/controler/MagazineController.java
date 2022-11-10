@@ -32,6 +32,7 @@ public class MagazineController {
         model.addAttribute("tonerList", magazines);
         List<Printer> printerList = printerService.findAll();
         model.addAttribute("printer", printerList);
+        model.addAttribute("id", userService.findUserByUsername().getId());
 
     }
 

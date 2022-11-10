@@ -28,6 +28,7 @@ public class ConfigController {
         ModelAndView model = new ModelAndView("config-form");
         Configuration configuration=configRepo.findById(1l).get();
         model.addObject("config", configuration);
+        model.addObject("id", userService.findUserByUsername().getId());
         return getModelAndView(model);
     }
     @PostMapping({"/saveConfig"})

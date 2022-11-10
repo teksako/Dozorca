@@ -25,6 +25,7 @@ public class LocationController {
         ModelAndView model = new ModelAndView("/list-locations");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("locationList", locationService.findAll());
+        model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 

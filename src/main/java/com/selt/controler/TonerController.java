@@ -27,6 +27,7 @@ public class TonerController {
         ModelAndView model = new ModelAndView("/list-toners");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("tonerList", tonerService.findAll());
+        model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 

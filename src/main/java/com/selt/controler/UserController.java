@@ -46,6 +46,7 @@ public class UserController {
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("userList", userService.findAll());
+        model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 
