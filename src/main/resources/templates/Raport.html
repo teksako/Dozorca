@@ -140,15 +140,16 @@
     </div>
 
     <div id="displayOtherSearch" style="display:none">
-        <p>Wpisz fraze:</p>
+        <label for="temp">Wpisz frazę:</label>
         <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
     </div>
-    <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
+    <input type="submit" value="Wyświetl" name="saveButton"  class="btn btn-primary">
+    <a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
 </form>
 
-<a th:text="${allert}"></a>
-<p>---------RAPORT----------</p>
-<a th:text="${allert}"></a>
+
+
+<a th:text="${alert}"></a>
 <table class="table table-bordered table-striped" >
 
     <thead>
@@ -197,6 +198,6 @@
     </tr>
     </tbody>
 </table>
-<a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
+
 </body>
 </html>

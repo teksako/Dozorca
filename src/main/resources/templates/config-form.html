@@ -10,15 +10,34 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
+<div class="position-relative">
 
-<form th:action="@{/saveConfig}" th:object="${config}" method="post">
-    <input type="text" th:field="*{email}" class="form-control col-4 mb-4" placeholder="E-mail">
-    <input type="text" th:field="*{tonerPercent}" class="form-control col-4 mb-4" placeholder="Poziom % raportowania tonerów">
-    <input type="text" th:field="*{time}" class="form-control col-4 mb-4" placeholder="Czas odczyty SNMP">
-    <input type="text" th:field="*{serviceCallcounter}" class="form-control col-4 mb-4" placeholder="Licznik przeglądów">
+<form th:action="@{/saveConfig}" th:object="${config}" method="post" class="position-absolute top-50 start-50">
+    <div class="row g-3 align-items-center">
+        <div class="col-auto">
+            <label for="E-mail" class="form-label">Email address</label>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="E-mail" id="E-mail">
 
-    <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
-    <input type="hidden" th:field="*{id}"/>
+            <label for="toner%" class="form-label">Poziom % toneru</label>
+            <input type="text" th:field="*{tonerPercent}" class="form-control"
+                   placeholder="Poziom % raportowania tonerów" id="toner%">
+
+            <label for="time" class="form-label">Czas odczytu SNMP</label>
+            <input type="text" th:field="*{time}" class="form-control" placeholder="Czas odczyty SNMP" id="time">
+
+            <label for="counter" class="form-label">Licznik stron przeglądów</label>
+            <input type="text" th:field="*{serviceCallcounter}" class="form-control"
+                   placeholder="Licznik przeglądów" id="counter">
+
+            <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
+        </div>
+        <input type="hidden" th:field="*{id}"/>
+</div>
 </form>
+
+</div>
+
+
+
 </body>
 </html>

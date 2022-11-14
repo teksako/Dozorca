@@ -78,7 +78,7 @@
 <body>
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
-<a class="navbar-brand" th:text="${'Zalogowany użytkownik: ' +username}"></a>
+
 <form th:action="@{/sortCounter}" th:object="${temp}" method="post">
     <div th:with="idPrinter=${printerId}">
 

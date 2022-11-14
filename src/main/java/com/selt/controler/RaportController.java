@@ -42,9 +42,10 @@ public class RaportController {
 
     private List<Raport> raportList;
     @GetMapping({"/Raport"})
-    public String getRaport(Model model) {
+    public String getRaport(Model model, String alert) {
         model.addAttribute("temp", new Temp());
         model.addAttribute("id", userService.findUserByUsername().getId());
+        model.addAttribute("alert", alert);
 
         return "/Raport";
     }
@@ -54,6 +55,7 @@ public class RaportController {
 
         List<Raport> raport = null;
         String mattern = '%' + temp.getTempString() + '%';
+        String alert="Znaleziono wyniki!";
 
         try{
 
@@ -85,10 +87,12 @@ public class RaportController {
         }
         catch (NullPointerException exception){
             raport = raportService.findAll();
+            alert="Nie znaleziono pasujących wyników, zostały wyświetlone wszystkie dane!";
         }
 
         model.addAttribute("raport", raport);
-        getRaport(model);
+        model.addAttribute("alert", alert);
+        getRaport(model,alert);
         raportList=raport;
         return "/Raport";
 

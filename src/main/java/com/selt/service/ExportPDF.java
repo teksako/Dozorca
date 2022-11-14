@@ -9,6 +9,8 @@ import com.selt.model.Raport;
 import com.selt.model.Toner;
 import lombok.Data;
 
+
+import javax.swing.text.StyleConstants;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -35,6 +37,18 @@ public class ExportPDF {
 
             Paragraph p = new Paragraph();
             Paragraph tableHeader=new Paragraph();
+//            Paragraph header = new Paragraph("Copy")
+//                    .setFont(PdfFontFactory.createFont(StandardFonts.HELVETICA))
+//                    .setFontSize(14)
+//                    .setFontColor(StyleConstants.ColorConstants.RED);
+//
+//            for (int i = 1; i <= pdfDoc.getNumberOfPages(); i++) {
+//                Rectangle pageSize = pdfDoc.getPage(i).getPageSize();
+//                float x = pageSize.getWidth() / 2;
+//                float y = pageSize.getTop() - 20;
+//                doc.showTextAligned(header, x, y, i, TextAlignment.LEFT, VerticalAlignment.BOTTOM, 0);
+//            }
+
 
             //p.setFont(data);
             tableHeader.setFont(headFont);
@@ -135,6 +149,14 @@ public class ExportPDF {
         }   catch (DocumentException | IOException ex) {
 
         }
+
+        return new ByteArrayInputStream(out.toByteArray());
+    }
+
+    public static ByteArrayInputStream exportProtocol(List<Raport> raportList){
+        Document document;
+        document = new Document();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
 
         return new ByteArrayInputStream(out.toByteArray());
     }
