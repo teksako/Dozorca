@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <meta charset="UTF-8">
     <title>Raport</title>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
+
     <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
@@ -71,6 +68,7 @@
                 }
             });
         });
+
 
     </script>
 </head>
@@ -143,28 +141,27 @@
         <label for="temp">Wpisz frazę:</label>
         <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
     </div>
-    <input type="submit" value="Wyświetl" name="saveButton"  class="btn btn-primary">
+    <input type="submit" value="Wyświetl" name="saveButton" class="btn btn-primary">
     <a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
 </form>
 
 
-
 <a th:text="${alert}"></a>
-<table class="table table-bordered table-striped" >
+<table class="table table-bordered table-striped">
 
     <thead>
     <tr style="text-align: center; ">
         <div sec:authorize="isAuthenticated()">
-        <th>Toner</th>
-        <th>Ilość</th>
-        <th>Drukarka</th>
-        <th>Nr. inwentarzowy</th>
-        <th>Dział</th>
-        <th>MPK</th>
-        <th>Data</th>
+            <th>Toner</th>
+            <th>Ilość</th>
+            <th>Drukarka</th>
+            <th>Nr. inwentarzowy</th>
+            <th>Dział</th>
+            <th>MPK</th>
+            <th>Data</th>
         </div>
         <div sec:authorize="hasAuthority('ADMIN')">
-        <th>Wydający</th>
+            <th>Wydający</th>
         </div>
     </tr>
     </thead>
