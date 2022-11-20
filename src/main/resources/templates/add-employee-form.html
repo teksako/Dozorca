@@ -5,7 +5,11 @@
     <title>SELT</title>
 </head>
 <body>
-<form th:action="@{/addEmployee}" th:object="${employee}" method="post">
+
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
+
+<form th:action="@{/add-employee-form}" th:object="${employee}" method="post">
     <p class="error" th:text="${commonErrro}"></p>
 
     <td>Imie: </td>

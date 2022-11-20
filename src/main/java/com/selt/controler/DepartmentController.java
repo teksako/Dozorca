@@ -43,7 +43,6 @@ public class DepartmentController {
         String mattern = '%' + temp.getTempString() + '%';
         model.addAttribute("departmentList", departmentService.findAllByNameOfDepartmentIsLike(mattern));
         getAllDepartments();
-
     }
 
     @GetMapping("/addDepartmentForm")
