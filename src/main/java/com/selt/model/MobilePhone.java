@@ -26,6 +26,12 @@ public class MobilePhone {
     private String IMEI;
 
     @Column
+    private String IMEI2;
+
+    @Column
+    private String MAC;
+
+    @Column
     private String serialNumber;
 
 

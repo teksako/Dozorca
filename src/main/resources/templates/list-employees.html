@@ -10,38 +10,37 @@
 <div th:replace="navbar :: navbar"></div>
 
 <form th:action="@{/list-employees}" th:object="${temp}" method="post">
-    <p class="error" th:text="${commonError}"></p>
-    <div class="cointainer">
-        <h3>Lista pracowników</h3>
-        <hr/>
-        <a th:href="@{/addEmployeeForm}" class="btn btn-primary">Dodaj pracownika</a>
-        <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
-        <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
-        <a class="navbar-brand" th:text="${allert}"></a>
-        <br/><br/>
-        <table class="table table-bordered table-striped">
-            <thead>
-            <tr style="text-align: center; ">
-                <th>Imię i nazwisko</th>
-                <th>Stanowisko</th>
-                <!--<th>Dział</th>-->
 
-            </thead>
-            <tbody>
-            <tr th:each="key : ${employeesList}">
+    <h3>Lista pracowników</h3>
+    <hr/>
+    <a th:href="@{/addEmployeeForm}" class="btn btn-primary">Dodaj pracownika</a>
+    <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+    <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+    <a class="navbar-brand" th:text="${allert}"></a>
+    <br/><br/>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr style="text-align: center; ">
+            <th>Imię i nazwisko</th>
+            <th>Stanowisko</th>
+            <th>Dział</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="key : ${employeesList}" style="text-align: center;">
 
-                <td th:text="${key.firstname + ' ' + key.lastname}"></td>
-                <td th:text="${key.workplace}"></td>
-                <!--<td th:text="${key.department}"></td>-->
-                <td><a th:href="@{/deleteEmployee/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
-                <td>
-                    <a th:href="@{/showUpdateEmployeeForm(employeeId=${key.id})}" class="btn btn-info">Update</a>
-                </td>
+            <td th:text="${key.firstname + ' ' + key.lastname}"></td>
+            <td th:text="${key.workplace}"></td>
+            <td th:text="${key.getDepartment().nameOfDepartment}"></td>
+            <td><a th:href="@{/deleteEmployee/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
+            <td>
+                <a th:href="@{/showUpdateEmployeeForm(employeeId=${key.id})}" class="btn btn-info">Update</a>
+            </td>
 
-            </tr>
-            </tbody>
-        </table>
-    </div>
+        </tr>
+        </tbody>
+    </table>
+
 </form>
 
 </body>

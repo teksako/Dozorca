@@ -9,7 +9,7 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
-<form th:action="@{/add-employee-form}" th:object="${employee}" method="post">
+<form th:action="@{/saveEmployee}" th:object="${employee}" method="post">
     <p class="error" th:text="${commonErrro}"></p>
 
     <td>Imie: </td>

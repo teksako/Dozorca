@@ -92,8 +92,8 @@ public class HardwareController {
     public ModelAndView reset(@RequestParam Long printerId) {
 
         printerService.resetServiceCounter(printerId);
-        String allert="Wyzerowano licznik!";
-        return showInfoForm(printerId,allert);
+        String allert = "Wyzerowano licznik!";
+        return showInfoForm(printerId, allert);
 
     }
 
@@ -121,30 +121,6 @@ public class HardwareController {
         return "redirect:/list-printers";
     }
 
-//    @PostMapping({"/savePrinter"})
-//    public ModelAndView savePrinter(@ModelAttribute Printer printer) {
-//        ModelAndView model = new ModelAndView("add-printers-form");
-//        printerService.save(printer);
-//        try {
-//
-//        }
-//        catch (NullPointerException exception){
-//            //allert= "Pole dział nie może być puste!";
-//            model.addObject("exception", "Pole dział nie może być puste!");
-//        }
-//
-//        return model;
-//    }
-
-//    @PostMapping({"/deletePrinter"})
-//    public String deletePrinter(Printer printer, Model model){
-//        printerPage(model);
-//        printerService.delete(printer);
-//        model.addAttribute("info", "Usunąłeś drukarkę "+ printer.getModel());
-//        return "/printer";
-//    }
-
-    //      INNA METODA
     @GetMapping({"/deletePrinter/{id}"})
     public String deletePrinter(@PathVariable(value = "id") long id) {
         printerService.deletePrinter(id);
@@ -212,36 +188,35 @@ public class HardwareController {
         return model;
     }
 
-//    @NotNull
-//    private ModelAndView getModelAndView(ModelAndView model) {
-//        model.addObject("username", userService.findUserByUsername().getFullname());
-//        List<Department> departmentList = departmentService.findAll();
-//        List<Toner> tonerList = tonerService.findAll();
-//
-//        model.addObject("toners", tonerList);
-//        model.addObject("departments", departmentList);
-//
-//        return model;
-//    }
-
 
 //---------------------------END PRINTERS--------------------------------------------------
 
-
-    @GetMapping({"/addPhone"})
-    public String addPhonePage(Model model) {
-        List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
-        model.addAttribute("phonenumber", phoneNumbers);
-        model.addAttribute("phone", new MobilePhone());
-        return "/addPhone";
+    //--------------------------START MOBILEPHONE--------------------------------------
+    @GetMapping({"/list-phones"})
+    public ModelAndView getAllPhones(){
+        ModelAndView model = new ModelAndView("list-phones");
+        model.addObject("temp", new Temp());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("phonesList", mobilePhoneService.findAll());
+        return model;
     }
 
-    @PostMapping({"/addPhone"})
+    @GetMapping({"/addPhoneForm"})
+    public ModelAndView addPhonePage() {
+        ModelAndView model = new ModelAndView("add-phone-form");
+        List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("phonenumber", phoneNumbers);
+        model.addObject("phone", new MobilePhone());
+        return model;
+    }
+
+    @PostMapping({"/savePhone"})
     public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
         mobilePhoneService.save(mobilePhone);
-        return "/addPhone";
+        return "redirect:/list-phones";
     }
-
+//-------------------------END MOBILEPHONE---------------------------------
 
     @GetMapping({"/addLaptop"})
     public String addLaptopPage(Model model) {

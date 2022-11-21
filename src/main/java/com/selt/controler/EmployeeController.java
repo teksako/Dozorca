@@ -52,7 +52,7 @@ public class EmployeeController {
 
     @GetMapping({"/addEmployeeForm"})
     public ModelAndView addEmployee(){
-        ModelAndView model = new ModelAndView("add-employees-form");
+        ModelAndView model = new ModelAndView("add-employee-form");
         List<Department> departmentList = departmentService.findAll();
         model.addObject("departmentList", departmentList);
         model.addObject("employee", new Employee());
