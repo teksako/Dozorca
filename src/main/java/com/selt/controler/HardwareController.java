@@ -1,6 +1,7 @@
 package com.selt.controler;
 
 import com.selt.model.*;
+import com.selt.repository.MobilePhoneRepo;
 import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
 import com.selt.service.*;
@@ -33,6 +34,7 @@ public class HardwareController {
     private final PrinterRepo printerRepo;
     private final OIDRepo oidRepo;
     private final CounterService counterService;
+    private final MobilePhoneRepo phoneRepo;
 
 
     @ResponseBody
@@ -201,6 +203,12 @@ public class HardwareController {
         return model;
     }
 
+    @PostMapping({"/savePhone"})
+    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
+        mobilePhoneService.save(mobilePhone);
+        return "redirect:/list-phones";
+    }
+
     @GetMapping({"/addPhoneForm"})
     public ModelAndView addPhonePage() {
         ModelAndView model = new ModelAndView("add-phone-form");
@@ -211,11 +219,25 @@ public class HardwareController {
         return model;
     }
 
-    @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
-        mobilePhoneService.save(mobilePhone);
-        return "redirect:/list-phones";
+    @GetMapping({"/showUpdatePhoneForm"})
+    public ModelAndView showUpdatePhoneForm(@RequestParam Long phoneId) {
+        ModelAndView model = new ModelAndView("add-phone-form");
+        List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
+        model.addObject("username", userService.findUserByUsername().getFullname());
+                MobilePhone phone = phoneRepo.findById(phoneId).get();
+        model.addObject("phonenumber", phoneNumbers);
+        model.addObject("phone", new MobilePhone());
+        return model;
     }
+
+    @GetMapping({"/deletePhone/{id}"})
+    public String deletePhone(@PathVariable(value = "id") long id) {
+        //departmentService.deleteDepartment(id);
+        getAllPhones();
+        return "redirect:/list-departments";
+    }
+
+
 //-------------------------END MOBILEPHONE---------------------------------
 
     @GetMapping({"/addLaptop"})

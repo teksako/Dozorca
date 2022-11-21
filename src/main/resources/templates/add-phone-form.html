@@ -10,10 +10,10 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
-<div class="container">
+
     <h3>Dodaj nowy telefon</h3>
 </hr>
-<form th:action="@{/addPhone}" th:object="${phone}" method="post">
+<form th:action="@{/savePhone}" th:object="${phone}" method="post">
 
     <td>Producent: </td>
     <input id="mark" th:field="*{mark}" type="text">

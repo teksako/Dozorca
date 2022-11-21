@@ -32,8 +32,8 @@
                      <a th:href="@{/addEmployee}">Dodaj pracownika</a><br>
                      <a th:href="@{/addComputer}">Dodaj komputer</a><br>
                      <a th:href="@{/showUserHardware}">Pokaz sprzęty pracownika</a><br>
-                     <a th:href="@{/addPhone}">Dodaj telefon</a><br>
-                     <a th:href="@{/addPhoneNumber}">Dodaj SIM</a><br>-->
+                     <a th:href="@{/addPhone}">Dodaj telefon</a><br>-->
+
                     <a class="nav-link" th:href="@{/list-departments}"><i class="bi bi-building"></i> Dział</a>
                     <a class="nav-link" th:href="@{/list-locations}"><i class="bi bi-geo-alt-fill"></i> Lokalizacje</a>
                     <a class="nav-link" th:href="@{/list-toners}"><i class="bi bi-droplet-fill"></i> Tonery i tusze</a>
@@ -43,7 +43,7 @@
                         użytkownikiem</a>
                     <a class="nav-link" th:href="@{/list-employees}"><i class="bi bi-person-square"></i> Dodaj pracownika</a>
                     <a class="nav-link" th:href="@{/list-phones}"><i class="bi bi-telephone-fill"></i></i> Telefony</a>
-
+                    <a class="nav-link" th:href="@{/list-phoneNumbers}"><i class="bi bi-sim"></i></i> Dodaj SIM</a><br>
                 </div>
 
                 <div class="navbar-nav" sec:authorize="isAuthenticated()">

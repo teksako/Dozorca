@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SELT</title>
+</head>
+
+<body>
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
+
+
+    <h3>Dodaj nową SIM</h3>
+</hr>
+<form th:action="@{/saveNumber}" th:object="${number}" method="post">
+
+    <td>Numer: </td>
+    <input id="mark" th:field="*{number}" type="text">
+    <td>numer SIM: </td>
+    <input id="model" th:field="*{SIMNumber}" type="text">
+    <td>PIN: </td>
+    <input id="IMEI" th:field="*{PIN}" type="text">
+    <td>PUK: </td>
+    <input id="serialnumber" th:field="*{PUK}" type="text">
+
+
+    <input type="button" value="Powrót" name="backButton"
+           onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+    <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
+</form>
+
+</body>
+</html>
