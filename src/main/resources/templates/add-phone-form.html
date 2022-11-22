@@ -21,6 +21,10 @@
     <input id="model" th:field="*{model}" type="text">
     <td>IMEI: </td>
     <input id="IMEI" th:field="*{IMEI}" type="text">
+    <td>IMEI2: </td>
+    <input id="IMEI2" th:field="*{IMEI2}" type="text">
+    <td>MAC:: </td>
+    <input id="MAC" th:field="*{MAC}" type="text">
     <td>Numer seryjny: </td>
     <input id="serialnumber" th:field="*{serialNumber}" type="text">
 
@@ -32,6 +36,16 @@
         <option th:each="Key : ${phonenumber}"
                 th:value="${Key.id}"
                 th:text="${Key.number}"></option>
+    </select>
+    </td>
+    <td>Użytkownik</td>
+
+    <select name="employee" id="employee" th:field="*{employee}">
+        <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
+        <option value="">Wybierz: </option>
+        <option th:each="Key : ${employeesList}"
+                th:value="${Key.id}"
+                th:text="${Key.firstname+' '+Key.lastname}"></option>
     </select>
     </td>
 

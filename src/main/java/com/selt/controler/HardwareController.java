@@ -200,6 +200,7 @@ public class HardwareController {
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phonesList", mobilePhoneService.findAll());
+
         return model;
     }
 
@@ -212,10 +213,10 @@ public class HardwareController {
     @GetMapping({"/addPhoneForm"})
     public ModelAndView addPhonePage() {
         ModelAndView model = new ModelAndView("add-phone-form");
-        List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phonenumber", phoneNumbers);
+        model.addObject("phonenumber", phoneNumberService.findAll());
         model.addObject("phone", new MobilePhone());
+        model.addObject("employeesList", employeeService.findAll());
         return model;
     }
 
