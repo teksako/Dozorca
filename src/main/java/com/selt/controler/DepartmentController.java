@@ -64,24 +64,7 @@ public class DepartmentController {
         return model;
     }
 
-//
-//    @GetMapping({"/showUpdateDepartmentForm"})
-//    public ModelAndView showUpdateDepartmentForm(@RequestParam Long departmentId) {
-//        ModelAndView model = new ModelAndView("add-department-form");
-//        Department department = departmentRepo.findById(departmentId).get();
-//        //Printer printer = printerService.findById(printerId).get();
-//        model.addObject("department", department);
-//        return getModelAndView(model, departmentId);
-//    }
-//
-//    @NotNull
-//    private ModelAndView getModelAndView(ModelAndView model, long id) {
-//        model.addObject("username", userService.findUserByUsername().getFullname());
-////        List<Location> locationList = locationService.findAll();
-////        model.addObject("locations", locationList);
-//        model.addObject("locationList", departmentService.findActualUse(id));
-//        return model;
-//    }
+
 
     @GetMapping({"/deleteDepartment/{id}"})
     public String deletePrinter(@PathVariable(value = "id") long id) {
@@ -89,16 +72,7 @@ public class DepartmentController {
         getAllDepartments();
         return "redirect:/list-departments";
     }
-    //    ----------STARA WERSJA---------------
-//    @GetMapping({"/addDepartment"})
-//    public String departmentPage(Model model){
-//        model.addAttribute("department", new Department());
-//        List<Location> locationList = locationService.findAll();
-//        List<Department> departmentList=departmentService.findAll();
-//        model.addAttribute("departmentList", departmentList);
-//        model.addAttribute("locationSList", locationList);
-//        return "add-department-form";
-//    }
+
 
 
 }

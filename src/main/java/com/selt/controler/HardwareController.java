@@ -6,6 +6,7 @@ import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
 import com.selt.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -197,6 +198,12 @@ public class HardwareController {
     @GetMapping({"/list-phones"})
     public ModelAndView getAllPhones(){
         ModelAndView model = new ModelAndView("list-phones");
+        Employee employee = new Employee();
+        Department department = new Department();
+        department.setNameOfDepartment("-");
+        employee.setFirstname("-");
+        employee.setLastname("-");
+        employee.setDepartment(department);
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phonesList", mobilePhoneService.findAll());

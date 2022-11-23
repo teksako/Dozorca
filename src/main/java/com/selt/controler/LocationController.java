@@ -2,6 +2,7 @@ package com.selt.controler;
 
 
 import com.selt.model.Location;
+import com.selt.model.Temp;
 import com.selt.repository.LocationRepo;
 import com.selt.service.LocationService;
 import com.selt.service.UserService;
@@ -23,18 +24,13 @@ public class LocationController {
     @GetMapping({"/list-locations"})
     public ModelAndView getAllLocation() {
         ModelAndView model = new ModelAndView("/list-locations");
+        model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("locationList", locationService.findAll());
         model.addObject("id", userService.findUserByUsername().getId());
         return model;
     }
 
-
-//    @GetMapping({"/addLocation"})
-//    public String locationPage(Model model){
-//        model.addAttribute("location", new Location());
-//        return "list-locations";
-//    }
 
     @PostMapping({"/saveLocation"})
     public String saveLocation(@ModelAttribute Location location) {
@@ -56,6 +52,13 @@ public class LocationController {
         Location location = locationRepo.findById(locationId).get();
         model.addObject("location", location);
         return getModelAndView(model);
+    }
+
+    @PostMapping({"/list-locations"})
+    public void searchDepartments(@ModelAttribute("temp") Temp temp, Model model) {
+        String mattern = '%' + temp.getTempString() + '%';
+        model.addAttribute("locationList", locationService.findAllByNameOfLocationIsLike(mattern));
+        getAllLocation();
     }
 
     @NotNull

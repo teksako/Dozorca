@@ -10,4 +10,5 @@ import java.util.List;
 public interface LocationRepo extends JpaRepository<Location, Long> {
 
     List<Location> findAll();
+    List<Location> findAllByNameOfLocationIsLike(String name);
 }

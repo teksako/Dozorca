@@ -1,6 +1,7 @@
 package com.selt.controler;
 
 import com.selt.model.Location;
+import com.selt.model.Temp;
 import com.selt.model.Toner;
 import com.selt.repository.TonerRepo;
 import com.selt.service.MagazineService;
@@ -25,6 +26,7 @@ public class TonerController {
     @GetMapping({"/list-toners"})
     public ModelAndView getAllToner() {
         ModelAndView model = new ModelAndView("/list-toners");
+        model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("tonerList", tonerService.findAll());
         model.addObject("id", userService.findUserByUsername().getId());
@@ -32,7 +34,12 @@ public class TonerController {
     }
 
 
-
+    @PostMapping({"/list-toners"})
+    public void searchToners(@ModelAttribute("temp") Temp temp, Model model){
+        String matter = '%' + temp.getTempString()+'%';
+        model.addAttribute("tonerList", tonerService.findAllByTonerNameIsLike(matter));
+        getAllToner();
+   }
 
     @PostMapping({"/saveToner"})
     public String saveToner(@ModelAttribute Toner toner) {
@@ -79,21 +86,8 @@ public class TonerController {
         return "/Toner";
     }
 
-//    @PostMapping({"/addToner"})
-//    public String saveToner(@ModelAttribute("toner") Toner toner) {
-//        tonerService.save(toner);
-//
-//        return "/Toner";
-//    }
 
 
-//    @GetMapping({"/deleteToner"})
-//    public String deleteTonerPage(Model model) {
-//        model.addAttribute("toner", new Toner());
-//        List<Toner> toners= tonerService.findAll();
-//        model.addAttribute("tonerList", toners);
-//        return "/deleteToner";
-//    }
     @PostMapping({"/deleteToner"})
     public String deleteToner(@ModelAttribute("toner") Toner toner){
         tonerService.delete(toner);
@@ -101,13 +95,6 @@ public class TonerController {
         return "/Toner";
     }
 
-//    @GetMapping({"/updateToner"})
-//    public String updateTonerPage(Model model) {
-//        model.addAttribute("toner", new Toner());
-//        List<Toner> toners= tonerService.findAll();
-//        model.addAttribute("tonerList", toners);
-//        return "/updateToner";
-//    }
     @PostMapping({"/updateToner"})
     public String saveUpdateToner(@ModelAttribute("toner") Toner toner,Model model){
         tonerService.update(toner);

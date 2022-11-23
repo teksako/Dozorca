@@ -29,13 +29,12 @@ public class LocationService {
         return validateBlankLocation(locationRepo.findAll());
     }
 
-    public Location findBlankLocation(){
-        Location location1 = new Location();
+    public List<Location> findBlankLocation(){
+        List<Location> location1 = new ArrayList<>();
         for (Location location: locationRepo.findAll()) {
             if(location.getNameOfLocation().equals("-")){
-                location1 = location;
+                location1.add(location);
             }
-
         }
         return location1;
     }
@@ -53,6 +52,10 @@ public class LocationService {
     public void deleteLocation(long id) {
         Optional<Location> location = locationRepo.findById(id);
        locationRepo.delete(location.get());
+    }
+
+    public List<Location> findAllByNameOfLocationIsLike(String name){
+        return locationRepo.findAllByNameOfLocationIsLike(name);
     }
 
 }

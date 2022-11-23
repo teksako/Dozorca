@@ -23,6 +23,10 @@ public class TonerService {
 //        magazineService.save(magazine);
     }
 
+    public List<Toner> findAllByTonerNameIsLike(String name){
+        return tonerRepo.findAllByTonerNameIsLike(name);
+    }
+
     public Optional<Toner> findById(Long id){
 
         return tonerRepo.findById(id);

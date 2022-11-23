@@ -10,10 +10,16 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
+<form th:action="@{/list-toners}" th:object="${temp}" method="post">
+  <p class="error" th:text="${commonError}"></p>
 <div class="container">
   <h3>Lista tonerów</h3>
-  </hr>
+  <hr/>
   <a th:href="@{/addTonerForm}" class="btn btn-primary">Dodaj toner</a>
+  <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+  <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+  <a class="navbar-brand" th:text="${allert}"></a>
+  <br/><br/>
   <table class="table table-bordered table striped">
     <thead>
     <tr style="text-align: center; ">
@@ -33,7 +39,7 @@
 
   </table>
 </div>
-
+</form>
 
 
 </body>
