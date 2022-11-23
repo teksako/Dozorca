@@ -18,14 +18,14 @@ public class PhoneNumber {
     private Long id;
 
     @Column
-    private Long number;
+    private String number;
 
     @Column
     private String SIMNumber;
 
     @Column
-    private Long PIN;
+    private String PIN;
 
     @Column
-    private Long PUK;
+    private String PUK;
 }

@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +26,28 @@ public class LocationService {
     }
 
     public List<Location> findAll() {
-        return locationRepo.findAll();
+        return validateBlankLocation(locationRepo.findAll());
+    }
+
+    public Location findBlankLocation(){
+        Location location1 = new Location();
+        for (Location location: locationRepo.findAll()) {
+            if(location.getNameOfLocation().equals("-")){
+                location1 = location;
+            }
+
+        }
+        return location1;
+    }
+
+    public List<Location> validateBlankLocation(List<Location> locationList){
+        List<Location> locationList1=new ArrayList<>();
+        for (Location location:locationList) {
+            if(!location.getNameOfLocation().equals("-")){
+                locationList1.add(location);
+            }
+        }
+        return locationList1;
     }
 
     public void deleteLocation(long id) {

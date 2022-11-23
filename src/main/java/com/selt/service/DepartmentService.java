@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,11 @@ public class DepartmentService {
     private final LocationService locationService;
 
     public void save(Department department) {
+
+        if(department.getLocations()==null){
+            department.setLocations(Collections.singletonList(locationService.findBlankLocation()));
+        }
+
         departmentRepo.save(department);
     }
 
@@ -29,27 +35,19 @@ public class DepartmentService {
     }
 
     public List<Department> findAll() {
-        return departmentRepo.findAll();
+        return validate(departmentRepo.findAll());
     }
 
-//    public List<Location> findActualUse(long id) {
-//        Optional<Department> department = departmentRepo.findById(id);
-//        List<Location> actualList = department.get().getLocations();
-//        List<Location> findAll = locationService.findAll();
-//        List<Location> finallyList = new ArrayList<>();
-//        for (Location list : findAll) {
-//            for (Location list2 : actualList) {
-//                if(actualList.size()==0){
-//                    return findAll;
-//                }
-//                else if (!list.equals(list2)) {
-//                    finallyList.add(list);
-//                }
-//            }
-//            finallyList.remove(list);
-//        }
-//        return findAll;
-//    }
+    public List<Department> validate(List<Department> departmentList) {
+        List<Department> departmentList1 = new ArrayList<>();
+        for (Department department : departmentList) {
+            if (!department.getNameOfDepartment().equals("-")) {
+                departmentList1.add(department);
+            }
+        }
+        return departmentList1;
+    }
+
 
     public void deleteDepartment(long id) {
         Optional<Department> department = departmentRepo.findById(id);
@@ -57,6 +55,6 @@ public class DepartmentService {
     }
 
     public List<Department> findAllByNameOfDepartmentIsLike(String name) {
-        return departmentRepo.findAllByNameOfDepartmentIsLike(name);
+        return validate(departmentRepo.findAllByNameOfDepartmentIsLike(name));
     }
 }
