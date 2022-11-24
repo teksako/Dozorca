@@ -8,10 +8,12 @@
 <body>
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
+
+<form th:action="@{/list-phoneNumbers}" th:object="${temp}" method="post">
 <h3>Lista kart SIM</h3>
 <hr/>
 <a th:href="@{/addPhoneNumberForm}" class="btn btn-primary">Dodaj SIM</a>
-<!--<input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">-->
+<input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
 <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
 <a class="navbar-brand" th:text="${allert}"></a>
 <br/><br/>
@@ -41,5 +43,6 @@
     </tr>
     </tbody>
 </table>
+</form>
 </body>
 </html>

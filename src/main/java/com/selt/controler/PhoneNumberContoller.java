@@ -1,10 +1,12 @@
 package com.selt.controler;
 
 import com.selt.model.PhoneNumber;
+import com.selt.model.Temp;
 import com.selt.service.PhoneNumberService;
 import com.selt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ public class PhoneNumberContoller {
     @GetMapping({"/list-phoneNumbers"})
     public ModelAndView getAllNumbers(){
         ModelAndView model = new ModelAndView("list-phoneNumbers");
+        model.addObject("temp",new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("numberList", numberService.findAll());
         return model;
@@ -39,4 +42,18 @@ public class PhoneNumberContoller {
         model.addObject("number", new PhoneNumber());
         return model;
     }
+
+    @PostMapping({"/list-phoneNumbers"})
+    public void searchNumber(@ModelAttribute("temp") Temp temp, Model model){
+        String mattern = '%' + temp.getTempString() + '%';
+        if(!numberService.findAllByNumberIsLike(mattern).isEmpty()){
+            model.addAttribute("numberList", numberService.findAllByNumberIsLike(mattern));
+        }
+        else{
+            model.addAttribute("numberList", numberService.findAllBySIMNumberIsLike(mattern));
+        }
+        getAllNumbers();
+    }
+
+
 }

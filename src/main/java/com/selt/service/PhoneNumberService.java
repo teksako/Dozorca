@@ -5,6 +5,7 @@ import com.selt.repository.PhoneNumberRepo;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +23,36 @@ public class PhoneNumberService {
     }
 
     public List<PhoneNumber> findAll() {
-        return phoneNumberRepo.findAll();
+        return cleanBlankNumber(phoneNumberRepo.findAll());
     }
+
+    public List<PhoneNumber> cleanBlankNumber(List<PhoneNumber> phoneNumbers) {
+        List<PhoneNumber> phoneNumbers1 = new ArrayList<>();
+        for (PhoneNumber number : phoneNumbers) {
+            if (!number.getNumber().equals("-")) {
+                phoneNumbers1.add(number);
+            }
+        }
+        return phoneNumbers1;
+    }
+
+    public List<PhoneNumber> findBlankNumber(List<PhoneNumber> phoneNumbers){
+        List<PhoneNumber> phoneNumbers1 = new ArrayList<>();
+        for (PhoneNumber number : phoneNumbers) {
+            if (number.getNumber().equals("-")) {
+                phoneNumbers1.add(number);
+            }
+        }
+        return phoneNumbers1;
+    }
+
+    public List<PhoneNumber> findAllByNumberIsLike(String number){
+        return phoneNumberRepo.findAllByNumberIsLike(number);
+    }
+
+    public List<PhoneNumber> findAllBySIMNumberIsLike(String number){
+        return phoneNumberRepo.findAllBySIMNumberIsLike(number);
+    }
+
+
 }

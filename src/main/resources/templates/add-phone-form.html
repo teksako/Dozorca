@@ -33,7 +33,7 @@
     <select name="phoneNumber" id="phoneNumber" th:field="*{phoneNumber}">
         <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
         <option value="">Wybierz: </option>
-        <option th:each="Key : ${phonenumber}"
+        <option th:each="Key : ${phoneNumberList}"
                 th:value="${Key.id}"
                 th:text="${Key.number}"></option>
     </select>

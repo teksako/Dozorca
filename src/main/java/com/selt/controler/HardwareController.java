@@ -221,7 +221,7 @@ public class HardwareController {
     public ModelAndView addPhonePage() {
         ModelAndView model = new ModelAndView("add-phone-form");
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phonenumber", phoneNumberService.findAll());
+        model.addObject("phoneNumber", phoneNumberService.findAll());
         model.addObject("phone", new MobilePhone());
         model.addObject("employeesList", employeeService.findAll());
         return model;
@@ -232,8 +232,8 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("add-phone-form");
         List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
         model.addObject("username", userService.findUserByUsername().getFullname());
-                MobilePhone phone = phoneRepo.findById(phoneId).get();
-        model.addObject("phonenumber", phoneNumbers);
+        MobilePhone phone = phoneRepo.findById(phoneId).get();
+        model.addObject("phoneNumberList", phoneNumbers);
         model.addObject("phone", new MobilePhone());
         return model;
     }
