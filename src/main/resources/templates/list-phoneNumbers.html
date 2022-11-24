@@ -10,39 +10,41 @@
 <div th:replace="navbar :: navbar"></div>
 
 <form th:action="@{/list-phoneNumbers}" th:object="${temp}" method="post">
-<h3>Lista kart SIM</h3>
-<hr/>
-<a th:href="@{/addPhoneNumberForm}" class="btn btn-primary">Dodaj SIM</a>
-<input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
-<input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
-<a class="navbar-brand" th:text="${allert}"></a>
-<br/><br/>
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr style="text-align: center; ">
-        <th>Numer</th>
-        <th>Numer SIM</th>
-        <th>PIN</th>
-        <th>PUK</th>
+    <div class="container">
+        <h3>Lista kart SIM</h3>
+        <hr/>
+        <a th:href="@{/addPhoneNumberForm}" class="btn btn-primary">Dodaj SIM</a>
+        <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+        <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+        <a class="navbar-brand" th:text="${allert}"></a>
+        <br/><br/>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr style="text-align: center; ">
+                <th>Numer</th>
+                <th>Numer SIM</th>
+                <th>PIN</th>
+                <th>PUK</th>
+                <th>Opcje</th>
 
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="key : ${numberList}" style="text-align: center;">
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="key : ${numberList}" style="text-align: center;">
 
-        <td th:text="${key.number}"></td>
-        <td th:text="${key.SIMNumber}"></td>
-        <td th:text="${key.PIN}"></td>
-        <td th:text="${key.PUK}"></td>
+                <td th:text="${key.number}"></td>
+                <td th:text="${key.SIMNumber}"></td>
+                <td th:text="${key.PIN}"></td>
+                <td th:text="${key.PUK}"></td>
 
-      <!--  <td><a th:href="@{/deletePhone/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
-        <td>
-            <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
-        </td>
--->
-    </tr>
-    </tbody>
-</table>
+                <td><a th:href="@{/deletePhoneNumber/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
+                    <a th:href="@{/showUpdatePhoneNumberForm(phoneNumberId=${key.id})}" class="btn btn-info">Update</a>
+                </td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </form>
 </body>
 </html>

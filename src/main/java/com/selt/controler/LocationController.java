@@ -41,8 +41,7 @@ public class LocationController {
     @GetMapping({"/addLocationForm"})
     public ModelAndView addLocationForm() {
         ModelAndView model = new ModelAndView("add-location-form");
-        Location location = new Location();
-        model.addObject("location", location);
+        model.addObject("location", new Location());
         return getModelAndView(model);
     }
 

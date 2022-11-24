@@ -1,10 +1,7 @@
 package com.selt.config;
 
 import com.selt.model.*;
-import com.selt.repository.ConfigRepo;
-import com.selt.repository.OIDRepo;
-import com.selt.repository.RoleRepo;
-import com.selt.repository.UserRepo;
+import com.selt.repository.*;
 import com.selt.service.MailService;
 import com.selt.service.PrinterService;
 import com.selt.service.SNMP4J;
@@ -43,13 +40,27 @@ public class SeltApplication implements CommandLineRunner {
     @Autowired
     private final ConfigRepo configRepo;
     private final MailService mailService;
+    @Autowired
+    private final EmployeeRepo employeeRepo;
+    private final DepartmentRepo departmentRepo;
+    private final LocationRepo locationRepo;
+    private final PhoneNumberRepo numberRepo;
+
 
     @Autowired
-    public SeltApplication(ConfigRepo configRepo, MailService mailService) {
+    public SeltApplication(ConfigRepo configRepo
+            , MailService mailService
+            , EmployeeRepo employeeRepo
+            , DepartmentRepo departmentRepo
+            , LocationRepo locationRepo
+            , PhoneNumberRepo numberRepo) {
+
         this.configRepo = configRepo;
-
         this.mailService = mailService;
-
+        this.numberRepo = numberRepo;
+        this.employeeRepo = employeeRepo;
+        this.departmentRepo = departmentRepo;
+        this.locationRepo = locationRepo;
     }
 
     public static void main(String[] args) {
@@ -60,7 +71,7 @@ public class SeltApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-       final List<String> printerList = new ArrayList<>();
+        final List<String> printerList = new ArrayList<>();
         printerList.add("454");
         printerList.add("284");
         printerList.add("253");
@@ -83,25 +94,25 @@ public class SeltApplication implements CommandLineRunner {
         printerList4.addAll(printerList1);
         printerList4.addAll(printerList2);
 
-        final List<String> printerList5= new ArrayList<>();//3335
+        final List<String> printerList5 = new ArrayList<>();//3335
         printerList5.add("3335");
 
-        final List<String> printerList11=new ArrayList<>();//B235
+        final List<String> printerList11 = new ArrayList<>();//B235
         printerList11.add("B235");
 
-        final List<String> printerList6= new ArrayList<>();//C235,b235,3335
+        final List<String> printerList6 = new ArrayList<>();//C235,b235,3335
         printerList6.add("C235");
         printerList6.addAll(printerList5);
         printerList6.addAll(printerList11);
 
-        final List<String> printerList7= new ArrayList<>();//C235
+        final List<String> printerList7 = new ArrayList<>();//C235
         printerList7.add("C235");
 
-        final List<String> printerList8= new ArrayList<>();//HP Color
+        final List<String> printerList8 = new ArrayList<>();//HP Color
         printerList8.add("MFP M277");
         printerList8.add("MFP M283");
 
-        final List<String> printerList9= new ArrayList<>();//HP Black
+        final List<String> printerList9 = new ArrayList<>();//HP Black
         printerList9.add("M402dne");
         printerList9.add("M1217nfw");
         printerList9.add("M26NW");
@@ -116,15 +127,54 @@ public class SeltApplication implements CommandLineRunner {
         printerList9.add("M125nw");
         printerList9.add("137fnw");
 
-        final List<String> printerList10= new ArrayList<>();//HP All
+        final List<String> printerList10 = new ArrayList<>();//HP All
         printerList10.addAll(printerList9);
         printerList10.addAll(printerList8);
 
-        final List<String> printerList12=new ArrayList<>();
+        final List<String> printerList12 = new ArrayList<>();
         printerList12.add("M203dn");
         printerList12.add("M227sdn");
 
-        if(configRepo.findAll().size()==0){
+        Location location = new Location();
+        Department department = new Department();
+        PhoneNumber number = new PhoneNumber();
+
+        if(numberRepo.findAll().size()==0){
+            number.setNumber("-");
+            number.setSIMNumber("-");
+            number.setPIN("-");
+            number.setPUK("-");
+            numberRepo.save(number);
+        }
+        if (locationRepo.findAll().size() == 0) {
+
+            location.setNameOfLocation("-");
+            location.setCity("-");
+            location.setNumber("-");
+            location.setCity("-");
+            locationRepo.save(location);
+        }
+
+        if (departmentRepo.findAll().size() == 0) {
+            List<Location> locationList = new ArrayList<>();
+            locationList.add(location);
+            department.setNameOfDepartment("-");
+            department.setLocations(locationList);
+            departmentRepo.save(department);
+        }
+
+
+        if (employeeRepo.findAll().size() == 0) {
+            Employee employee = new Employee();
+            employee.setDepartment(department);
+            employee.setFirstname("-");
+            employee.setWorkplace("-");
+            employee.setLastname("");
+            employeeRepo.save(employee);
+
+        }
+
+        if (configRepo.findAll().size() == 0) {
             Configuration configuration = new Configuration();
             configuration.setEmail("admin@admin.com");
             configuration.setServiceCallcounter(10000l);
@@ -165,7 +215,7 @@ public class SeltApplication implements CommandLineRunner {
             userRepository.save(admin);
         }
 
-        if(oidRepo.findAll().size()==0){
+        if (oidRepo.findAll().size() == 0) {
 
             //-------------Konica Minolta--------------//
             OID oid = new OID();
@@ -461,7 +511,7 @@ public class SeltApplication implements CommandLineRunner {
             oidRepo.save(oid40);
 
 
-        //------------------Xerox-----------------------------------------
+            //------------------Xerox-----------------------------------------
             OID oid41 = new OID();
             oid41.setOidName("Max Drum Page Counter");
             oid41.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.2");//3335

@@ -36,9 +36,9 @@ public class PhoneNumberService {
         return phoneNumbers1;
     }
 
-    public List<PhoneNumber> findBlankNumber(List<PhoneNumber> phoneNumbers){
+    public List<PhoneNumber> findBlankNumber(){
         List<PhoneNumber> phoneNumbers1 = new ArrayList<>();
-        for (PhoneNumber number : phoneNumbers) {
+        for (PhoneNumber number : phoneNumberRepo.findAll()) {
             if (number.getNumber().equals("-")) {
                 phoneNumbers1.add(number);
             }

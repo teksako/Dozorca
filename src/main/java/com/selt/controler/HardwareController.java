@@ -180,14 +180,11 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("add-printers-form");
         Printer printer = printerRepo.findById(printerId).get();
         model.addObject("username", userService.findUserByUsername().getFullname());
-        List<Department> departmentList = departmentService.findAll();
-        List<Toner> tonerList = tonerService.findAll();
-        // model.addObject("onlineList", onlineService.findAll());
         model.addObject("printer", printer);
         model.addObject("oidlist", oidRepo.findAll());
-        model.addObject("toners", tonerList);
-        model.addObject("departments", departmentList);
-        //model.addObject("oids", oidList);
+        model.addObject("toners", tonerService.findAll());
+        model.addObject("departments", departmentService.findAll());
+
         return model;
     }
 
@@ -198,12 +195,6 @@ public class HardwareController {
     @GetMapping({"/list-phones"})
     public ModelAndView getAllPhones(){
         ModelAndView model = new ModelAndView("list-phones");
-        Employee employee = new Employee();
-        Department department = new Department();
-        department.setNameOfDepartment("-");
-        employee.setFirstname("-");
-        employee.setLastname("-");
-        employee.setDepartment(department);
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phonesList", mobilePhoneService.findAll());
@@ -230,13 +221,13 @@ public class HardwareController {
     @GetMapping({"/showUpdatePhoneForm"})
     public ModelAndView showUpdatePhoneForm(@RequestParam Long phoneId) {
         ModelAndView model = new ModelAndView("add-phone-form");
-        List<PhoneNumber> phoneNumbers = phoneNumberService.findAll();
+        model.addObject("employeesList", employeeService.findAll());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        MobilePhone phone = phoneRepo.findById(phoneId).get();
-        model.addObject("phoneNumberList", phoneNumbers);
-        model.addObject("phone", new MobilePhone());
+        model.addObject("phoneNumberList", phoneNumberService.findAll());
+        model.addObject("phone", phoneRepo.findById(phoneId).get());
         return model;
     }
+
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {

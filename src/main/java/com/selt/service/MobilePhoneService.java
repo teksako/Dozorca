@@ -15,12 +15,21 @@ public class MobilePhoneService {
 
 
     private final MobilePhoneRepo mobilePhoneRepo;
+    private final EmployeeService employeeService;
+    private final PhoneNumberService numberService;
 
-    public List<MobilePhone> findAll(){
+    public List<MobilePhone> findAll() {
         return mobilePhoneRepo.findAll();
     }
 
     public void save(MobilePhone mobilePhone) {
+
+        if (mobilePhone.getPhoneNumber() == null) {
+            mobilePhone.setPhoneNumber(numberService.findBlankNumber().get(0));
+        }
+        if (mobilePhone.getEmployee() == null) {
+            mobilePhone.setEmployee(employeeService.findBlankEmployeer().get(0));
+        }
         mobilePhoneRepo.save(mobilePhone);
     }
 

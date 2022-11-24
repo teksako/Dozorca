@@ -29,6 +29,7 @@
                 <th>Numer</th>
                 <th>Miasto</th>
                 <th>Kod pocztowy</th>
+                <th>Opcje</th>
             </tr>
             </thead>
             <tbody>
@@ -39,8 +40,8 @@
                 <td th:text="${key.number}"></td>
                 <td th:text="${key.city}"></td>
                 <td th:text="${key.postalCode}"></td>
-                <td><a th:href="@{/deleteLocation/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
-                <td>
+                <td><a th:href="@{/deleteLocation/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
+
                     <a th:href="@{/showUpdateLocationForm(locationId=${key.id})}" class="btn btn-info">Update</a>
                 </td>
             </tr>

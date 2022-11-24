@@ -2,14 +2,13 @@ package com.selt.controler;
 
 import com.selt.model.PhoneNumber;
 import com.selt.model.Temp;
+import com.selt.repository.PhoneNumberRepo;
 import com.selt.service.PhoneNumberService;
 import com.selt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class PhoneNumberContoller {
 
     private final PhoneNumberService numberService;
+    private final PhoneNumberRepo numberRepo;
     private final UserService userService;
 
     @GetMapping({"/list-phoneNumbers"})
@@ -43,6 +43,14 @@ public class PhoneNumberContoller {
         return model;
     }
 
+    @GetMapping({"/showUpdatePhoneNumberForm"})
+    public ModelAndView showUpdatePhoneNumberForm(@RequestParam Long phoneNumberId) {
+        ModelAndView model = new ModelAndView("add-phoneNumber-form");
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("number", numberRepo.findById(phoneNumberId).get());
+        return model;
+    }
+
     @PostMapping({"/list-phoneNumbers"})
     public void searchNumber(@ModelAttribute("temp") Temp temp, Model model){
         String mattern = '%' + temp.getTempString() + '%';
@@ -54,6 +62,11 @@ public class PhoneNumberContoller {
         }
         getAllNumbers();
     }
-
+    @GetMapping({"/deletePhoneNumber/{id}"})
+    public String deletePhoneNumber(@PathVariable(value = "id") long id) {
+        //departmentService.deleteDepartment(id);
+        getAllNumbers();
+        return "redirect:/list-departments";
+    }
 
 }

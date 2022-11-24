@@ -13,14 +13,14 @@
 
 <form th:action="@{/list-printers}" th:object="${temp}" method="post">
 
-
+    <div class="cointainer">
 
 
         <h3>Lista drukarek</h3>
 
         <hr/>
         <a th:href="@{/addPrinterForm}" class="btn btn-primary">Dodaj drukarke</a>
-      <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+        <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
         <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
         <a class="navbar-brand" th:text="${allert}"></a>
         <br/><br/>
@@ -37,12 +37,13 @@
                 <th>Użytkownik</th>
                 <th>Dział</th>
                 <th>Toner</th>
+                <th>Opcje</th>
 
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="key : ${printerList}"  style="text-align: center; ">
+            <tr th:each="key : ${printerList}" style="text-align: center; ">
 
                 <td th:text="${key.manufacturer}"></td>
                 <td th:text="${key.model}"></td>
@@ -53,22 +54,15 @@
                 <td th:text="${key.user}"></td>
                 <td th:text="${key.getDepartment().nameOfDepartment}"></td>
                 <td th:text="${key.getTonerList()}"></td>
-                <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
-                <td>
-                    <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a>
-                </td>
-                <td>
-                    <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
+                <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a>
+                <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a>
+                <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>
             </tr>
             </tbody>
         </table>
-
+    </div>
 </form>
-<!--Dodaj liczniki: <input type="checkbox" id="myCheck" onclick="myFunction()">
-    <form th:action="@{/saveOid}" th:object="${oid}" method="post" style="display:none">
-       <input th:field="*{oidName}" type="text" class="form-control col-4 mb-4" placeholder="Nazwa">
-        <input th:field="*{oid}" type="text" class="form-control col-4 mb-4" placeholder="Oid">
-    </form> -->
+
 </body>
 </html>
