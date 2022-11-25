@@ -208,6 +208,13 @@ public class HardwareController {
         return "redirect:/list-phones";
     }
 
+    @PostMapping({"/list-phones"})
+    public void searchPhones(@ModelAttribute("temp") Temp temp, Model model){
+        String mattern = '%' + temp.getTempString() + '%';
+        model.addAttribute("phonesList", mobilePhoneService.search(mattern));
+        getAllPhones();
+    }
+
     @GetMapping({"/addPhoneForm"})
     public ModelAndView addPhonePage() {
         ModelAndView model = new ModelAndView("add-phone-form");

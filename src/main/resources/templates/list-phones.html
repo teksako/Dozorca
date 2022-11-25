@@ -8,50 +8,54 @@
 <body>
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
-<h3>Lista telefonów</h3>
-<hr/>
-<a th:href="@{/addPhoneForm}" class="btn btn-primary">Dodaj telefon</a>
-<!--<input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">-->
-<input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
-<a class="navbar-brand" th:text="${allert}"></a>
-<br/><br/>
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr style="text-align: center; ">
-        <th>Numer</th>
-        <th>NR SIM</th>
-        <th>PIN</th>
-        <th>PUK</th>
-        <th>Imię i nazwisko</th>
-        <th>Dział</th>
-        <th>Producent</th>
-        <th>Model</th>
-        <th>Numer seryjny</th>
-        <th>IMEI</th>
-        <th>IMEI2</th>
-        <th>MAC</th>
-        <th>Opcje</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="key : ${phonesList}" style="text-align: center;">
-        <td th:text="${key.getPhoneNumber().number}"></td>
-        <td th:text="${key.getPhoneNumber().SIMNumber}"></td>
-        <td th:text="${key.getPhoneNumber().PIN}"></td>
-        <td th:text="${key.getPhoneNumber().PUK}"></td>
-        <td th:text="${key.getEmployee().firstname+' '+key.getEmployee().lastname}"></td>
-        <td th:text="${key.getEmployee().getDepartment().nameOfDepartment}"></td>
-        <td th:text="${key.mark}"></td>
-        <td th:text="${key.model}"></td>
-        <td th:text="${key.serialNumber}"></td>
-        <td th:text="${key.IMEI}"></td>
-        <td th:text="${key.IMEI2}"></td>
-        <td th:text="${key.MAC}"></td>
-        <td><a th:href="@{/deletePhone/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
-            <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<form th:action="@{/list-phones}" th:object="${temp}" method="post">
+<div class="container-fluid">
+    <h3>Lista telefonów</h3>
+    <hr/>
+    <a th:href="@{/addPhoneForm}" class="btn btn-primary">Dodaj telefon</a>
+    <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
+    <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
+    <a class="navbar-brand" th:text="${allert}"></a>
+    <br/><br/>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr style="text-align: center; ">
+            <th>Numer</th>
+            <th>NR SIM</th>
+            <th>PIN</th>
+            <th>PUK</th>
+            <th>Imię i nazwisko</th>
+            <th>Dział</th>
+            <th>Producent</th>
+            <th>Model</th>
+            <th>Numer seryjny</th>
+            <th>IMEI</th>
+            <th>IMEI2</th>
+            <th>MAC</th>
+            <th>Opcje</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="key : ${phonesList}" style="text-align: center;">
+            <td th:text="${key.getPhoneNumber().number}"></td>
+            <td th:text="${key.getPhoneNumber().SIMNumber}"></td>
+            <td th:text="${key.getPhoneNumber().PIN}"></td>
+            <td th:text="${key.getPhoneNumber().PUK}"></td>
+            <td th:text="${key.getEmployee().firstname+' '+key.getEmployee().lastname}"></td>
+            <td th:text="${key.getEmployee().getDepartment().nameOfDepartment}"></td>
+            <td th:text="${key.mark}"></td>
+            <td th:text="${key.model}"></td>
+            <td th:text="${key.serialNumber}"></td>
+            <td th:text="${key.IMEI}"></td>
+            <td th:text="${key.IMEI2}"></td>
+            <td th:text="${key.MAC}"></td>
+            <td><a th:href="@{/deletePhone/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
+                <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</form>
 </body>
 </html>

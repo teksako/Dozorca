@@ -37,7 +37,7 @@
                 <th>Użytkownik</th>
                 <th>Dział</th>
                 <th>Toner</th>
-                <th>Opcje</th>
+
 
 
             </tr>
@@ -54,9 +54,11 @@
                 <td th:text="${key.user}"></td>
                 <td th:text="${key.getDepartment().nameOfDepartment}"></td>
                 <td th:text="${key.getTonerList()}"></td>
-                <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a>
-                <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a>
-                <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
+                <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
+                <td>
+                    <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a></td>
+                <td>
+                    <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>
             </tr>
             </tbody>

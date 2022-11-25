@@ -33,6 +33,10 @@ public class MobilePhoneService {
         mobilePhoneRepo.save(mobilePhone);
     }
 
+    public List<MobilePhone> search(String matter){
+        return mobilePhoneRepo.findAllByModelIsLike(matter);
+    }
+
     public void delete(MobilePhone mobilePhone) {
         mobilePhoneRepo.delete(mobilePhone);
     }

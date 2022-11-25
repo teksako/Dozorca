@@ -10,7 +10,7 @@
 <div th:replace="navbar :: navbar"></div>
 
 <form th:action="@{/list-employees}" th:object="${temp}" method="post">
-
+    <div class="container">
     <h3>Lista pracowników</h3>
     <hr/>
     <a th:href="@{/addEmployeeForm}" class="btn btn-primary">Dodaj pracownika</a>
@@ -40,7 +40,7 @@
         </tr>
         </tbody>
     </table>
-
+    </div>
 </form>
 
 </body>

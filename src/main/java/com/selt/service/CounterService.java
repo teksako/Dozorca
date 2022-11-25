@@ -36,11 +36,7 @@ public class CounterService {
     private final ConfigService configService;
 
 
-    public String test(){
-        return "0 0 10 * * MON-SUN";
-    }
-
-    //@Scheduled(fixedDelay = 10000)
+     //@Scheduled(fixedDelay = 10000)
     @Scheduled(cron = "0 0 10 * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList = new ArrayList<>();
@@ -233,7 +229,7 @@ public class CounterService {
                     //String oid1 = oidRepo.findAllByOidName("Max Toner Capacity").get(0).getOidValue();
                     countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Toner Capacity").getOidValue()) + "%");
                 } else if ((oid.getOidName().equals("Actual Drum Page Counter"))) {
-                    if (printer.get().getModel().equals("20")||printer.get().getModel().equals("20p")) {
+                    if (printer.get().getModel().equals("bizhub 20")||printer.get().getModel().equals("bizhub 20p")) {
                         countList.add("Kondycja bębna: " + (long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100) + "%");
                         System.out.println(Math.ceil((long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100)) + "%");
                     } else {
