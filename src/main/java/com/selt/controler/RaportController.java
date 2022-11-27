@@ -1,5 +1,8 @@
 package com.selt.controler;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.selt.model.Magazine;
 import com.selt.model.Raport;
 import com.selt.model.Temp;
@@ -104,18 +107,19 @@ public class RaportController {
         return raportService.findAll();
     }
 
-    @GetMapping(value = "/exportpdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> tonerReports(HttpServletResponse response) throws IOException {
+    @GetMapping({"/exportpdf"})//(value = "/exportpdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public void tonerReports(HttpServletResponse response) throws IOException, DocumentException {
 
 
+        ExportPDF.protcol();
+        //ByteArrayInputStream bis = ExportPDF.tonerRaport(raportList);
 
-        ByteArrayInputStream bis = ExportPDF.tonerRaport(raportList);
+//        HttpHeaders headers = new HttpHeaders();
+//
+//        headers.add("Content-Disposition", "attachment;filename=raport.pdf");
+//
+//        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
+//                .body(new InputStreamResource(bis));
 
-        HttpHeaders headers = new HttpHeaders();
-
-        headers.add("Content-Disposition", "attachment;filename=raport.pdf");
-
-        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(bis));
     }
 }
