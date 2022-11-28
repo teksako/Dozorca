@@ -1,13 +1,16 @@
 package com.selt.service;
 
+import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.layout.Document;
 
 
 import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
@@ -24,11 +27,11 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
-
-
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.layout.element.Text;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-
+import com.itextpdf.text.Chunk;
 import com.itextpdf.layout.element.Image;
 
 @Data
@@ -53,58 +56,63 @@ public class ExportPDF {
     }
 
     public static void protcol() throws IOException, DocumentException {
-        BaseFont helvetica = BaseFont.createFont(BaseFont.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
+        PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.EMBEDDED);
 
         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ randomNumber()+".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
+        Text docTitle = new Text("PROTOKÓŁ PRZEKAZANIA");
 
         PdfPage pdfPage = pdf.addNewPage();
-
-        PdfCanvas headerLine = new PdfCanvas(pdfPage);
-        PdfCanvas footerLine = new PdfCanvas(pdfPage);
         Paragraph paragraph = new Paragraph();
-        Paragraph docTitle = new Paragraph("PROTOKÓŁ ODBIORU");
+        Paragraph paragraph2 = new Paragraph();
+
+
         Paragraph phoneData=new Paragraph();
         phoneData.add("Producent: "+producent+"\n"+ "Model: "+model+"\n"+"Nr seryjny: " + serialnumber+"\n"+ "IMEI: "+IMEI+"\n"+"SIM: "+SIM+"\n"+"Nr telefonu: "+number);
         Paragraph date = new Paragraph("Opole, " + today.format(DateTimeFormatter
                 .ofLocalizedDate(FormatStyle.SHORT)));
-        String imFile = "src/main/resources/images/logo.png";
-        ImageData data = ImageDataFactory.create(imFile);
-        paragraph.add("SELT Sp. z o.o.\n" +
-                  "ul. Wschodnia 23a | 45-449 Opole\n" +
-                    "Sąd Rejonowy w Opolu VIII Wydział Gospodarczy Krajowego Rejestru Sądowego\n" +
-                   "KRS 0000589791 | NIP 7543103311\n" +
-                   "Kapitał zakładowy 64.000.000 PLN");
+        String footerPaath = "src/main/resources/images/FOOTER.png";
+        String headerPath= "src/main/resources/images/HEADER.png";
+        ImageData data = ImageDataFactory.create(footerPaath);
+        ImageData data2 = ImageDataFactory.create(headerPath);
+
 
         // Creating an Image object
-        Image image = new Image(data);
-        image.scaleToFit(70,70);
-        image.setFixedPosition(10, 760);
+        Image header = new Image(data2);
+        Image footer = new Image(data);
+        header.scaleToFit(588,100);
+        header.setFixedPosition(5,750);
+        footer.scaleToFit(580,100);
+        footer.setFixedPosition(7, 0);
         // Adding image to the document
 
-        phoneData.setFixedPosition(220,550,300);
-        docTitle.setFixedPosition(220,680,300);
+        phoneData.setFixedPosition(100,500,500);
+        phoneData.setMarginLeft(100);
+        phoneData.setTextAlignment(TextAlignment.LEFT);
+
+        docTitle.setFont(helvetica);
+        paragraph2.setFixedPosition(0,640,600);
+        paragraph2.setTextAlignment(TextAlignment.CENTER);
+
         docTitle.setFontSize(17);
         docTitle.setBold();
-
+        docTitle.setFont(helvetica);
+        paragraph2.add(docTitle);
         // Initial point of the line
-        headerLine.moveTo(0, 750);
+        //headerLine.moveTo(90, 760);
         //footerLine.moveTo(0,70);
-        date.setFixedPosition(520,730,70);
-        date.setFontSize(8);
+        date.setFixedPosition(456,732,100);
+        date.setFontSize(11);
         paragraph.setFixedPosition(20,10,500);
         paragraph.setFontSize(7);
-        // Drawing the line
-        headerLine.lineTo(595, 750);
-        //footerLine.lineTo(595,70);
-        headerLine.closePathStroke();
-        //footerLine.closePathStroke();
+
 
         document.add(phoneData);
-        document.add(docTitle);
+        document.add(paragraph2);
         document.add(date);
-        document.add(image);
+        document.add(header);
+        document.add(footer);
         document.add(paragraph);
 
         // Closing the document
