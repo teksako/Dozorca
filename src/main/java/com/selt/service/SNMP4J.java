@@ -100,8 +100,9 @@ public class SNMP4J {
                     info = String.valueOf(vb.getVariable());
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception  e) {
+           // e.printStackTrace();
+            System.out.println("brak połaczenia");
 
         } finally {
             if (snmp != null) {

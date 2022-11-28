@@ -34,6 +34,9 @@ public class MobilePhone {
     @Column
     private String serialNumber;
 
+    @Column
+    private String color;
+
 
     @OneToOne
     @JoinTable(
