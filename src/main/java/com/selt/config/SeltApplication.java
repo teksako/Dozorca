@@ -2,6 +2,7 @@ package com.selt.config;
 
 import com.selt.model.*;
 import com.selt.repository.*;
+import com.selt.service.ExportPDF;
 import com.selt.service.MailService;
 import com.selt.service.PrinterService;
 import com.selt.service.SNMP4J;
@@ -70,7 +71,7 @@ public class SeltApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        ExportPDF.protcol();
         final List<String> printerList = new ArrayList<>();
         printerList.add("454");
         printerList.add("284");

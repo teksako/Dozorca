@@ -76,7 +76,9 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
+<div class="container">
 <form th:action="@{/Raport}" th:object="${temp}" method="post">
+
     <ul>
         <li>
             <input id="features" name="features" type="radio" th:field="*{radio}" th:value="${0}"
@@ -167,17 +169,7 @@
     </tr>
     </thead>
     <tbody>
-    <!--<tr th:each="key : ${raport}" style="text-align: center; ">
-        <div sec:authorize="isAuthenticated()">
-            <td th:text="${key.Printers.getToner().getTonerName()}"></td>
-            <td th:text="${key.count}"></td>
-            <td th:text="${key.Printers.getManufacturer()+' '+key.Printers.getModel()}"></td>
-            <td th:text="${key.Printers.getDepartment().getNameOfDepartment()}"></td>
-            <td th:text="${key.Printers.getDepartment().getMPK()}"></td>
-            <td th:text="${key.Printers.getInventoryNumber()}"></td>
-            <td th:text="${key.date}"></td>
-        </div>-->
-    <tr th:each="key : ${raport}" style="text-align: center;">
+        <tr th:each="key : ${raport}" style="text-align: center;">
         <div sec:authorize="isAuthenticated()">
             <td th:text="${key.toner}"></td>
             <td th:text="${key.count}"></td>
@@ -196,6 +188,6 @@
     </tr>
     </tbody>
 </table>
-
+</div>
 </body>
 </html>
