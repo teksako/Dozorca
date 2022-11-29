@@ -47,6 +47,8 @@ public class ExportPDF {
     static String IMEI="4987365487949263";
     static String SIM="123244557668576867";
     static String number="694048092";
+    static String uradzenie="Telefon";
+    static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
 
 
     public static  int randomNumber() {
@@ -56,69 +58,95 @@ public class ExportPDF {
     }
 
     public static void protcol() throws IOException, DocumentException {
-        PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD, BaseFont.CP1250, BaseFont.EMBEDDED);
+        PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ randomNumber()+".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
-        Text docTitle = new Text("PROTOKÓŁ PRZEKAZANIA");
+        String footerPaath = "src/main/resources/images/footer.jpg";
+        String headerPath= "src/main/resources/images/header.jpg";
 
+        Text docTitle = new Text("PROTOKÓŁ PRZEKAZANIA").setBold();
+        Text template = new Text("Urządzenie: \n"+"Producent: \n"+ "Model: \n"+"Nr seryjny: \n"+ "IMEI: \n"+"SIM: \n"+"Nr telefonu: ").setBold();
+        Text template2 = new Text("Telefon \n"+ producent+"\n"+model+"\n"+serialnumber+"\n"+IMEI+"\n"+SIM+"\n"+number);
+        Text attentionTemplate = new Text("Uwagi: ").setBold();
+        Text atetnioData = new Text(attention);
         PdfPage pdfPage = pdf.addNewPage();
+
         Paragraph paragraph = new Paragraph();
         Paragraph paragraph2 = new Paragraph();
-
-
+        Paragraph paragraph1 = new Paragraph();
         Paragraph phoneData=new Paragraph();
-        phoneData.add("Producent: "+producent+"\n"+ "Model: "+model+"\n"+"Nr seryjny: " + serialnumber+"\n"+ "IMEI: "+IMEI+"\n"+"SIM: "+SIM+"\n"+"Nr telefonu: "+number);
-        Paragraph date = new Paragraph("Opole, " + today.format(DateTimeFormatter
-                .ofLocalizedDate(FormatStyle.SHORT)));
-        String footerPaath = "src/main/resources/images/FOOTER.png";
-        String headerPath= "src/main/resources/images/HEADER.png";
+        Paragraph attentionParagraph = new Paragraph(attentionTemplate);
+        Paragraph attentioDataParagraph=new Paragraph(atetnioData);
+
         ImageData data = ImageDataFactory.create(footerPaath);
         ImageData data2 = ImageDataFactory.create(headerPath);
 
-
-        // Creating an Image object
         Image header = new Image(data2);
         Image footer = new Image(data);
-        header.scaleToFit(588,100);
-        header.setFixedPosition(5,750);
-        footer.scaleToFit(580,100);
-        footer.setFixedPosition(7, 0);
-        // Adding image to the document
 
-        phoneData.setFixedPosition(100,500,500);
-        phoneData.setMarginLeft(100);
-        phoneData.setTextAlignment(TextAlignment.LEFT);
+        paragraph1.add(template2);
+        phoneData.add(template);
+        Paragraph date = new Paragraph("Opole, " + today.format(DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.SHORT)));
+
+
 
         docTitle.setFont(helvetica);
         paragraph2.setFixedPosition(0,640,600);
         paragraph2.setTextAlignment(TextAlignment.CENTER);
 
+
+        header.scaleToFit(580,100);
+        header.setFixedPosition(15,758);
+        footer.scaleToFit(592,100);
+        footer.setFixedPosition(3, 0);
+
+
+        phoneData.setFont(helvetica);
+        phoneData.setFixedPosition(50,450,100);
+        phoneData.setTextAlignment(TextAlignment.RIGHT);
+
+        paragraph1.setFont(helvetica);
+        paragraph1.setFixedPosition(155,450,150);
+        paragraph1.setTextAlignment(TextAlignment.LEFT);
+
+       attentionParagraph.setFont(helvetica);
+       attentionParagraph.setFixedPosition(50,390,100);
+       attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
+
+       attentioDataParagraph.setFont(helvetica);
+       attentioDataParagraph.setFixedPosition(155,390,400);
+       attentioDataParagraph.setTextAlignment(TextAlignment.LEFT);
+       attentioDataParagraph.setFirstLineIndent(155);
+
+
+
         docTitle.setFontSize(17);
         docTitle.setBold();
         docTitle.setFont(helvetica);
         paragraph2.add(docTitle);
-        // Initial point of the line
-        //headerLine.moveTo(90, 760);
-        //footerLine.moveTo(0,70);
-        date.setFixedPosition(456,732,100);
+
+        date.setFixedPosition(456,730,100);
         date.setFontSize(11);
         paragraph.setFixedPosition(20,10,500);
         paragraph.setFontSize(7);
 
-
+        document.add(paragraph1);
         document.add(phoneData);
         document.add(paragraph2);
         document.add(date);
         document.add(header);
         document.add(footer);
         document.add(paragraph);
+        document.add(attentionParagraph);
+        document.add(attentioDataParagraph);
 
         // Closing the document
         document.close();
 
-        System.out.println("Image added");
+        System.out.println("Image added ");
 
 
     }
