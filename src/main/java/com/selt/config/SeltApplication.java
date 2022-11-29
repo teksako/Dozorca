@@ -71,7 +71,7 @@ public class SeltApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        ExportPDF.protcol();
+        //ExportPDF.protcol();
         final List<String> printerList = new ArrayList<>();
         printerList.add("454");
         printerList.add("284");

@@ -1,41 +1,39 @@
 package com.selt.service;
-
 import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.layout.Document;
-
-
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.layout.property.VerticalAlignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import com.selt.model.MobilePhone;
 import com.selt.model.Raport;
+import com.selt.model.User;
 import lombok.Data;
 import com.itextpdf.kernel.pdf.PdfPage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import com.itextpdf.layout.element.Paragraph;
 import java.io.IOException;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
 import com.itextpdf.kernel.font.PdfFont;
-import com.itextpdf.layout.element.Text;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.layout.element.Image;
+
+
 
 @Data
 public class ExportPDF {
+
+    static UserService userService;
 
     static ByteArrayOutputStream out = new ByteArrayOutputStream();
     //static Document document=new Document();
@@ -48,8 +46,10 @@ public class ExportPDF {
     static String SIM="123244557668576867";
     static String number="694048092";
     static String uradzenie="Telefon";
-    static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
-
+    //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
+    static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
+    static String receiverPerson="Aleksandra Lipok";
+   // static  String spenderPersone=userService.actualLoginUser();
 
     public static  int randomNumber() {
         int min = 0;
@@ -57,7 +57,7 @@ public class ExportPDF {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public static void protcol() throws IOException, DocumentException {
+    public static void protcol(MobilePhone mobilePhone, String username) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ randomNumber()+".pdf");
@@ -68,9 +68,15 @@ public class ExportPDF {
 
         Text docTitle = new Text("PROTOKÓŁ PRZEKAZANIA").setBold();
         Text template = new Text("Urządzenie: \n"+"Producent: \n"+ "Model: \n"+"Nr seryjny: \n"+ "IMEI: \n"+"SIM: \n"+"Nr telefonu: ").setBold();
-        Text template2 = new Text("Telefon \n"+ producent+"\n"+model+"\n"+serialnumber+"\n"+IMEI+"\n"+SIM+"\n"+number);
+        Text template2 = new Text("Telefon \n"+ mobilePhone.getMark()+"\n"+mobilePhone.getModel()+"\n"+mobilePhone.getSerialNumber()+"\n"+mobilePhone.getIMEI()+"\n"+mobilePhone.getPhoneNumber().getSIMNumber()+"\n"+mobilePhone.getPhoneNumber().getNumber());
         Text attentionTemplate = new Text("Uwagi: ").setBold();
         Text atetnioData = new Text(attention);
+        Text info = new Text("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.").setFontColor(Color.RED).setUnderline();
+        Text receiver= new Text("Odbierający");
+        Text spender=new Text("Przekazujący");
+        Text rPerson= new Text(mobilePhone.getEmployee().getFirstname()+mobilePhone.getEmployee().getLastname()+"\n");
+        Text sPerson = new Text(username+"\n");
+
         PdfPage pdfPage = pdf.addNewPage();
 
         Paragraph paragraph = new Paragraph();
@@ -79,6 +85,10 @@ public class ExportPDF {
         Paragraph phoneData=new Paragraph();
         Paragraph attentionParagraph = new Paragraph(attentionTemplate);
         Paragraph attentioDataParagraph=new Paragraph(atetnioData);
+        Paragraph infoParagraph = new Paragraph(info);
+        Paragraph receiverParagraph = new Paragraph(rPerson.setBold().getText()+receiver.getText());
+        Paragraph spenderParagraph = new Paragraph(sPerson.setBold().getText() + spender.getText());
+
 
         ImageData data = ImageDataFactory.create(footerPaath);
         ImageData data2 = ImageDataFactory.create(headerPath);
@@ -98,7 +108,7 @@ public class ExportPDF {
         paragraph2.setTextAlignment(TextAlignment.CENTER);
 
 
-        header.scaleToFit(580,100);
+        header.scaleToFit(555,100);
         header.setFixedPosition(15,758);
         footer.scaleToFit(592,100);
         footer.setFixedPosition(3, 0);
@@ -113,15 +123,25 @@ public class ExportPDF {
         paragraph1.setTextAlignment(TextAlignment.LEFT);
 
        attentionParagraph.setFont(helvetica);
-       attentionParagraph.setFixedPosition(50,390,100);
+       attentionParagraph.setFixedPosition(50,370,100);
        attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
 
        attentioDataParagraph.setFont(helvetica);
-       attentioDataParagraph.setFixedPosition(155,390,400);
-       attentioDataParagraph.setTextAlignment(TextAlignment.LEFT);
-       attentioDataParagraph.setFirstLineIndent(155);
+       attentioDataParagraph.setFixedPosition(155,370,365);
+       attentioDataParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
 
 
+        infoParagraph.setFont(helvetica);
+        infoParagraph.setFixedPosition(50, 300,470);
+        infoParagraph.setTextAlignment(TextAlignment.JUSTIFIED).setBold();
+
+        receiverParagraph.setFont(helvetica);
+        receiverParagraph.setFixedPosition(400,200, 150);
+        receiverParagraph.setTextAlignment(TextAlignment.CENTER);
+
+        spenderParagraph.setFont(helvetica);
+        spenderParagraph.setFixedPosition(100,200,150);
+        spenderParagraph.setTextAlignment(TextAlignment.CENTER);
 
         docTitle.setFontSize(17);
         docTitle.setBold();
@@ -133,6 +153,9 @@ public class ExportPDF {
         paragraph.setFixedPosition(20,10,500);
         paragraph.setFontSize(7);
 
+        document.add(receiverParagraph);
+        document.add(spenderParagraph);
+        document.add(infoParagraph);
         document.add(paragraph1);
         document.add(phoneData);
         document.add(paragraph2);

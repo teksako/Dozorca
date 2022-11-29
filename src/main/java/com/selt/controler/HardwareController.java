@@ -1,5 +1,6 @@
 package com.selt.controler;
 
+import com.itextpdf.text.DocumentException;
 import com.selt.model.*;
 import com.selt.repository.MobilePhoneRepo;
 import com.selt.repository.OIDRepo;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -203,7 +205,7 @@ public class HardwareController {
     }
 
     @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
+    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
         mobilePhoneService.save(mobilePhone);
         return "redirect:/list-phones";
     }

@@ -49,7 +49,7 @@ public class RaportController {
         model.addAttribute("temp", new Temp());
         model.addAttribute("id", userService.findUserByUsername().getId());
         model.addAttribute("alert", alert);
-
+        model.addAttribute("username", userService.findUserByUsername().getFullname());
         return "/Raport";
     }
 
@@ -111,7 +111,7 @@ public class RaportController {
     public void tonerReports(HttpServletResponse response) throws IOException, DocumentException {
 
 
-        ExportPDF.protcol();
+        //ExportPDF.protcol();
         //ByteArrayInputStream bis = ExportPDF.tonerRaport(raportList);
 
 //        HttpHeaders headers = new HttpHeaders();
