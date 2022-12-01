@@ -34,7 +34,8 @@ public class MobilePhoneService {
         if (mobilePhone.getEmployee() == null) {
             mobilePhone.setEmployee(employeeService.findBlankEmployeer().get(0));
         }
-        ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
+       // ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
+
         mobilePhoneRepo.save(mobilePhone);
     }
 

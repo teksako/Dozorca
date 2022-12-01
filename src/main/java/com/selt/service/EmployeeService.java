@@ -17,7 +17,7 @@ public class EmployeeService {
 
 
     private final EmployeeRepo employeeRepo;
-
+    private final DepartmentService departmentService;
     public List<Employee> findAll(){
         return cleanBlankEmployeer(employeeRepo.findAll());
     }
@@ -60,6 +60,9 @@ public class EmployeeService {
     }
 
     public void save(Employee employee) {
+        if(employee.getDepartment()==null){
+            employee.setDepartment(departmentService.findBlankDepartment().get(0));
+        }
         employeeRepo.save(employee);
         //return "Dodano pracownika: " +employee;
     }

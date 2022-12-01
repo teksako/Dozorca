@@ -7,13 +7,19 @@ import com.selt.repository.OIDRepo;
 import com.selt.repository.PrinterRepo;
 import com.selt.service.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.expression.spel.SpelEvaluationException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 
@@ -204,10 +210,26 @@ public class HardwareController {
         return model;
     }
 
-    @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
+//    @PostMapping({"/savePhone"})
+//    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
+//        mobilePhoneService.save(mobilePhone);
+//
+//        return "redirect:/list-phones";
+//    }
+
+    @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> savePhone(@ModelAttribute("phone") MobilePhone mobilePhone, HttpServletResponse response) throws DocumentException, IOException {
         mobilePhoneService.save(mobilePhone);
-        return "redirect:/list-phones";
+
+        ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
+
+        HttpHeaders headers = new HttpHeaders();
+
+        headers.add("Content-Disposition", "attachment;filename=test.pdf");
+
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
+                .body(new InputStreamResource(bis));
+
     }
 
     @PostMapping({"/list-phones"})
@@ -221,7 +243,7 @@ public class HardwareController {
     public ModelAndView addPhonePage() {
         ModelAndView model = new ModelAndView("add-phone-form");
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phoneNumber", phoneNumberService.findAll());
+        model.addObject("phoneNumberList", phoneNumberService.findAll());
         model.addObject("phone", new MobilePhone());
         model.addObject("employeesList", employeeService.findAll());
         return model;

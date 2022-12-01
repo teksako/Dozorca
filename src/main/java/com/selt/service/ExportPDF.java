@@ -39,16 +39,16 @@ public class ExportPDF {
     //static Document document=new Document();
     static LocalDate today = LocalDate.now();
     static LocalTime actualTime = LocalTime.now();
-    static String producent="Huawei";
-    static String model="Y6";
-    static String serialnumber="GXM1246678Y";
-    static String IMEI="4987365487949263";
-    static String SIM="123244557668576867";
-    static String number="694048092";
-    static String uradzenie="Telefon";
+//    static String producent="Huawei";
+//    static String model="Y6";
+//    static String serialnumber="GXM1246678Y";
+//    static String IMEI="4987365487949263";
+//    static String SIM="123244557668576867";
+//    static String number="694048092";
+       static String uradzenie="Telefon";
     //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
     static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
-    static String receiverPerson="Aleksandra Lipok";
+    //static String receiverPerson="Aleksandra Lipok";
    // static  String spenderPersone=userService.actualLoginUser();
 
     public static  int randomNumber() {
@@ -57,7 +57,7 @@ public class ExportPDF {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public static void protcol(MobilePhone mobilePhone, String username) throws IOException, DocumentException {
+    public static  ByteArrayInputStream protcol(MobilePhone mobilePhone, String username) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ randomNumber()+".pdf");
@@ -171,7 +171,7 @@ public class ExportPDF {
 
         System.out.println("Image added ");
 
-
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
     public static ByteArrayInputStream tonerRaport(List<Raport> raportList) {
@@ -291,11 +291,11 @@ public class ExportPDF {
 //            document.add(tableHeader);
 //            document.add(table);
 //            document.close();
-
+//
 //        }   catch (DocumentException | IOException ex) {
 //
 //        }
-//
+
        return new ByteArrayInputStream(out.toByteArray());
     }
 

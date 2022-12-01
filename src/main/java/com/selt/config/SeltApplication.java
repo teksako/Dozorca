@@ -71,6 +71,14 @@ public class SeltApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+//        for (Employee employee:employeeRepo.findAll()) {
+//            if(employee.getDepartment()==null){
+//                employee.setDepartment(departmentRepo.getById(39l));
+//            }
+//            employeeRepo.save(employee);
+//        }
+
         //ExportPDF.protcol();
         final List<String> printerList = new ArrayList<>();
         printerList.add("454");

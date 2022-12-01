@@ -1,6 +1,7 @@
 package com.selt.service;
 
 import com.selt.model.Department;
+import com.selt.model.Employee;
 import com.selt.model.Location;
 import com.selt.model.Printer;
 import com.selt.repository.DepartmentRepo;
@@ -36,6 +37,17 @@ public class DepartmentService {
 
     public List<Department> findAll() {
         return validate(departmentRepo.findAll());
+    }
+
+    public List<Department> findBlankDepartment(){
+
+        List<Department> departmentList = new ArrayList<>();
+        for (Department department : departmentRepo.findAll()) {
+            if (department.getNameOfDepartment().equals("-")) {
+                departmentList.add(department);
+            }
+        }
+        return departmentList;
     }
 
     public List<Department> validate(List<Department> departmentList) {
