@@ -43,6 +43,8 @@ public class PrinterService {
 //        System.out.println(randomNumber());
 //    }
 
+
+
     public int randomNumber() {
         int min = 0;
         int max = 100;
@@ -146,7 +148,9 @@ public class PrinterService {
         if (printer.getIPAdress().isBlank()) {
             printer.setIPAdress("-");
         }
-
+        if(printer.getServiceCounter()==null) {
+            printer.setServiceCounter(0l);
+        }
         printer.setOid(oidService.findAllByPrinterModel(printer.getModel(), oidService.findAllByOidProducent(printer.getManufacturer())));
         //printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer(),printer.getModel()));
         printerRepo.save(printer);

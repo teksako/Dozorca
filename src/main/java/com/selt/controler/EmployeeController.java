@@ -9,6 +9,7 @@ import com.selt.service.EmployeeService;
 import com.selt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.rule.Mode;
+import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,20 +28,26 @@ public class EmployeeController {
     public final EmployeeRepo employeeRepo;
 
     @GetMapping({"list-employees"})
-    public ModelAndView getAllEmployees(){
+    public ModelAndView getAllEmployees() {
         ModelAndView model = new ModelAndView("list-employees");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("employeesList", employeeService.findAll());
+
+        for (Employee employee : employeeService.findAll()) {
+            if (employee.getDepartment() == null) {
+                employee.setDepartment(departmentService.getDepartmentRepo().getById(1l));
+            }
+
+        }
+         model.addObject("employeesList", employeeService.findAll());
         return model;
     }
 
     @PostMapping({"/saveEmployee"})
-    public String saveEmployee(@ModelAttribute Employee employee){
+    public String saveEmployee(@ModelAttribute Employee employee) {
         employeeService.save(employee);
         return "redirect:/list-employees";
     }
-
 
 
     @PostMapping({"/list-employees"})
@@ -51,7 +58,7 @@ public class EmployeeController {
     }
 
     @GetMapping({"/addEmployeeForm"})
-    public ModelAndView addEmployee(){
+    public ModelAndView addEmployee() {
         ModelAndView model = new ModelAndView("add-employee-form");
         List<Department> departmentList = departmentService.findAll();
         model.addObject("departmentList", departmentList);

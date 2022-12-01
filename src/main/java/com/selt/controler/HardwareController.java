@@ -74,6 +74,11 @@ public class HardwareController {
     @GetMapping({"/list-printers"})
     public ModelAndView getAllPrinters() {
         ModelAndView model = new ModelAndView("list-printers");
+//        for (Printer printer: printerService.findAll()
+//             ) {
+//
+//
+//        }
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("printerList", printerService.findAll());

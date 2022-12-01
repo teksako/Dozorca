@@ -2,7 +2,6 @@ package com.selt.config;
 
 import com.selt.model.*;
 import com.selt.repository.*;
-import com.selt.service.ExportPDF;
 import com.selt.service.MailService;
 import com.selt.service.PrinterService;
 import com.selt.service.SNMP4J;
@@ -46,6 +45,7 @@ public class SeltApplication implements CommandLineRunner {
     private final DepartmentRepo departmentRepo;
     private final LocationRepo locationRepo;
     private final PhoneNumberRepo numberRepo;
+    private final TonerRepo tonerRepo;
 
 
     @Autowired
@@ -54,7 +54,8 @@ public class SeltApplication implements CommandLineRunner {
             , EmployeeRepo employeeRepo
             , DepartmentRepo departmentRepo
             , LocationRepo locationRepo
-            , PhoneNumberRepo numberRepo) {
+            , PhoneNumberRepo numberRepo
+            , TonerRepo tonerRepo) {
 
         this.configRepo = configRepo;
         this.mailService = mailService;
@@ -62,6 +63,7 @@ public class SeltApplication implements CommandLineRunner {
         this.employeeRepo = employeeRepo;
         this.departmentRepo = departmentRepo;
         this.locationRepo = locationRepo;
+        this.tonerRepo = tonerRepo;
     }
 
     public static void main(String[] args) {
@@ -170,6 +172,13 @@ public class SeltApplication implements CommandLineRunner {
             department.setNameOfDepartment("-");
             department.setLocations(locationList);
             departmentRepo.save(department);
+        }
+
+        if(tonerRepo.findAll().size()==0){
+            Toner toner = new Toner();
+            toner.setTonerName("-");
+            tonerRepo.save(toner);
+
         }
 
 
