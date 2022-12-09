@@ -32,7 +32,9 @@
             <tr th:each="key : ${departmentList}">
 
                 <td th:text="${key.nameOfDepartment}"></td>
-                <td th:text="${key.locations}"></td>
+                <td><a th:each=" locations :${key.locations}">
+                    <a th:text="${locations.nameOfLocation}"></a></a>
+                </td>
                 <td th:text="${key.MPK}"></td>
                 <td><a th:href="@{/deleteDepartment/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
                 <td>

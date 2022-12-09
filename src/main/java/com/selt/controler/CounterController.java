@@ -95,16 +95,23 @@ public class CounterController {
 
         }
         catch (NullPointerException exception){
-            counterList = counterService.findAllByPrinterId(printerId);
-            sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
-            if(counterList.size()==0){
+            try {
+                counterList = counterService.findAllByPrinterId(printerId);
+                sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
+                if (counterList.size() == 0) {
+                    allert = "Brak wyników spełniających kryteria!";
+                }
+                allert="W wybranym okresie zostało wydrukowanych "+sub.toString()+" stron.";
+            }
+            catch (IndexOutOfBoundsException exception2){
                 allert="Brak wyników spełniających kryteria!";
             }
+
         }
         catch (IndexOutOfBoundsException exception){
             allert="Brak wyników spełniających kryteria!";
         }
-        allert="W wybranym okresie zostało wydrukowanych "+sub.toString()+" stron.";
+
         System.out.println("różnica = " + sub);
 
 

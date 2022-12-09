@@ -60,7 +60,7 @@ public class ExportPDF {
     public static  ByteArrayInputStream protcol(MobilePhone mobilePhone, String username) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
-        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ randomNumber()+".pdf");
+        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         String footerPaath = "src/main/resources/images/footer.jpg";
@@ -74,7 +74,7 @@ public class ExportPDF {
         Text info = new Text("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.").setFontColor(Color.RED).setUnderline();
         Text receiver= new Text("Odbierający");
         Text spender=new Text("Przekazujący");
-        Text rPerson= new Text(mobilePhone.getEmployee().getFirstname()+mobilePhone.getEmployee().getLastname()+"\n");
+        Text rPerson= new Text(mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"\n");
         Text sPerson = new Text(username+"\n");
 
         PdfPage pdfPage = pdf.addNewPage();
@@ -86,7 +86,7 @@ public class ExportPDF {
         Paragraph attentionParagraph = new Paragraph(attentionTemplate);
         Paragraph attentioDataParagraph=new Paragraph(atetnioData);
         Paragraph infoParagraph = new Paragraph(info);
-        Paragraph receiverParagraph = new Paragraph(rPerson.setBold().getText()+receiver.getText());
+        Paragraph receiverParagraph = new Paragraph(rPerson.setBold().getText() + receiver.getText());
         Paragraph spenderParagraph = new Paragraph(sPerson.setBold().getText() + spender.getText());
 
 
@@ -140,7 +140,7 @@ public class ExportPDF {
         receiverParagraph.setTextAlignment(TextAlignment.CENTER);
 
         spenderParagraph.setFont(helvetica);
-        spenderParagraph.setFixedPosition(100,200,150);
+        spenderParagraph.setFixedPosition(50,200,150);
         spenderParagraph.setTextAlignment(TextAlignment.CENTER);
 
         docTitle.setFontSize(17);
