@@ -24,9 +24,9 @@ public class DepartmentService {
 
     public void save(Department department) {
 
-        if(department.getLocations().isEmpty()){
-            department.setLocations(locationService.findBlankLocation());
-        }
+//        if(department.getLocations().isEmpty()){
+//            department.setLocations(locationService.findBlankLocation());
+//        }
 
         departmentRepo.save(department);
     }

@@ -28,12 +28,12 @@ public class MobilePhoneService {
 
     public void save(MobilePhone mobilePhone) throws DocumentException, IOException {
 
-        if (mobilePhone.getPhoneNumber() == null) {
-            mobilePhone.setPhoneNumber(numberService.findBlankNumber().get(0));
-        }
-        if (mobilePhone.getEmployee() == null) {
-            mobilePhone.setEmployee(employeeService.findBlankEmployeer().get(0));
-        }
+//        if (mobilePhone.getPhoneNumber() == null) {
+//            mobilePhone.setPhoneNumber(numberService.findBlankNumber().get(0));
+//        }
+//        if (mobilePhone.getEmployee() == null) {
+//            mobilePhone.setEmployee(employeeService.findBlankEmployeer().get(0));
+//        }
        // ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
 
         mobilePhoneRepo.save(mobilePhone);

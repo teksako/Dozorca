@@ -34,17 +34,5 @@ public class Department {
     private List<Location> locations;
 
 
-//    @OneToOne(orphanRemoval = true)
-//    @JoinTable(name = "department_printer",
-//            joinColumns = @JoinColumn(name = "department_department_id"),
-//            inverseJoinColumns = @JoinColumn(name = "printer_printer_id"))
-//    private Printer printer;
-//
-//    public Printer getPrinter() {
-//        return printer;
-//    }
-//
-//    public void setPrinter(Printer printer) {
-//        this.printer = printer;
-//    }
+
 }

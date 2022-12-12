@@ -1,6 +1,7 @@
 package com.selt.controler;
 
 import com.selt.model.Department;
+import com.selt.model.Location;
 import com.selt.model.Temp;
 import com.selt.repository.DepartmentRepo;
 import com.selt.service.DepartmentService;
@@ -12,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @Data
 public class DepartmentController {
@@ -20,14 +24,29 @@ public class DepartmentController {
     private final LocationService locationService;
     private final UserService userService;
     private final DepartmentRepo departmentRepo;
+    private static Location location = new Location();
+    static List<Location> locationList=new ArrayList<>();
+    public static void setLocation(Location location) {
+        DepartmentController.location = location;
+        location.setNameOfLocation("-");
+
+        locationList.add(location);
+    }
 
     @GetMapping({"/list-departments"})
     public ModelAndView getAllDepartments() {
         ModelAndView model = new ModelAndView("list-departments");
         model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("departmentList", departmentService.findAll());
         model.addObject("id", userService.findUserByUsername().getId());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        for (Department department: departmentService.findAll()) {
+            if(department.getLocations().size()==0){
+                department.setLocations(locationList);
+            }
+        }
+
+        model.addObject("departmentList", departmentService.findAll());
+
         return model;
     }
 

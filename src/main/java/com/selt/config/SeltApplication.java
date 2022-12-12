@@ -145,52 +145,52 @@ public class SeltApplication implements CommandLineRunner {
         final List<String> printerList12 = new ArrayList<>();
         printerList12.add("M203dn");
         printerList12.add("M227sdn");
+//
+//        Location location = new Location();
+//        Department department = new Department();
+//        PhoneNumber number = new PhoneNumber();
 
-        Location location = new Location();
-        Department department = new Department();
-        PhoneNumber number = new PhoneNumber();
-
-        if(numberRepo.findAll().size()==0){
-            number.setNumber("-");
-            number.setSIMNumber("-");
-            number.setPIN("-");
-            number.setPUK("-");
-            numberRepo.save(number);
-        }
-        if (locationRepo.findAll().size() == 0) {
-
-            location.setNameOfLocation("-");
-            location.setCity("-");
-            location.setNumber("-");
-            location.setCity("-");
-            locationRepo.save(location);
-        }
-
-        if (departmentRepo.findAll().size() == 0) {
-            List<Location> locationList = new ArrayList<>();
-            locationList.add(location);
-            department.setNameOfDepartment("-");
-            department.setLocations(locationList);
-            departmentRepo.save(department);
-        }
-
-        if(tonerRepo.findAll().size()==0){
-            Toner toner = new Toner();
-            toner.setTonerName("-");
-            tonerRepo.save(toner);
-
-        }
-
-
-        if (employeeRepo.findAll().size() == 0) {
-            Employee employee = new Employee();
-            employee.setDepartment(department);
-            employee.setFirstname("-");
-            employee.setWorkplace("-");
-            employee.setLastname("");
-            employeeRepo.save(employee);
-
-        }
+//        if(numberRepo.findAll().size()==0){
+//            number.setNumber("-");
+//            number.setSIMNumber("-");
+//            number.setPIN("-");
+//            number.setPUK("-");
+//            numberRepo.save(number);
+//        }
+//        if (locationRepo.findAll().size() == 0) {
+//
+//            location.setNameOfLocation("-");
+//            location.setCity("-");
+//            location.setNumber("-");
+//            location.setCity("-");
+//            locationRepo.save(location);
+//        }
+//
+//        if (departmentRepo.findAll().size() == 0) {
+//            List<Location> locationList = new ArrayList<>();
+//            locationList.add(location);
+//            department.setNameOfDepartment("-");
+//            department.setLocations(locationList);
+//            departmentRepo.save(department);
+//        }
+//
+//        if(tonerRepo.findAll().size()==0){
+//            Toner toner = new Toner();
+//            toner.setTonerName("-");
+//            tonerRepo.save(toner);
+//
+//        }
+//
+//
+//        if (employeeRepo.findAll().size() == 0) {
+//            Employee employee = new Employee();
+//            employee.setDepartment(department);
+//            employee.setFirstname("-");
+//            employee.setWorkplace("-");
+//            employee.setLastname("");
+//            employeeRepo.save(employee);
+//
+//        }
 
         if (configRepo.findAll().size() == 0) {
             Configuration configuration = new Configuration();

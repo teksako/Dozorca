@@ -29,10 +29,10 @@
                 <th>MPK</th>
             </thead>
             <tbody>
-            <tr th:each="key : ${departmentList}">
+            <tr th:each="key : ${departmentList}" style="text-align: center; ">
 
                 <td th:text="${key.nameOfDepartment}"></td>
-                <td><a th:each=" locations :${key.locations}">
+                <td><a th:each=" locations :${key.locations}"  >
                     <a th:text="${locations.nameOfLocation}"></a></a>
                 </td>
                 <td th:text="${key.MPK}"></td>

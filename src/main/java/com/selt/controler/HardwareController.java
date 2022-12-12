@@ -21,6 +21,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -44,6 +45,41 @@ public class HardwareController {
     private final OIDRepo oidRepo;
     private final CounterService counterService;
     private final MobilePhoneRepo phoneRepo;
+
+    private static Employee employee = new Employee();
+    private static Department department = new Department();
+    private static PhoneNumber number = new PhoneNumber();
+    private static Toner emptyToner = new Toner();
+    static List<Toner> tonerList = new ArrayList<>();
+
+    public static void setToner(Toner toner) {
+        HardwareController.emptyToner = toner;
+        toner.setTonerName("-");
+        tonerList.add(toner);
+    }
+
+    public static void setNumber(PhoneNumber number) {
+        HardwareController.number = number;
+        number.setNumber("-");
+        number.setSIMNumber("-");
+        number.setPUK("-");
+        number.setPIN("-");
+    }
+
+    public static void setDepartment(Department department) {
+        HardwareController.department = department;
+        department.setNameOfDepartment("-");
+    }
+
+    public static void setEmployee(Employee employee) {
+        HardwareController.employee = employee;
+        employee.setFirstname("-");
+        employee.setWorkplace("-");
+        employee.setLastname("");
+        employee.setDepartment(department);
+
+
+    }
 
 
     @ResponseBody
@@ -74,15 +110,18 @@ public class HardwareController {
     @GetMapping({"/list-printers"})
     public ModelAndView getAllPrinters() {
         ModelAndView model = new ModelAndView("list-printers");
-//        for (Printer printer: printerService.findAll()
-//             ) {
-//
-//
-//        }
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printerList", printerService.findAll());
         model.addObject("id", userService.findUserByUsername().getId());
+        for (Printer printer : printerService.findAll()) {
+            if (printer.getDepartment() == null) {
+                printer.setDepartment(department);
+            }
+            if (printer.getTonerList().size() == 0) {
+                printer.setTonerList(tonerList);
+            }
+        }
+        model.addObject("printerList", printerService.findAll());
         return model;
     }
 
@@ -206,23 +245,22 @@ public class HardwareController {
 
     //--------------------------START MOBILEPHONE--------------------------------------
     @GetMapping({"/list-phones"})
-    public ModelAndView getAllPhones(){
+    public ModelAndView getAllPhones() {
         ModelAndView model = new ModelAndView("list-phones");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-//        for (MobilePhone mobilePhone : mobilePhoneService.findAll()) {
-//            if (mobilePhone.getPhoneNumber() == null) {
-//                mobilePhone.setPhoneNumber(phoneNumberService.getPhoneNumberRepo().getById(1l));
-//                           }
-//            if(mobilePhone.getEmployee()==null){
-//                mobilePhone.setEmployee(employeeService.getEmployeeRepo().getById(1l);
-//               if(employeeService.getEmployeeRepo().getById(1l).getDepartment()==null){
-//
-//               }
-//            }
-//
-//
-//        }
+
+        for (MobilePhone mobilePhone : mobilePhoneService.findAll()) {
+            if (mobilePhone.getPhoneNumber() == null) {
+                mobilePhone.setPhoneNumber(number);
+            }
+            if (mobilePhone.getEmployee() == null) {
+                mobilePhone.setEmployee(employee);
+
+            }
+
+
+        }
         model.addObject("phonesList", mobilePhoneService.findAll());
 
         return model;
@@ -239,7 +277,7 @@ public class HardwareController {
     public ResponseEntity<InputStreamResource> savePhone(@ModelAttribute("phone") MobilePhone mobilePhone, HttpServletResponse response) throws DocumentException, IOException {
         mobilePhoneService.save(mobilePhone);
 
-        ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
+        ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname());
 
         HttpHeaders headers = new HttpHeaders();
 
@@ -251,7 +289,7 @@ public class HardwareController {
     }
 
     @PostMapping({"/list-phones"})
-    public void searchPhones(@ModelAttribute("temp") Temp temp, Model model){
+    public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
         String mattern = '%' + temp.getTempString() + '%';
         model.addAttribute("phonesList", mobilePhoneService.search(mattern));
         getAllPhones();

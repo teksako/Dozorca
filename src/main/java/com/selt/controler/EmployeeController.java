@@ -27,8 +27,10 @@ public class EmployeeController {
     private final UserService userService;
     public final EmployeeRepo employeeRepo;
 
-    @GetMapping({"list-employees"})
-    public ModelAndView getAllEmployees() {
+
+
+        @GetMapping({"list-employees"})
+        public ModelAndView getAllEmployees () {
         ModelAndView model = new ModelAndView("list-employees");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
@@ -42,9 +44,10 @@ public class EmployeeController {
             }
 
         }
-         model.addObject("employeesList", employeeService.findAll());
+        model.addObject("employeesList", employeeService.findAll());
         return model;
     }
+
 
     @PostMapping({"/saveEmployee"})
     public String saveEmployee(@ModelAttribute Employee employee) {

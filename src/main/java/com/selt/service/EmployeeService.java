@@ -60,9 +60,9 @@ public class EmployeeService {
     }
 
     public void save(Employee employee) {
-        if(employee.getDepartment()==null){
-            employee.setDepartment(departmentService.findBlankDepartment().get(0));
-        }
+//        if(employee.getDepartment()==null){
+//            employee.setDepartment(departmentService.findBlankDepartment().get(0));
+//        }
         employeeRepo.save(employee);
         //return "Dodano pracownika: " +employee;
     }
