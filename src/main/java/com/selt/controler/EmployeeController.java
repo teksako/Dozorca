@@ -32,10 +32,13 @@ public class EmployeeController {
         ModelAndView model = new ModelAndView("list-employees");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-
+        Department department = new Department();
+        department.setNameOfDepartment("-");
         for (Employee employee : employeeService.findAll()) {
             if (employee.getDepartment() == null) {
-                employee.setDepartment(departmentService.getDepartmentRepo().getById(1l));
+
+                employee.setDepartment(department);
+
             }
 
         }

@@ -210,6 +210,19 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("list-phones");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
+//        for (MobilePhone mobilePhone : mobilePhoneService.findAll()) {
+//            if (mobilePhone.getPhoneNumber() == null) {
+//                mobilePhone.setPhoneNumber(phoneNumberService.getPhoneNumberRepo().getById(1l));
+//                           }
+//            if(mobilePhone.getEmployee()==null){
+//                mobilePhone.setEmployee(employeeService.getEmployeeRepo().getById(1l);
+//               if(employeeService.getEmployeeRepo().getById(1l).getDepartment()==null){
+//
+//               }
+//            }
+//
+//
+//        }
         model.addObject("phonesList", mobilePhoneService.findAll());
 
         return model;

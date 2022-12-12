@@ -11,7 +11,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.selt.model.MobilePhone;
 import com.selt.model.Raport;
-import com.selt.model.User;
 import lombok.Data;
 import com.itextpdf.kernel.pdf.PdfPage;
 import java.io.ByteArrayInputStream;
@@ -39,17 +38,11 @@ public class ExportPDF {
     //static Document document=new Document();
     static LocalDate today = LocalDate.now();
     static LocalTime actualTime = LocalTime.now();
-//    static String producent="Huawei";
-//    static String model="Y6";
-//    static String serialnumber="GXM1246678Y";
-//    static String IMEI="4987365487949263";
-//    static String SIM="123244557668576867";
-//    static String number="694048092";
-       static String uradzenie="Telefon";
+    static String uradzenie="Telefon";
     //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
-    static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
-    //static String receiverPerson="Aleksandra Lipok";
-   // static  String spenderPersone=userService.actualLoginUser();
+    //static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
+    static String attention="Telefon wraz z ładowarką.";
+
 
     public static  int randomNumber() {
         int min = 0;
