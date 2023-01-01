@@ -19,11 +19,5 @@ public class TempService {
         return tempRepo.findAll();
     }
 
-//    public LocalDate returnStartDate(Temp temp){
-//        return temp.getStart();
-//    }
 
-//    public LocalDate returnEndDate(Temp temp){
-//        return temp.getEnd();
-//    }
 }

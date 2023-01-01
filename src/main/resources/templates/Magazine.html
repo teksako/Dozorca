@@ -27,26 +27,7 @@
 
     <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
 </form>
-<!--<p>Wydaj toner.</p>
-<form th:action="@{/removeMagazine}" th:object="${magazine}" method="post">
 
-    <td>Drukarka:</td>
-    <select id="wydaj" th:field="*{id}">
-        <option value="">Wybierz:</option>
-        <option th:each="Key : ${printer}"
-                th:value="${Key.id}"
-                th:text="${Key.manufacturer+' '+Key.model+' '+ Key.getDepartment().getNameOfDepartment()+' '+ Key.getToner().getTonerName()}"></option>
-    </select>
-    th:value="${Key.getToner().getId()}"
-
-    </td>
-
-    <input id="subtoner" th:field="*{count}" type="text">
-
-    <input type="submit" value="Aktualizuj" name="saveButton" class="mySubmitButton">
-
-</form>
--->
 </form>
 <p>---------MAGAZYN----------</p>
 <form th:action="@{/getMagazine}" th:object="${temp}" method="post">

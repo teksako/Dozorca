@@ -26,11 +26,12 @@ public class ConfigController {
     @GetMapping({"/config-form"})
     public ModelAndView configForm() {
         ModelAndView model = new ModelAndView("config-form");
-        Configuration configuration=configRepo.findById(1l).get();
+        Configuration configuration = configRepo.findById(1l).get();
         model.addObject("config", configuration);
         model.addObject("id", userService.findUserByUsername().getId());
         return getModelAndView(model);
     }
+
     @PostMapping({"/saveConfig"})
     public String saveConfig(@ModelAttribute Configuration configuration) {
         configService.save(configuration);
@@ -41,8 +42,7 @@ public class ConfigController {
     @NotNull
     private ModelAndView getModelAndView(ModelAndView model) {
         model.addObject("username", userService.findUserByUsername().getFullname());
-//        List<Location> locationList = locationService.findAll();
-//        model.addObject("locations", locationList);
+
         return model;
     }
 }

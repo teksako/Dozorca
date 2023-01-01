@@ -31,9 +31,7 @@
                 <th>Producent</th>
                 <th>Model</th>
                 <th>Adres IP</th>
-                <th>Adres MAc</th>
-                <th>Numer seryjny</th>
-                <th>Nr. inwentarzowy</th>
+                <th>Adres Mac</th>
                 <th>Użytkownik</th>
                 <th>Dział</th>
                 <th>Toner</th>
@@ -49,11 +47,11 @@
                 <td th:text="${key.model}"></td>
                 <td th:text="${key.IPAdress}"></td>
                 <td th:text="${key.MACAdress}"></td>
-                <td th:text="${key.serialNumber}"></td>
-                <td th:text="${key.inventoryNumber}"></td>
                 <td th:text="${key.user}"></td>
-                <td th:text="${key.getDepartment().nameOfDepartment}"></td>
-                <td th:text="${key.getTonerList()}"></td>
+                <td th:text="${key.getDepartment()?.nameOfDepartment}"></td>
+                <td><a th:each="toner:${key.getTonerList()}">
+                    <a th:text="${toner.tonerName}"></a></a>
+                </td>
                 <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
                 <td>
                     <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a></td>

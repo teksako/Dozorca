@@ -10,10 +10,8 @@ import java.util.List;
 
 @Repository
 public interface OIDRepo extends JpaRepository<OID, Long> {
-List<OID> findAllByOidName(String oidName);
+
 List<OID> findAllByOidProducentIsLike(String producent);
-List<OID> findAllByPrinterModelIsLike(String printerModel);
-OID findOIDById(Long id);
 OID findOIDByoidProducentAndOidName(String producent, String oidName);
 
 }

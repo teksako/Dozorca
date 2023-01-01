@@ -61,10 +61,8 @@ public class LicenseController {
     }
 
     @PostMapping({"/addOfficeLicense"})
-    public String saveOffice(Office office, BindingResult bindingResult){
-//        if(bindingResult.hasErrors()){
-//            return "addOfficeLicense";
-//        }
+    public String saveOffice(Office office){
+
         officeService.save(office);
         return "/index";
     }

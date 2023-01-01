@@ -46,40 +46,6 @@ public class HardwareController {
     private final CounterService counterService;
     private final MobilePhoneRepo phoneRepo;
 
-    private static Employee employee = new Employee();
-    private static Department department = new Department();
-    private static PhoneNumber number = new PhoneNumber();
-    private static Toner emptyToner = new Toner();
-    static List<Toner> tonerList = new ArrayList<>();
-
-    public static void setToner(Toner toner) {
-        HardwareController.emptyToner = toner;
-        toner.setTonerName("-");
-        tonerList.add(toner);
-    }
-
-    public static void setNumber(PhoneNumber number) {
-        HardwareController.number = number;
-        number.setNumber("-");
-        number.setSIMNumber("-");
-        number.setPUK("-");
-        number.setPIN("-");
-    }
-
-    public static void setDepartment(Department department) {
-        HardwareController.department = department;
-        department.setNameOfDepartment("-");
-    }
-
-    public static void setEmployee(Employee employee) {
-        HardwareController.employee = employee;
-        employee.setFirstname("-");
-        employee.setWorkplace("-");
-        employee.setLastname("");
-        employee.setDepartment(department);
-
-
-    }
 
 
     @ResponseBody
@@ -107,20 +73,11 @@ public class HardwareController {
     }
 
     //-------------------------PRINTERS----------------------------------
-    @GetMapping({"/list-printers"})
+    @GetMapping({"list-printers"})
     public ModelAndView getAllPrinters() {
         ModelAndView model = new ModelAndView("list-printers");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("id", userService.findUserByUsername().getId());
-        for (Printer printer : printerService.findAll()) {
-            if (printer.getDepartment() == null) {
-                printer.setDepartment(department);
-            }
-            if (printer.getTonerList().size() == 0) {
-                printer.setTonerList(tonerList);
-            }
-        }
         model.addObject("printerList", printerService.findAll());
         return model;
     }
@@ -133,7 +90,6 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
         model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
-        //model.addObject("collectCounter", printerRepo.findById(id).get().getCollectCounter());
         model.addObject("counter", counterService.getActualCounter(id));
         model.addObject("printerId", id);
         model.addObject("temp", temp);
@@ -241,7 +197,7 @@ public class HardwareController {
     }
 
 
-//---------------------------END PRINTERS--------------------------------------------------
+    //---------------------------END PRINTERS--------------------------------------------------
 
     //--------------------------START MOBILEPHONE--------------------------------------
     @GetMapping({"/list-phones"})
@@ -249,42 +205,29 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("list-phones");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-
-        for (MobilePhone mobilePhone : mobilePhoneService.findAll()) {
-            if (mobilePhone.getPhoneNumber() == null) {
-                mobilePhone.setPhoneNumber(number);
-            }
-            if (mobilePhone.getEmployee() == null) {
-                mobilePhone.setEmployee(employee);
-
-            }
-
-
-        }
         model.addObject("phonesList", mobilePhoneService.findAll());
 
         return model;
     }
 
-//    @PostMapping({"/savePhone"})
-//    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
-//        mobilePhoneService.save(mobilePhone);
-//
-//        return "redirect:/list-phones";
-//    }
-
-    @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> savePhone(@ModelAttribute("phone") MobilePhone mobilePhone, HttpServletResponse response) throws DocumentException, IOException {
+    @PostMapping({"/savePhone"})
+    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
         mobilePhoneService.save(mobilePhone);
+        if (mobilePhone.getEmployee() != null && mobilePhone.getPhoneNumber() != null) {
+            savePdf(mobilePhone);
+        }
+
+        return "redirect:/list-phones";
+    }
+
+    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<InputStreamResource> savePdf(MobilePhone mobilePhone) throws DocumentException, IOException {
+
 
         ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname());
-
         HttpHeaders headers = new HttpHeaders();
-
         headers.add("Content-Disposition", "attachment;filename=test.pdf");
-
-        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF)
-                .body(new InputStreamResource(bis));
+        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bis));
 
     }
 
@@ -318,9 +261,9 @@ public class HardwareController {
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {
-        //departmentService.deleteDepartment(id);
+        mobilePhoneService.deleteMobilePhone(id);
         getAllPhones();
-        return "redirect:/list-departments";
+        return "redirect:/list-phones";
     }
 
 

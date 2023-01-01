@@ -64,7 +64,6 @@ public class PhoneNumberContoller {
     }
     @GetMapping({"/deletePhoneNumber/{id}"})
     public String deletePhoneNumber(@PathVariable(value = "id") long id) {
-        //departmentService.deleteDepartment(id);
         getAllNumbers();
         return "redirect:/list-departments";
     }

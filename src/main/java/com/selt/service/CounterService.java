@@ -108,24 +108,7 @@ public class CounterService {
         }
         return onlineList;
     }
-//    @Scheduled(fixedDelay = 100)
-//    public void getCounter(){
-//        List<Printer> printerList =printerService.findAllByOnlineIs();
-//        List<OID> oidList= new ArrayList<>();
-//        String oidValue = new String();
-//        for (Printer printer:printerList) {
-//            oidList = printer.getOid();
-//            for (OID oid: oidList) {
-//                if(oid.getOidName()=="Total Counter"){
-//                    oidValue=oid.getOidValue();
-//                }
-//
-//            }
-//            System.out.println(printer.getManufacturer()+ " " + printer.getModel() +" "+printerService.getPrintCounter(printer.getIPAdress(),oidValue));
-//
-//        }
-//
-//    }
+
 
 
     //@Scheduled(cron = "30 * * ? * ?")

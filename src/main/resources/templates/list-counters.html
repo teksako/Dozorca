@@ -72,6 +72,7 @@
         });
 
 
+
     </script>
 </head>
 
@@ -129,7 +130,6 @@
     </div>
 
 
-
     <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
 </form>
 <div class="font-weight-bold">
@@ -159,19 +159,5 @@
         </tbody>
     </table>
 </div>
-<!--
-<form th:action="@{/subCounter}" th:object="${temp}" method="post">
-    <div th:with="idPrinter=${printerId}">
-        <input type="hidden" th:value="${idPrinter}" th:name="id_2" th:id="id_2"/>
-    </div>
-    <div id="displayDate2">
-        <label for="from">Dzień rozpoczęcia:</label>
-        <input type="text" id="from" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
-
-        <label for="from">Dzień zakończenia:</label>
-        <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
-        <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
-    </div>
-</form>-->
 </body>
 </html>

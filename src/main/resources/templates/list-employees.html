@@ -24,6 +24,7 @@
             <th>Imię i nazwisko</th>
             <th>Stanowisko</th>
             <th>Dział</th>
+
         </tr>
         </thead>
         <tbody>
@@ -31,7 +32,7 @@
 
             <td th:text="${key.firstname + ' ' + key.lastname}"></td>
             <td th:text="${key.workplace}"></td>
-            <td th:text="${key.getDepartment().nameOfDepartment}"></td>
+            <td th:text="${key.getDepartment()?.nameOfDepartment}"></td>
             <td><a th:href="@{/deleteEmployee/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a></td>
             <td>
                 <a th:href="@{/showUpdateEmployeeForm(employeeId=${key.id})}" class="btn btn-info">Update</a>

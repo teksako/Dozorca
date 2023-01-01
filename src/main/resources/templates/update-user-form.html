@@ -38,46 +38,6 @@
             <a class="navbar-brand" th:text="${info}"></a>
         </form>
 
-        <!--
-    ----------------------RESETUJ UŻYTKOWNIKA HASŁO UŻYTKOWNIKA----------------------
-        <form th:action="@{/resetPassword}" th:object="${user}" method="post">
-            <p class="error" th:text="${commonError}"></p>
-
-
-            <td>
-                <select name="replacement" id="replacement" th:field="*{id}">
-                    komentarz<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">
-                    <option value="">Użytkownik</option>
-                    <option th:each="user : ${users}"
-                            th:value="${user.id}"
-                            th:text="${user.fullname}"></option>
-                </select>
-            </td>
-
-            <input  id="changepassword" type="text" th:field="*{password}" class="myPasswordButton" value="Nowe123">
-            <div class="error" th:errors="*{password}" ></div>
-            </td>
-
-            <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
-
-        </form>
-    </div>
-
-    <div sec:authorize="isAuthenticated()">
-    <form th:action="@{/saveUser}" th:object="${user}" method="post">
-        <p class="error" th:text="${commonError}"></p>
-    ----------------------ZMIEŃ SWOJE HASŁO----------------------
-        <br>
-        <input id="password" type="password" th:field="*{password}" class="form-control col-4 mb-4"
-                   placeholder="Hasło">
-
-        <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
-        <input type="hidden" th:field="*{id}"/>
-    </form>
-    </div>-->
-
-
-
         <hr/>
         <a th:href="@{/list-users}">Back to list</a>
     </div>

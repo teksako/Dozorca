@@ -51,18 +51,6 @@ public class MagazineService {
 
     }
 
-//    public Optional<Magazine> findMagazine(Printer printer) {
-//        Optional<Magazine> magazine = magazineRepo.findById(getFromPrinter(printer));
-//        return magazine;
-//
-//    }
-//
-//    public Long getFromPrinter(Printer printer) {
-//        Optional<Printer> printer1 = printerRepo.findById(printer.getId());
-//        Long tonerId = printer1.get().getToner().getId();
-//        return tonerId;
-//    }
-
     public void updateInventory(Magazine magazine, Long temp) {
         Optional<Magazine> toner1 = magazineRepo.findById(magazine.getId());
         Long add = magazine.getCount();
@@ -71,30 +59,6 @@ public class MagazineService {
         magazineRepo.save(toner1.get());
 
     }
-//-------------pierwotna wersja---------------------------------
-//    public void removeInventory(Magazine magazine, Long temp) {
-//        Optional<Magazine> toner1 = magazineRepo.findById(magazine.getId());
-//        Long add= magazine.getCount();
-//        add=temp-add;
-//        toner1.get().setCount(add);
-//        magazineRepo.save(toner1.get());
-//
-//    }
-
-//    ------druga wersja bez licznika----------------------------
-//    public void removeInventory(Printer printer, int temp) {
-//
-//        Magazine magazine=new Magazine();
-//       //Optional<Magazine> toner1 = getFromPrinter(printer);
-//        Optional<Magazine> toner1 = magazineRepo.findById(getFromPrinter(printer));
-//        //Long temp = 2l;
-//        Long add=toner1.get().getCount();
-//       // Long add= magazine.getCount();
-//        add=add-temp;
-//        toner1.get().setCount(add);
-//        magazineRepo.save(toner1.get());
-//
-//    }
 
 
     public void removeFromMagazine(Long tonerId, Long temp) {
@@ -102,18 +66,7 @@ public class MagazineService {
         magazine.get().setCount(magazine.get().getCount() - temp);
         magazineRepo.save(magazine.get());
     }
-//-------------------------pierwotne wydawanie z magazynu----------------------------
-//    public void removeInventory(Magazine magazine, Long temp) {
-//        // Raport raport = new Raport();
-//        Optional<Magazine> toner1 = magazineRepo.findById(printerService.getTonerId(magazine.getId()));
-//        toner1.get().setCount(temp - magazine.getCount());
-//        magazineRepo.save(toner1.get());
-//        Optional<Printer> printer = printerRepo.findById(magazine.getId());
-//        raport.setPrinters(printer.get());
-//        raport.setCount(magazine.getCount());
-//        raportService.save(raport);
-//
-//    }
+
 
     public void save(Magazine magazine) {
 

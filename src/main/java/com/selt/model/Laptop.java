@@ -35,8 +35,6 @@ public class Laptop {
     @Column
     private String IPAdress;
 
-//    @Column
-//    private List<Employee> oldOwners;
 
     @Column
     private String note;

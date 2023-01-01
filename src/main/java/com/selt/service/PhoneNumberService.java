@@ -23,9 +23,11 @@ public class PhoneNumberService {
     }
 
     public List<PhoneNumber> findAll() {
-        return cleanBlankNumber(phoneNumberRepo.findAll());
+        return phoneNumberRepo.findAll();
     }
 
+
+    private  static PhoneNumber phoneNumber = new PhoneNumber();
     public List<PhoneNumber> cleanBlankNumber(List<PhoneNumber> phoneNumbers) {
         List<PhoneNumber> phoneNumbers1 = new ArrayList<>();
         for (PhoneNumber number : phoneNumbers) {
@@ -36,15 +38,7 @@ public class PhoneNumberService {
         return phoneNumbers1;
     }
 
-    public List<PhoneNumber> findBlankNumber(){
-        List<PhoneNumber> phoneNumbers1 = new ArrayList<>();
-        for (PhoneNumber number : phoneNumberRepo.findAll()) {
-            if (number.getNumber().equals("-")) {
-                phoneNumbers1.add(number);
-            }
-        }
-        return phoneNumbers1;
-    }
+
 
     public List<PhoneNumber> findAllByNumberIsLike(String number){
         return phoneNumberRepo.findAllByNumberIsLike(number);

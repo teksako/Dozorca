@@ -79,10 +79,18 @@ public class RaportService {
     public List<Raport> findAllByPreviousMonth() {
         LocalDate start;
         LocalDate end = null;
-        int year = LocalDate.now().getYear();
-        int month = LocalDate.now().getMonthValue()-1;
+        int year;
+        int month;
+
+        if(LocalDate.now().getMonthValue()==1){
+            month = 12;
+            year = LocalDate.now().getYear()-1;
+        }
+        else {
+            month = LocalDate.now().getMonthValue()-1;
+            year = LocalDate.now().getYear();
+        }
         start = LocalDate.of(year, month, 1);
-        int day;
 
         if (year % 4 == 0) {
 
@@ -96,11 +104,17 @@ public class RaportService {
         } else {
             if (month == 2) {
                 end = LocalDate.of(year, month, 28);
-            } else {
+            }
+            else if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+                end = LocalDate.of(year, month, 31);
+            }
+            else {
+
                 end = LocalDate.of(year, month, 30);
             }
 
         }
+        System.out.println(start+" "+ end);
         return raportRepo.findAllByDateIsBetween(start, end);
 
     }

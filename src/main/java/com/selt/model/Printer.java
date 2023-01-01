@@ -2,7 +2,7 @@ package com.selt.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+
 
 import javax.persistence.*;
 import java.util.List;
@@ -51,8 +51,8 @@ public class Printer {
 
     @OneToOne
     @JoinTable(name = "PRINTER_LOCATION",
-            joinColumns = @JoinColumn(name = "PRINTER_ID", referencedColumnName = "PRINTER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "DEPARTMENT_ID", referencedColumnName = "DEPARTMENT_ID"))
+            joinColumns = @JoinColumn(name = "PRINTER_ID"), //referencedColumnName = "PRINTER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "DEPARTMENT_ID"))//, referencedColumnName = "DEPARTMENT_ID"))
 
     private Department department;
 

@@ -5,6 +5,7 @@ import com.selt.repository.TonerRepo;
 import lombok.Data;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,14 +14,13 @@ import java.util.Optional;
 public class TonerService {
 
     private final TonerRepo tonerRepo;
-    //private final MagazineService magazineService;
+    private static Toner toner = new Toner();
+    private static List<Toner> tonerList = new ArrayList<>();
 
     public void save(Toner toner) {
-        //Magazine magazine = new Magazine();
+
         tonerRepo.save(toner);
-//        magazine.setCount(0l);
-//        magazine.setToner(toner);
-//        magazineService.save(magazine);
+
     }
 
     public List<Toner> findAllByTonerNameIsLike(String name){
@@ -28,11 +28,8 @@ public class TonerService {
     }
 
     public Optional<Toner> findById(Long id){
-
         return tonerRepo.findById(id);
-
     }
-
     public void delete(Toner toner) {
         tonerRepo.delete(toner);
 

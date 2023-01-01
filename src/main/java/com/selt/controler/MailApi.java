@@ -20,11 +20,6 @@ public class MailApi {
 
     @GetMapping("/sendMail")
     public String sendMail() throws MessagingException {
-//        mailService.sendSimpleEmail("pawel.kwapisinski@selt.com",
-//                "Wygrałeś",
-//                "<b>1000 000 zł</b><br>:P");
-       // counterService.validateTonerLevel();
-        printerService.reload();
         return "wysłano";
 
     }

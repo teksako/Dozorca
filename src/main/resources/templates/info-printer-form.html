@@ -85,10 +85,10 @@
         <tr th:text="${serviceCounter}"></tr>
     </p>
     <tr>
-        <div th:if="${printerIP =='-'}">
+        <div th:if="${printerIP ==null}">
             <p></p>
         </div>
-        <div th:unless="${printerIP=='-'}">
+        <div th:unless="${printerIP==null}">
             <p th:text="${printerIP}" class="navbar-brand"></p>
             </hr>
 

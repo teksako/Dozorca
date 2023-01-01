@@ -25,13 +25,7 @@ public class DepartmentController {
     private final UserService userService;
     private final DepartmentRepo departmentRepo;
     private static Location location = new Location();
-    static List<Location> locationList=new ArrayList<>();
-    public static void setLocation(Location location) {
-        DepartmentController.location = location;
-        location.setNameOfLocation("-");
 
-        locationList.add(location);
-    }
 
     @GetMapping({"/list-departments"})
     public ModelAndView getAllDepartments() {
@@ -39,12 +33,6 @@ public class DepartmentController {
         model.addObject("temp", new Temp());
         model.addObject("id", userService.findUserByUsername().getId());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        for (Department department: departmentService.findAll()) {
-            if(department.getLocations().size()==0){
-                department.setLocations(locationList);
-            }
-        }
-
         model.addObject("departmentList", departmentService.findAll());
 
         return model;

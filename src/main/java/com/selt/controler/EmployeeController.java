@@ -4,9 +4,7 @@ import com.selt.model.Department;
 import com.selt.model.Employee;
 import com.selt.model.Temp;
 import com.selt.repository.EmployeeRepo;
-import com.selt.service.DepartmentService;
-import com.selt.service.EmployeeService;
-import com.selt.service.UserService;
+import com.selt.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.rule.Mode;
 import org.springframework.expression.spel.SpelEvaluationException;
@@ -28,22 +26,11 @@ public class EmployeeController {
     public final EmployeeRepo employeeRepo;
 
 
-
         @GetMapping({"list-employees"})
         public ModelAndView getAllEmployees () {
         ModelAndView model = new ModelAndView("list-employees");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        Department department = new Department();
-        department.setNameOfDepartment("-");
-        for (Employee employee : employeeService.findAll()) {
-            if (employee.getDepartment() == null) {
-
-                employee.setDepartment(department);
-
-            }
-
-        }
         model.addObject("employeesList", employeeService.findAll());
         return model;
     }

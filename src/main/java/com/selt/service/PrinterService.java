@@ -27,8 +27,13 @@ public class PrinterService {
     private final OIDRepo oidRepo;
     @Autowired
     private final OIDService oidService;
+    @Autowired
+    private final DepartmentService departmentService;
+    @Autowired
+    private final TonerService tonerService;
     private final ConfigService configService;
 
+    private static List<Printer> printerList = new ArrayList<>();
 
     public Optional<Printer> findById(Long id) {
         return printerRepo.findById(id);
@@ -37,11 +42,6 @@ public class PrinterService {
     public List<Printer> findAll() {
         return printerRepo.findAll();
     }
-
-//    @Scheduled(fixedDelay = 1000)
-//    public void print(){
-//        System.out.println(randomNumber());
-//    }
 
 
 
@@ -120,7 +120,7 @@ public class PrinterService {
         Long counter2 = printer.getServiceCounter();
 
         if (counte1 - counter2 < configService.getConfigRepo().getById(1l).getServiceCallcounter()) {
-            return configService.getConfigRepo().getById(1l).getServiceCallcounter()-(counte1 - counter2) + " stron do przeglądu";
+            return configService.getConfigRepo().getById(1l).getServiceCallcounter() - (counte1 - counter2) + " stron do przeglądu";
         } else {
             return "Wykonaj przegląd!";
         }
@@ -145,14 +145,6 @@ public class PrinterService {
 
     public void save(Printer printer) {
 
-        if (printer.getIPAdress().isBlank()) {
-            printer.setIPAdress("-");
-        }
-        if(printer.getServiceCounter()==null) {
-            printer.setServiceCounter(0l);
-        }
-        printer.setOid(oidService.findAllByPrinterModel(printer.getModel(), oidService.findAllByOidProducent(printer.getManufacturer())));
-        //printer.setOid(oidService.findAllByOidProducent(printer.getManufacturer(),printer.getModel()));
         printerRepo.save(printer);
     }
 

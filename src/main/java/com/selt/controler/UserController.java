@@ -26,19 +26,7 @@ public class UserController {
     private final UserService userService;
     private final UserRepo userRepo;
     private final RoleServis roleServis;
-    private final RoleRepo roleRepo;
 
-
-//    @GetMapping({"/User"})
-//    public String userPage(Model model) {
-//        List<User> users = userService.findAll();
-//        model.addAttribute("users", users);
-//        model.addAttribute("user", new User());
-//        List<UserRole> roleList = roleServis.findAll();
-//        model.addAttribute("roleList", roleList);
-//        model.addAttribute("username", userService.findUserByUsername().getFullname());
-//        return "add-user-form";
-//    }
 
     @GetMapping({"/list-users"})
     public ModelAndView getAllUsers() {
@@ -79,7 +67,6 @@ public class UserController {
     public ModelAndView showUpdateUserForm(@RequestParam Long userId) {
         ModelAndView model = new ModelAndView("update-user-form");
         User user = userRepo.findById(userId).get();
-        //Printer printer = printerService.findById(printerId).get();
         model.addObject("user", user);
         return getModelAndView(model);
     }
@@ -87,8 +74,6 @@ public class UserController {
     @NotNull
     private ModelAndView getModelAndView(ModelAndView model) {
         model.addObject("username", userService.findUserByUsername().getFullname());
-//        List<Location> locationList = locationService.findAll();
-//        model.addObject("locations", locationList);
         model.addObject("roleList", roleServis.findAll());
         return model;
     }

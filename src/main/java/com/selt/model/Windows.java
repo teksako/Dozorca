@@ -23,7 +23,5 @@ public class Windows {
     @Column
     private String windowsKey;
 
-//    @OneToOne(mappedBy = "laptop")
-//    private Set<Laptop> laptops;
 
 }

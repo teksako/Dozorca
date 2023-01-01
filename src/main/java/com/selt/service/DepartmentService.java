@@ -23,32 +23,19 @@ public class DepartmentService {
     private final LocationService locationService;
 
     public void save(Department department) {
-
-//        if(department.getLocations().isEmpty()){
-//            department.setLocations(locationService.findBlankLocation());
-//        }
-
         departmentRepo.save(department);
     }
+
 
     public void delete(Department department) {
         departmentRepo.delete(department);
     }
 
+
     public List<Department> findAll() {
-        return validate(departmentRepo.findAll());
+        return departmentRepo.findAll();
     }
 
-    public List<Department> findBlankDepartment(){
-
-        List<Department> departmentList = new ArrayList<>();
-        for (Department department : departmentRepo.findAll()) {
-            if (department.getNameOfDepartment().equals("-")) {
-                departmentList.add(department);
-            }
-        }
-        return departmentList;
-    }
 
     public List<Department> validate(List<Department> departmentList) {
         List<Department> departmentList1 = new ArrayList<>();
@@ -67,6 +54,6 @@ public class DepartmentService {
     }
 
     public List<Department> findAllByNameOfDepartmentIsLike(String name) {
-        return validate(departmentRepo.findAllByNameOfDepartmentIsLike(name));
+        return departmentRepo.findAllByNameOfDepartmentIsLike(name);
     }
 }

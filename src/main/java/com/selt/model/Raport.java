@@ -45,22 +45,4 @@ public class Raport {
     @Column
     private String user;
 
-
-//    @OneToOne
-//    @JoinTable
-//            (
-//                    name = "toner_raport",
-//                    joinColumns = {@JoinColumn(name = "RAPORT_ID")},
-//                    inverseJoinColumns = {@JoinColumn(name = "PRINTER_ID")}
-//            )
-//    private Printer printers;
-//
-//    @OneToOne
-//    @JoinTable
-//            (
-//                    name = "user_raport",
-//                    joinColumns = {@JoinColumn(name = "RAPORT_ID")},
-//                    inverseJoinColumns = {@JoinColumn(name = "USER_ID")}
-//            )
-//    private User user;
 }

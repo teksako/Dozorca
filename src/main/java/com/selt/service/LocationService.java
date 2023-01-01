@@ -17,6 +17,7 @@ public class LocationService {
 
     private final LocationRepo locationRepo;
 
+
     public void save(Location location) {
         locationRepo.save(location);
     }
@@ -26,28 +27,9 @@ public class LocationService {
     }
 
     public List<Location> findAll() {
-        return validateBlankLocation(locationRepo.findAll());
+        return locationRepo.findAll();
     }
 
-    public List<Location> findBlankLocation(){
-        List<Location> location1 = new ArrayList<>();
-        for (Location location: locationRepo.findAll()) {
-            if(location.getNameOfLocation().equals("-")){
-                location1.add(location);
-            }
-        }
-        return location1;
-    }
-
-    public List<Location> validateBlankLocation(List<Location> locationList){
-        List<Location> locationList1=new ArrayList<>();
-        for (Location location:locationList) {
-            if(!location.getNameOfLocation().equals("-")){
-                locationList1.add(location);
-            }
-        }
-        return locationList1;
-    }
 
     public void deleteLocation(long id) {
         Optional<Location> location = locationRepo.findById(id);

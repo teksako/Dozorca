@@ -20,14 +20,14 @@ import java.util.List;
 @Data
 public class CounterController {
 
-    //private final HardwareController hardwareController;
+
     private final CounterService counterService;
     private final UserService userService;
     private final PrinterRepo printerRepo;
 
     @GetMapping({"/list-counters"})
-    //public ModelAndView  getCounters(ArrayList <Counter> counterList, String allert) {
-        public ModelAndView  getCounters(@RequestParam long printerId,ArrayList <Counter> counterList, String allert) {
+
+    public ModelAndView getCounters(@RequestParam long printerId, ArrayList<Counter> counterList, String allert) {
         ModelAndView model = new ModelAndView("list-counters");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("temp", new Temp());
@@ -39,20 +39,17 @@ public class CounterController {
     }
 
     @PostMapping({"/subCounter"})
-    public ModelAndView subCounter(@ModelAttribute("temp") Temp temp){
+    public ModelAndView subCounter(@ModelAttribute("temp") Temp temp) {
         ModelAndView model = new ModelAndView("list-counters");
         Long printerId = temp.getId_2();
         List<Counter> counterList = null;
         Long sub;
-        LocalDate date1=LocalDate.parse(temp.getStart());
-        LocalDate date2= LocalDate.parse(temp.getEnd());
-        sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date2));
-        //System.out.println("różnica = " + sub);
-        String allert="Ilość wydruków: " + sub;
-        counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1);
-        //counterList.add(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date1));
-        //counterList.add(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,date2));
-        return getCounters(printerId,(ArrayList<Counter>) counterList,allert);
+        LocalDate date1 = LocalDate.parse(temp.getStart());
+        LocalDate date2 = LocalDate.parse(temp.getEnd());
+        sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId, date1), counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId, date2));
+        String allert = "Ilość wydruków: " + sub;
+        counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId, date1);
+        return getCounters(printerId, (ArrayList<Counter>) counterList, allert);
     }
 
     @PostMapping({"/sortCounter"})
@@ -63,9 +60,8 @@ public class CounterController {
         List<Counter> counterList = null;
         String allert = null;
         Long sub = null;
-        //LocalDate date1=LocalDate.parse(temp.getStart());
-        // LocalDate date2= LocalDate.parse(temp.getEnd());
-        try{
+
+        try {
 
             if (temp.getRadio() == 0) {
                 counterList = counterService.findAllByPreviousMonth(printerId);
@@ -80,42 +76,37 @@ public class CounterController {
 
             }
             if (temp.getRadio() == 3) {
-                counterList = counterService.findAllByDateBetween(printerId,LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
-               // sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getStart())),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getEnd())));
+                counterList = counterService.findAllByDateBetween(printerId, LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
 
             }
             if (temp.getRadio() == 4) {
                 counterList = counterService.findAllWeekly(printerId);
-                // sub = counterService.subCounter(counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getStart())),counterService.findByPrinter_IdIsLikeAndDateIsLike(printerId,LocalDate.parse(temp.getEnd())));
 
             }
 
 
-            sub = counterList.get(counterList.size()-1).getCounter()-counterList.get(0).getCounter();
+            sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
 
-        }
-        catch (NullPointerException exception){
+        } catch (NullPointerException exception) {
             try {
                 counterList = counterService.findAllByPrinterId(printerId);
                 sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
                 if (counterList.size() == 0) {
                     allert = "Brak wyników spełniających kryteria!";
                 }
-                allert="W wybranym okresie zostało wydrukowanych "+sub.toString()+" stron.";
-            }
-            catch (IndexOutOfBoundsException exception2){
-                allert="Brak wyników spełniających kryteria!";
+                allert = "W wybranym okresie zostało wydrukowanych " + sub.toString() + " stron.";
+            } catch (IndexOutOfBoundsException exception2) {
+                allert = "Brak wyników spełniających kryteria!";
             }
 
-        }
-        catch (IndexOutOfBoundsException exception){
-            allert="Brak wyników spełniających kryteria!";
+        } catch (IndexOutOfBoundsException exception) {
+            allert = "Brak wyników spełniających kryteria!";
         }
 
         System.out.println("różnica = " + sub);
 
 
-        return getCounters(printerId,(ArrayList<Counter>) counterList,allert);
+        return getCounters(printerId, (ArrayList<Counter>) counterList, allert);
 
 
     }

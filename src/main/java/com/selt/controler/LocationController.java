@@ -63,8 +63,6 @@ public class LocationController {
     @NotNull
     private ModelAndView getModelAndView(ModelAndView model) {
         model.addObject("username", userService.findUserByUsername().getFullname());
-//        List<Location> locationList = locationService.findAll();
-//        model.addObject("locations", locationList);
         return model;
     }
 

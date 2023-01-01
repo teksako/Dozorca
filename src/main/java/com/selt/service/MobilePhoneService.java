@@ -1,6 +1,7 @@
 package com.selt.service;
 
 import com.itextpdf.text.DocumentException;
+import com.selt.model.Department;
 import com.selt.model.MobilePhone;
 import com.selt.repository.MobilePhoneRepo;
 import lombok.Data;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 @Data
 @Service
@@ -27,15 +29,6 @@ public class MobilePhoneService {
     }
 
     public void save(MobilePhone mobilePhone) throws DocumentException, IOException {
-
-//        if (mobilePhone.getPhoneNumber() == null) {
-//            mobilePhone.setPhoneNumber(numberService.findBlankNumber().get(0));
-//        }
-//        if (mobilePhone.getEmployee() == null) {
-//            mobilePhone.setEmployee(employeeService.findBlankEmployeer().get(0));
-//        }
-       // ExportPDF.protcol(mobilePhone,userService.findUserByUsername().getFullname());
-
         mobilePhoneRepo.save(mobilePhone);
     }
 
@@ -43,7 +36,9 @@ public class MobilePhoneService {
         return mobilePhoneRepo.findAllByModelIsLike(matter);
     }
 
-    public void delete(MobilePhone mobilePhone) {
-        mobilePhoneRepo.delete(mobilePhone);
+    public void deleteMobilePhone(long id) {
+        Optional<MobilePhone> mobilePhone = mobilePhoneRepo.findById(id);
+        mobilePhoneRepo.delete(mobilePhone.get());
     }
+
 }

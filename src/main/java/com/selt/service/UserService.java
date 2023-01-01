@@ -26,23 +26,15 @@ public class UserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
-//    public List<User> findAll() {
-//        return userRepo.findAllByUsername("admin");
-//    }
 
     public void delete(User user) {
         userRepo.delete(user);
     }
 
     public void save(@NotNull User user, String password) {
-       // if (userRepo.findUserByLogin(user.getLogin()) == null) {
-            user.setCreateDate(new Date());
+                  user.setCreateDate(new Date());
             user.setPassword(passwordEncoder.encode(password));
             userRepo.save(user);
-//            return "Utworzyłeś uzytkownika: " + user.getLogin();
-//        } else {
-//            return "Taki użytkownik istnieje!";
-//        }
     }
 
     public void saveUpdate(@NotNull User user, String password){
@@ -58,7 +50,7 @@ public class UserService {
 
     public void changePassword(String password) {
         Optional<User> actualUser = Optional.ofNullable(userRepo.findUserByLogin(userDetailsService().getUsername()));
-        //Optional<User> user1 = userRepo.findById(userDetailsService(). getId());
+
         if (actualUser.isPresent()) {
             User user = actualUser.get();
             user.setPassword(passwordEncoder.encode(password));

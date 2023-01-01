@@ -23,6 +23,7 @@ public class TonerController {
     private final UserService userService;
     private final TonerRepo tonerRepo;
     private final MagazineService magazineService;
+
     @GetMapping({"/list-toners"})
     public ModelAndView getAllToner() {
         ModelAndView model = new ModelAndView("/list-toners");
@@ -67,8 +68,6 @@ public class TonerController {
     @NotNull
     private ModelAndView getModelAndView(ModelAndView model) {
         model.addObject("username", userService.findUserByUsername().getFullname());
-//        List<Location> locationList = locationService.findAll();
-//        model.addObject("locations", locationList);
         return model;
     }
 
