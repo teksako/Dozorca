@@ -66,7 +66,7 @@ public class PhoneNumberContoller {
     public String deletePhoneNumber(@PathVariable(value = "id") long id) {
         getAllNumbers();
         numberService.delete(id);
-        return "redirect:/list-departments";
+        return "redirect:/list-phoneNumbers";
     }
 
 }
