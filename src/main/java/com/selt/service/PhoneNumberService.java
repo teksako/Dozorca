@@ -1,5 +1,6 @@
 package com.selt.service;
 
+import com.selt.model.Location;
 import com.selt.model.PhoneNumber;
 import com.selt.repository.PhoneNumberRepo;
 import lombok.Data;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -18,8 +20,10 @@ public class PhoneNumberService {
         phoneNumberRepo.save(phoneNumber);
     }
 
-    public void delete(PhoneNumber phoneNumber) {
-        phoneNumberRepo.delete(phoneNumber);
+    public void delete(long id) {
+        Optional<PhoneNumber> phoneNumber = phoneNumberRepo.findById(id);
+
+        phoneNumberRepo.delete(phoneNumber.get());
     }
 
     public List<PhoneNumber> findAll() {
