@@ -45,6 +45,7 @@ public class HardwareController {
     private final OIDRepo oidRepo;
     private final CounterService counterService;
     private final MobilePhoneRepo phoneRepo;
+    private final MobilePhoneHistoryService mobilePhoneHistoryService;
 
 
 
@@ -213,6 +214,7 @@ public class HardwareController {
     @PostMapping({"/savePhone"})
     public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
         mobilePhoneService.save(mobilePhone);
+        mobilePhoneHistoryService.save(mobilePhone);
         if (mobilePhone.getEmployee() != null && mobilePhone.getPhoneNumber() != null) {
             savePdf(mobilePhone);
         }

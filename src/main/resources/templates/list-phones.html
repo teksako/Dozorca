@@ -53,6 +53,8 @@
             <td th:text="${key.MAC}"></td>
             <td><a th:href="@{/deletePhone/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
                 <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
+                <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Wydanie</a>
+                <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Zdanie</a>
             </td>
         </tr>
         </tbody>
