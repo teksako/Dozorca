@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 
@@ -46,6 +47,7 @@ public class HardwareController {
     private final CounterService counterService;
     private final MobilePhoneRepo phoneRepo;
     private final MobilePhoneHistoryService mobilePhoneHistoryService;
+    Temp temp = new Temp();
 
 
 
@@ -212,26 +214,22 @@ public class HardwareController {
     }
 
     @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) throws DocumentException, IOException {
+    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone)  {
         mobilePhoneService.save(mobilePhone);
-        mobilePhoneHistoryService.save(mobilePhone);
-        if (mobilePhone.getEmployee() != null && mobilePhone.getPhoneNumber() != null) {
-            savePdf(mobilePhone);
-        }
+
 
         return "redirect:/list-phones";
     }
 
-    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<InputStreamResource> savePdf(MobilePhone mobilePhone) throws DocumentException, IOException {
-
-
-        ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname());
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment;filename=test.pdf");
-        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bis));
-
-    }
+//    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
+//    public ResponseEntity<InputStreamResource> savePdf(MobilePhone mobilePhone) throws DocumentException, IOException {
+//
+////         ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname(), "test");
+////        HttpHeaders headers = new HttpHeaders();
+////        headers.add("Content-Disposition", "attachment;filename=test.pdf");
+////        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bis));
+//
+//    }
 
     @PostMapping({"/list-phones"})
     public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
@@ -260,6 +258,47 @@ public class HardwareController {
         return model;
     }
 
+
+    @GetMapping({"/releasePhone/{id}"})
+    public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+
+        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+        temp.setTempString1("Odbierający");
+        temp.setTempString2("Przekazujący");
+        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+
+        if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+            ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp);
+            mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE");
+
+        }
+        getAllPhones();
+        return "redirect:/list-phones";
+    }
+
+    @GetMapping({"/getPhone/{id}"})
+    public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+
+
+        temp.setTempString("PROTOKÓŁ ZDANIA");
+        temp.setTempString1("Przekazujący");
+        temp.setTempString2("Odbierający");
+        temp.setTempString3("");
+        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+
+
+        if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+            ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp);
+            mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE");
+            //savePdf(mobilePhone.get());
+        }
+        mobilePhone.get().setEmployee(null);
+        mobilePhone.get().setPhoneNumber(null);
+        savePhone(mobilePhone.get());
+        getAllPhones();
+        return "redirect:/list-phones";
+    }
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {

@@ -16,7 +16,7 @@ public class MobilePhoneHistoryService {
 
     private final MobilePhoneHistoryRepo mobilePhoneHistoryRepo;
 
-    public void save (MobilePhone mobilePhone){
+    public void save (MobilePhone mobilePhone, String type){
         MobilePhoneHistory mobilePhoneHistory = new MobilePhoneHistory();
         mobilePhoneHistory.setDate(LocalDate.now());
         mobilePhoneHistory.setEmployee(mobilePhone.getEmployee().getFirstname()+" " + mobilePhone.getEmployee().getLastname());
@@ -24,10 +24,11 @@ public class MobilePhoneHistoryService {
         mobilePhoneHistory.setSimNumber(mobilePhone.getPhoneNumber().getSIMNumber());
         mobilePhoneHistory.setIMEI(mobilePhone.getIMEI());
         mobilePhoneHistory.setModel(mobilePhone.getModel());
-        mobilePhoneHistory.setMAC(mobilePhone.getMAC());
+        mobilePhoneHistory.setSerialNumber(mobilePhone.getSerialNumber());
+        mobilePhoneHistory.setMark(mobilePhoneHistory.getMark());
         mobilePhoneHistory.setMark(mobilePhoneHistory.getMark());
         mobilePhoneHistory.setSerialNumber(mobilePhoneHistory.getSerialNumber());
-        mobilePhoneHistory.setType("WYDANIE");
+        mobilePhoneHistory.setType(type);
         mobilePhoneHistoryRepo.save(mobilePhoneHistory);
     }
 }

@@ -11,6 +11,7 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.selt.model.MobilePhone;
 import com.selt.model.Raport;
+import com.selt.model.Temp;
 import lombok.Data;
 import com.itextpdf.kernel.pdf.PdfPage;
 import java.io.ByteArrayInputStream;
@@ -50,23 +51,23 @@ public class ExportPDF {
         return (int) Math.floor(Math.random() * (max - min + 1) + min);
     }
 
-    public static  ByteArrayInputStream protcol(MobilePhone mobilePhone, String username) throws IOException, DocumentException {
+    public static  ByteArrayInputStream protcol(MobilePhone mobilePhone, String username, Temp temp) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
-        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+".pdf");
+        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+"-"+temp.getTempString()+".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         String footerPaath = "src/main/resources/images/footer.jpg";
         String headerPath= "src/main/resources/images/header.jpg";
 
-        Text docTitle = new Text("PROTOKÓŁ PRZEKAZANIA").setBold();
+        Text docTitle = new Text(temp.getTempString()).setBold();
         Text template = new Text("Urządzenie: \n"+"Producent: \n"+ "Model: \n"+"Nr seryjny: \n"+ "IMEI: \n"+"SIM: \n"+"Nr telefonu: ").setBold();
         Text template2 = new Text("Telefon \n"+ mobilePhone.getMark()+"\n"+mobilePhone.getModel()+"\n"+mobilePhone.getSerialNumber()+"\n"+mobilePhone.getIMEI()+"\n"+mobilePhone.getPhoneNumber().getSIMNumber()+"\n"+mobilePhone.getPhoneNumber().getNumber());
         Text attentionTemplate = new Text("Uwagi: ").setBold();
         Text atetnioData = new Text(attention);
-        Text info = new Text("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.").setFontColor(Color.RED).setUnderline();
-        Text receiver= new Text("Odbierający");
-        Text spender=new Text("Przekazujący");
+        Text info = new Text(temp.getTempString3()).setFontColor(Color.RED).setUnderline();
+        Text receiver= new Text(temp.getTempString1());
+        Text spender=new Text(temp.getTempString2());
         Text rPerson= new Text(mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"\n");
         Text sPerson = new Text(username+"\n");
 

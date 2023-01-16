@@ -30,9 +30,6 @@ public class MobilePhoneHistory {
     private String IMEI;
 
     @Column
-    private String MAC;
-
-    @Column
     private String serialNumber;
 
     @Column

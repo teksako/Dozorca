@@ -1,7 +1,6 @@
 package com.selt.service;
 
 import com.itextpdf.text.DocumentException;
-import com.selt.model.Department;
 import com.selt.model.MobilePhone;
 import com.selt.repository.MobilePhoneRepo;
 import lombok.Data;
@@ -24,11 +23,15 @@ public class MobilePhoneService {
     private final UserService userService;
     //private final ExportPDF exportPDF;
 
+    public Optional<MobilePhone> findById(long id){
+        return mobilePhoneRepo.findById(id);
+    }
+
     public List<MobilePhone> findAll() {
         return mobilePhoneRepo.findAll();
     }
 
-    public void save(MobilePhone mobilePhone) throws DocumentException, IOException {
+    public void save(MobilePhone mobilePhone) {
         mobilePhoneRepo.save(mobilePhone);
     }
 

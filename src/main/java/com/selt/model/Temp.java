@@ -18,6 +18,10 @@ public class Temp {
   private String start;
   private String end;
   private String tempString;
+  private String tempString1;
+  private String tempString2;
+  private String tempString3;
+  private String tempString4;
   private Long id_1;
   private Long id_2;
 
