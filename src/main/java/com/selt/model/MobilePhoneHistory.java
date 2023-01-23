@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-@Table(name="MOBILEPHONEHISTORY")
+@Table(name="MOBILE_PHONE_HISTORY")
 @NoArgsConstructor
 public class MobilePhoneHistory {
     @Id
@@ -19,12 +19,6 @@ public class MobilePhoneHistory {
 
     @Column
     private LocalDate date;
-
-    @Column
-    private String mark;
-
-    @Column
-    private String model;
 
     @Column
     private String IMEI;
@@ -44,6 +38,7 @@ public class MobilePhoneHistory {
     @Column
     private String type;
 
+    @Column String protocolName;
 
 
 }

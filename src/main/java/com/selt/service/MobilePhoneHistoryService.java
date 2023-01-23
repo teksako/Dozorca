@@ -23,10 +23,7 @@ public class MobilePhoneHistoryService {
         mobilePhoneHistory.setPhoneNumber(mobilePhone.getPhoneNumber().getNumber());
         mobilePhoneHistory.setSimNumber(mobilePhone.getPhoneNumber().getSIMNumber());
         mobilePhoneHistory.setIMEI(mobilePhone.getIMEI());
-        mobilePhoneHistory.setModel(mobilePhone.getModel());
         mobilePhoneHistory.setSerialNumber(mobilePhone.getSerialNumber());
-        mobilePhoneHistory.setMark(mobilePhoneHistory.getMark());
-        mobilePhoneHistory.setMark(mobilePhoneHistory.getMark());
         mobilePhoneHistory.setSerialNumber(mobilePhoneHistory.getSerialNumber());
         mobilePhoneHistory.setType(type);
         mobilePhoneHistoryRepo.save(mobilePhoneHistory);
