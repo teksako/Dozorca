@@ -11,4 +11,5 @@ public interface PhoneNumberRepo extends JpaRepository<PhoneNumber, Long> {
 
     List<PhoneNumber> findAllByNumberIsLike(String number);
     List<PhoneNumber> findAllBySIMNumberIsLike(String number);
+    List<PhoneNumber> findByOrderByNumberAsc();
 }

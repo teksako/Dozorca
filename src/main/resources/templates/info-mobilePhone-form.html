@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SELT</title>
+
+<body>
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
+<br>
+<br><br>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr style="text-align: center; ">
+
+        <th>Data</th>
+        <th>Użytkownik</th>
+        <th>Nr telefonu</th>
+        <th>Nr SIM</th>
+        <th>Typ</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="key : ${historyList}" style="text-align: center; ">
+
+        <td th:text="${key.date}"></td>
+        <td th:text="${key.employee}"></td>
+        <td th:text="${key.phoneNumber}"></td>
+        <td th:text="${key.simNumber}"></td>
+        <td th:text="${key.type}"></td>
+
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+</html>

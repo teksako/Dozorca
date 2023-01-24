@@ -26,6 +26,10 @@ public class PhoneNumberService {
         phoneNumberRepo.delete(phoneNumber.get());
     }
 
+    public List<PhoneNumber> findByOrderByNumberAsc(){
+        return phoneNumberRepo.findByOrderByNumberAsc();
+    }
+
     public List<PhoneNumber> findAll() {
         return phoneNumberRepo.findAll();
     }

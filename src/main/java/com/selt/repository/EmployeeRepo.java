@@ -10,5 +10,6 @@ import java.util.List;
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 List<Employee> findAllByFirstnameIsLike(String name);
 List<Employee> findAllByLastnameIsLike(String name);
+List<Employee> findByOrderByLastnameAsc();
 
 }

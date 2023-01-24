@@ -55,6 +55,9 @@
                 <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
                 <a th:href="@{/releasePhone/{id}(id=${key.id})}" class="btn btn-info">Wydanie</a>
                 <a th:href="@{/getPhone/{id}(id=${key.id})}" class="btn btn-info">Zdanie</a>
+            <td>
+                <a th:href="@{/showPhoneInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
+            </td>
             </td>
         </tr>
         </tbody>

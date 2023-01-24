@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Data
@@ -15,6 +16,10 @@ import java.time.LocalDate;
 public class MobilePhoneHistoryService {
 
     private final MobilePhoneHistoryRepo mobilePhoneHistoryRepo;
+
+    public List<MobilePhoneHistory> findAllByIMEI(String IMEI){
+        return mobilePhoneHistoryRepo.findAllByIMEI(IMEI);
+    }
 
     public void save (MobilePhone mobilePhone, String type){
         MobilePhoneHistory mobilePhoneHistory = new MobilePhoneHistory();

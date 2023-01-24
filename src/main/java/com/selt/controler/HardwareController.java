@@ -231,6 +231,16 @@ public class HardwareController {
 //
 //    }
 
+
+    @GetMapping({"/showPhoneInfoForm"})
+    public ModelAndView showPhoneInfoForm(@RequestParam long id, String allert) {
+        ModelAndView model = new ModelAndView("info-mobilePhone-form");
+        Temp temp = new Temp();
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
+
+        return model;
+    }
     @PostMapping({"/list-phones"})
     public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
         String mattern = '%' + temp.getTempString() + '%';
@@ -244,7 +254,7 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phoneNumberList", phoneNumberService.findAll());
         model.addObject("phone", new MobilePhone());
-        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
         return model;
     }
 
@@ -253,7 +263,7 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("add-phone-form");
         model.addObject("employeesList", employeeService.findAll());
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phoneNumberList", phoneNumberService.findAll());
+        model.addObject("phoneNumberList", phoneNumberService.findByOrderByNumberAsc());
         model.addObject("phone", phoneRepo.findById(phoneId).get());
         return model;
     }
