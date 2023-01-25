@@ -41,8 +41,8 @@ public class ExportPDF {
     static LocalTime actualTime = LocalTime.now();
     static String uradzenie="Telefon";
     //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
-    //static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
-    static String attention="Telefon wraz z ładowarką.";
+    static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
+    //static String attention="Telefon wraz z ładowarką.";
 
 
     public static  int randomNumber() {
@@ -116,13 +116,13 @@ public class ExportPDF {
         paragraph1.setFixedPosition(155,450,150);
         paragraph1.setTextAlignment(TextAlignment.LEFT);
 
-       attentionParagraph.setFont(helvetica);
-       attentionParagraph.setFixedPosition(50,370,100);
-       attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
+        attentionParagraph.setFont(helvetica);
+        attentionParagraph.setFixedPosition(50,370,100);
+        attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
 
-       attentioDataParagraph.setFont(helvetica);
-       attentioDataParagraph.setFixedPosition(155,370,365);
-       attentioDataParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
+        attentioDataParagraph.setFont(helvetica);
+        attentioDataParagraph.setFixedPosition(155,370,365);
+        attentioDataParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
 
 
         infoParagraph.setFont(helvetica);
@@ -290,7 +290,7 @@ public class ExportPDF {
 //
 //        }
 
-       return new ByteArrayInputStream(out.toByteArray());
+        return new ByteArrayInputStream(out.toByteArray());
     }
 
 

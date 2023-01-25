@@ -144,11 +144,18 @@ public class PrinterService {
     }
 
     public void save(Printer printer) {
+        if (printer.getIPAdress().isBlank()) {
+            printer.setIPAdress("-");
+        }
 
+            printer.setServiceCounter(0l);
+
+        printer.setOid(oidService.findAllByPrinterModel(printer.getModel(),oidRepo.findAllByOidProducentIsLike(printer.getManufacturer())));
         printerRepo.save(printer);
     }
 
     public void deletePrinter(long id) {
+
         Optional<Printer> printer = printerRepo.findById(id);
         printerRepo.delete(printer.get());
     }
