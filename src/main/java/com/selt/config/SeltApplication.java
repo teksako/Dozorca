@@ -87,6 +87,7 @@ public class SeltApplication implements CommandLineRunner {
         printerList.add("284");
         printerList.add("253");
         printerList.add("360");
+        printerList.add("C368");
 
         final List<String> printerList1 = new ArrayList<>();
         printerList1.add("bizhub 20");
@@ -130,6 +131,7 @@ public class SeltApplication implements CommandLineRunner {
         printerList9.add("1320n");
         printerList9.add("P2055dn");
         printerList9.add("M426fdw");
+        printerList9.add("M426fdn");
         printerList9.add("M1536dnf");
         printerList9.add("P1606dn");
         printerList9.add("M227");

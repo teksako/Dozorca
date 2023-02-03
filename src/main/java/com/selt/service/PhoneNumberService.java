@@ -27,7 +27,7 @@ public class PhoneNumberService {
     }
 
     public List<PhoneNumber> findByOrderByNumberAsc(){
-        return phoneNumberRepo.findByOrderByNumberAsc();
+        return phoneNumberRepo.findAllByOrderByNumberAsc();
     }
 
     public List<PhoneNumber> findAll() {
