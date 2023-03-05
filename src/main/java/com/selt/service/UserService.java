@@ -84,7 +84,14 @@ public class UserService {
         return userRepo.findAll();
     }
 
-    public List<User> findAllByFullNameIsLike(String fullname){
-        return userRepo.findAllByFullnameIsLike(fullname);
+    public List<User> search(String matern){
+        List<User> userList=null;
+        if(userRepo.findAllByLoginIsLike(matern).size()!=0){
+            userList=userRepo.findAllByLoginIsLike(matern);
+        } else if(userRepo.findAllByFullnameIsLike(matern).size()!=0){
+            userList=userRepo.findAllByFullnameIsLike(matern);
+        }
+
+        return userList;
     }
 }

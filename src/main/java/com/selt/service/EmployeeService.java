@@ -40,8 +40,19 @@ public class EmployeeService {
     }
 
 
-    public List<Employee> findAllByLastnameIsLike(String name) {
-        return employeeRepo.findAllByLastnameIsLike(name);
+    public List<Employee> search(String mattern) {
+        List<Employee> employeeList=null;
+        if(employeeRepo.findAllByLastnameIsLike(mattern).size()!=0){
+            employeeList=employeeRepo.findAllByLastnameIsLike(mattern);
+        } else if(employeeRepo.findAllByFirstnameIsLike(mattern).size()!=0){
+            employeeList=employeeRepo.findAllByFirstnameIsLike(mattern);
+        }else if(employeeRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size()!=0){
+            employeeList=employeeRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
+        } else if(employeeRepo.findAllByWorkplaceIsLike(mattern).size()!=0){
+            employeeList=employeeRepo.findAllByWorkplaceIsLike(mattern);
+        }
+
+        return employeeList;
     }
 
     public void save(Employee employee) {

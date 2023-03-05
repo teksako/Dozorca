@@ -12,10 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -36,6 +33,13 @@ public class UserController {
         model.addObject("userList", userService.findAll());
         model.addObject("id", userService.findUserByUsername().getId());
         return model;
+    }
+
+    @PostMapping({"/list-users"})
+    public void searchUser(@ModelAttribute("temp") Temp temp, Model model) {
+        String mattern = '%' + temp.getTempString() + '%';
+        model.addAttribute("userList", userService.search(mattern));
+        getAllUsers();
     }
 
     @PostMapping({"/saveUser"})
@@ -98,7 +102,7 @@ public class UserController {
     public String resetPasword(User user, String password, Model model) {
         model.addAttribute("password", password);
 
-        userService.resetPasswordByAdmin(user,password);
+        userService.resetPasswordByAdmin(user, password);
         getAllUsers();
         return "add-user-form";
     }

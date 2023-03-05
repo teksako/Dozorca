@@ -36,7 +36,28 @@ public class MobilePhoneService {
     }
 
     public List<MobilePhone> search(String matter){
-        return mobilePhoneRepo.findAllByModelIsLike(matter);
+        List<MobilePhone> mobilePhoneList=null;
+        if(mobilePhoneRepo.findAllByModelIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByModelIsLike(matter);
+        } else if(mobilePhoneRepo.findAllByIMEIIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByIMEIIsLike(matter);
+        } else if(mobilePhoneRepo.findAllByIMEI2IsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByIMEI2IsLike(matter);
+        }else if(mobilePhoneRepo.findAllByMarkIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByMarkIsLike(matter);
+        }else if(mobilePhoneRepo.findAllByMACIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByMACIsLike(matter);
+        } else if(mobilePhoneRepo.findAllByPhoneNumber_NumberIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByPhoneNumber_NumberIsLike(matter);
+        } else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter);
+        } else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllByEmployee_FirstnameIsLike(matter);
+        } else if(mobilePhoneRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter);
+        }
+
+        return mobilePhoneList;
     }
 
     public void deleteMobilePhone(long id) {

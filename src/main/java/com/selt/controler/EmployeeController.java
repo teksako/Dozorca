@@ -46,7 +46,8 @@ public class EmployeeController {
     @PostMapping({"/list-employees"})
     public void searchEmployee(@ModelAttribute("temp") Temp temp, Model model) {
         String mattern = '%' + temp.getTempString() + '%';
-        model.addAttribute("employeeList", employeeService.findAllByLastnameIsLike(mattern));
+        model.addAttribute("employeesList", employeeService.search(mattern));
+        System.out.println(employeeService.search(mattern));
         getAllEmployees();
     }
 
