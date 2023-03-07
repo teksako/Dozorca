@@ -18,6 +18,7 @@ public interface PrinterRepo extends JpaRepository<Printer, Long> {
    List<Printer> findAllBySerialNumberIsLike(String serialNumber);
    List<Printer> findAllByInventoryNumberIsLike(String inventorynumber);
    List<Printer> findAllByUserIsLike(String user);
+   List<Printer> findAllByOrderByManufacturerAsc();
 
 
 

@@ -33,7 +33,7 @@ public class DepartmentService {
 
 
     public List<Department> findAll() {
-        return departmentRepo.findAll();
+        return departmentRepo.findAllByOrderByNameOfDepartmentAsc();
     }
 
 

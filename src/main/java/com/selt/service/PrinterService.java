@@ -40,7 +40,7 @@ public class PrinterService {
     }
 
     public List<Printer> findAll() {
-        return printerRepo.findAll();
+        return printerRepo.findAllByOrderByManufacturerAsc();
     }
 
 

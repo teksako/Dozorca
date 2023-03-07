@@ -8,6 +8,6 @@ import java.util.List;
 
 @Repository
 public interface TonerRepo extends JpaRepository<Toner, Long> {
-    List<Toner> findAll();
+    List<Toner> findAllByOrderByTonerNameAsc();
     List<Toner> findAllByTonerNameIsLike(String name);
 }

@@ -47,7 +47,7 @@ public class TonerService {
     }
 
     public List<Toner> findAll() {
-        return tonerRepo.findAll();
+        return tonerRepo.findAllByOrderByTonerNameAsc();
     }
 
 

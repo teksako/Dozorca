@@ -27,7 +27,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findByOrderByLastnameAsc(){
-        return employeeRepo.findByOrderByLastnameAsc();
+        return employeeRepo.findAllByOrderByLastnameAsc();
     }
 
     public void delete(Employee employee) {
