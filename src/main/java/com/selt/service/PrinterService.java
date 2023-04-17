@@ -109,20 +109,24 @@ public class PrinterService {
     public String validateServiceCounter(long id) {
         Printer printer = printerRepo.getById(id);
         String oidValue = null;
-        for (OID oid : printer.getOid()
-        ) {
-            if (oid.getOidName().equals("Total Counter")) {
-                oidValue = oid.getOidValue();
-            }
-
-        }
-        Long counte1 = (SNMP4J.snmpGet(printer.getIPAdress(), "public", oidValue));
-        Long counter2 = printer.getServiceCounter();
-
-        if (counte1 - counter2 < configService.getConfigRepo().getById(1l).getServiceCallcounter()) {
-            return configService.getConfigRepo().getById(1l).getServiceCallcounter() - (counte1 - counter2) + " stron do przeglądu";
+        if (printer.getIPAdress().equals("-")) {
+            return "Odczyt nie powiódł się!";
         } else {
-            return "Wykonaj przegląd!";
+            for (OID oid : printer.getOid()
+            ) {
+                if (oid.getOidName().equals("Total Counter")) {
+                    oidValue = oid.getOidValue();
+                }
+
+            }
+            Long counte1 = (SNMP4J.snmpGet(printer.getIPAdress(), "public", oidValue));
+            Long counter2 = printer.getServiceCounter();
+
+            if (counte1 - counter2 < configService.getConfigRepo().getById(1l).getServiceCallcounter()) {
+                return configService.getConfigRepo().getById(1l).getServiceCallcounter() - (counte1 - counter2) + " stron do przeglądu";
+            } else {
+                return "Wykonaj przegląd!";
+            }
         }
 
 
