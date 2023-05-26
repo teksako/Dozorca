@@ -28,10 +28,8 @@ public class MagazineController {
         model.addAttribute("magazine", new Magazine());
         model.addAttribute("printers", new Printer());
         model.addAttribute("username", userService.findUserByUsername().getFullname());
-        List<Magazine> magazines = magazineService.findAll();
-        model.addAttribute("tonerList", magazines);
-        List<Printer> printerList = printerService.findAll();
-        model.addAttribute("printer", printerList);
+        model.addAttribute("tonerList", magazineService.findAll());
+        model.addAttribute("printer",printerService.findAll());
         model.addAttribute("id", userService.findUserByUsername().getId());
 
     }

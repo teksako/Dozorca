@@ -17,30 +17,30 @@ public class Computer {
     private Long id;
 
     @Column
-    private String model;
+    private String inventoryNumber;
 
     @Column
     private String manufacturer;
 
     @Column
+    private String model;
+
+    @Column
     private String serialNumber;
 
     @Column
-    private String hostname;
+    private String windowsKey;
+
+    @Column
+    private String MACAdress;
 
     @Column
     private String IPAdress;
 
     @Column
-    private String MACAdress;
+    private String hostname;
 
-    @OneToOne
-    @JoinTable(
-            name = "computer_windows_license",
-            joinColumns = {@JoinColumn(name = "COMPUTER_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "WINDOWS_ID")}
-    )
-    private Windows windowsKey;
+
 
     @OneToOne
     @JoinTable(

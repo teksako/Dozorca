@@ -1,6 +1,7 @@
 package com.selt.service;
 
 import com.selt.model.Computer;
+import com.selt.model.MobilePhone;
 import com.selt.model.Toner;
 import com.selt.repository.ComputerRepo;
 import lombok.Data;
@@ -30,8 +31,9 @@ public class ComputerService {
         computerRepo.save(computer);
     }
 
-    public void delete(Computer computer) {
-        computerRepo.delete(computer);
+    public void delete(long id) {
+        Optional<Computer> computer = computerRepo.findById(id);
+        computerRepo.delete(computer.get());
     }
 
     public void update(Computer computer) {

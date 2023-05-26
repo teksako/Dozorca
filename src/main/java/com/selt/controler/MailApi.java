@@ -20,7 +20,8 @@ public class MailApi {
 
     @GetMapping("/sendMail")
     public String sendMail() throws MessagingException {
-        return "wysłano";
+        counterService.onlineList();
+            return "wysłano";
 
     }
 }

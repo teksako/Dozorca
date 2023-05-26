@@ -51,6 +51,8 @@ public class MobilePhoneService {
             mobilePhoneList=mobilePhoneRepo.findAllByPhoneNumber_NumberIsLike(matter);
         } else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
             mobilePhoneList=mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter);
+        } else if(mobilePhoneRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllBySerialNumberIsLike(matter);
         } else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
             mobilePhoneList=mobilePhoneRepo.findAllByEmployee_FirstnameIsLike(matter);
         } else if(mobilePhoneRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter).size()!=0){

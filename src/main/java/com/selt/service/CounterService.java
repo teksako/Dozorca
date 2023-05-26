@@ -37,7 +37,7 @@ public class CounterService {
 
 
      //@Scheduled(fixedDelay = 10000)
-    @Scheduled(cron = "0 0 10 * * MON-SUN")
+    @Scheduled(cron = "0 30 8 * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList = new ArrayList<>();
         Long tonerPercent = configService.getConfigRepo().getById(1l).getTonerPercent();
@@ -102,17 +102,18 @@ public class CounterService {
         List<Printer> findAll = printerService.findAll();
         List<Printer> onlineList = new ArrayList<>();
         for (Printer printer : findAll) {
-            if (printer.getIPAdress() != null || printer.getIPAdress() != "-") {
+            if (printer.getIPAdress() != "-") {
                 onlineList.add(printer);
             }
         }
+        System.out.println(onlineList);
         return onlineList;
     }
 
 
 
     //@Scheduled(cron = "30 * * ? * ?")
-    @Scheduled(cron = "0 10 9 * * MON-SUN")
+    @Scheduled(cron = "0 0 9 * * MON-SUN")
     public void save() {
 
         List<Printer> printerList = printerService.findAll();

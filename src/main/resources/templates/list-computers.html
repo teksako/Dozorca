@@ -11,15 +11,15 @@
 <div th:replace="navbar :: navbar"></div>
 
 
-<form th:action="@{/list-printers}" th:object="${temp}" method="post">
+<form th:action="@{/list-computers}" th:object="${temp}" method="post">
 
     <div class="cointainer">
 
 
-        <h3>Lista drukarek</h3>
+        <h3>Lista komputerów</h3>
 
         <hr/>
-        <a th:href="@{/addPrinterForm}" class="btn btn-primary">Dodaj drukarke</a>
+        <a th:href="@{/addComputerForm}" class="btn btn-primary">Dodaj drukarke</a>
         <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
         <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
         <a class="navbar-brand" th:text="${allert}"></a>
@@ -28,42 +28,39 @@
             <thead>
             <tr style="text-align: center; ">
                 <th>Lp.</th>
-                <th>Producent</th>
-                <th>Model</th>
-                <th>Nr inwentarzowy</th>
-                <th>Nr seryjny</th>
-                <th>Adres IP</th>
-                <th>Adres Mac</th>
                 <th>Użytkownik</th>
-                <th>Dział</th>
-                <th>Toner</th>
-
+                <th>Nr inwentarzowy</th>
+                <th>Producnet</th>
+                <th>Model</th>
+                <th>Nr seryjny</th>
+                <th>System</th>
+                <th>Office</th>
+                <th>Adres Mac</th>
+                <th>Adres IP</th>
+                <th>Hostname</th>
 
 
             </tr>
             </thead>
             <tbody>
-            <tr th:each="key : ${printerList}" style="text-align: center; ">
+            <tr th:each="key : ${computerList}" style="text-align: center; ">
                 <td th:text="${key.id}"></td>
+                <td><a th:text="${key.getEmployee()?.firstname}"></a> <a th:text="${key.getEmployee()?.lastname}"></a></td>
+                <td th:text="${key.inventoryNumber}"></td>
                 <td th:text="${key.manufacturer}"></td>
                 <td th:text="${key.model}"></td>
-                <td th:text="${key.inventoryNumber}"></td>
                 <td th:text="${key.serialNumber}"></td>
-                <td th:text="${key.IPAdress}"></td>
+                <td th:text="${key.windowsKey}"></td>
+                <td th:text="${key.officeKey}"></td>
                 <td th:text="${key.MACAdress}"></td>
-                <td th:text="${key.user}"></td>
-                <td th:text="${key.getDepartment()?.nameOfDepartment}"></td>
-                <td><a th:each="toner:${key.getTonerList()}">
-                    <a th:text="${toner.tonerName}"></a></a>
-                </td>
-                <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
-                <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
+                <td th:text="${key.IPAdress}"></td>
+                <td th:text="${key.hostname}"></td>
+                <td><a th:href="@{/deleteComputer/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
                 <td>
-                    <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a></td>
+                    <a th:href="@{/showUpdateForm(computerId=${key.id})}" class="btn btn-success">Update</a></td>
                 <td>
                     <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>
-                </div>
             </tr>
             </tbody>
         </table>
