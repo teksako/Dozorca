@@ -341,17 +341,16 @@ public class HardwareController {
     }
 
     //-------------------COMPUTER---------------------------------------------
-    @GetMapping({"/addComputer"})
-    public String addComputerPage(Model model) {
-        List<Windows> windowsKeys = windowsService.findAll();
-        List<Office> officeKeys = officeService.findAll();
-        List<Employee> employees = employeeService.findAll();
-        model.addAttribute("computer", new Computer());
-        model.addAttribute("owners", employees);
-        model.addAttribute("officeKeys", officeKeys);
-        model.addAttribute("Keys", windowsKeys);
-        return "/addComputer";
+    @GetMapping({"/addComputerForm"})
+    public ModelAndView addComputerForm() {
+        ModelAndView model = new ModelAndView("add-computer-form");
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("officeKeyList", officeService.findAll());
+        model.addObject("computer", new Computer());
+        model.addObject("employeesList", employeeService.findAll());
+        return model;
     }
+
 
     @GetMapping({"list-computers"})
     public ModelAndView getAllComputers() {
