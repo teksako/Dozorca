@@ -22,6 +22,7 @@
                 <span class="navbar-toggler-icon"></span>
 
             </button>
+
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
 
@@ -33,20 +34,24 @@
                      <a th:href="@{/addComputer}">Dodaj komputer</a><br>
                      <a th:href="@{/showUserHardware}">Pokaz sprzęty pracownika</a><br>
                      <a th:href="@{/addPhone}">Dodaj telefon</a><br>-->
-
+                </div>
+                <div class="navbar-nav" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/list-departments}"><i class="bi bi-building"></i> Dział</a>
                     <a class="nav-link" th:href="@{/list-locations}"><i class="bi bi-geo-alt-fill"></i> Lokalizacje</a>
                     <a class="nav-link" th:href="@{/list-toners}"><i class="bi bi-droplet-fill"></i> Tonery i tusze</a>
                     <a class="nav-link" th:href="@{/list-printers}"><i class="bi bi-printer-fill"></i> Drukarki</a>
+                    <a class="nav-link" th:href="@{/list-computers}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pc-display" viewBox="0 0 16 16">
+                        <path d="M8 1a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V1Zm1 13.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Zm2 0a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0ZM9.5 1a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5ZM9 3.5a.5.5 0 0 0 .5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5ZM1.5 2A1.5 1.5 0 0 0 0 3.5v7A1.5 1.5 0 0 0 1.5 12H6v2h-.5a.5.5 0 0 0 0 1H7v-4H1.5a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .5-.5H7V2H1.5Z"/>
+                    </svg> Komputery</a>
                     <a class="nav-link" th:href="@{/Magazine}"><i class="bi bi-box"></i> Magazyn</a>
                     <a class="nav-link" th:href="@{/list-users}"><i class="bi bi-people-fill"></i> Zarządzanie
                         użytkownikiem</a>
                     <a class="nav-link" th:href="@{/list-employees}"><i class="bi bi-person-square"></i> Dodaj pracownika</a>
                     <a class="nav-link" th:href="@{/list-phones}"><i class="bi bi-telephone-fill"></i></i> Telefony</a>
                     <a class="nav-link" th:href="@{/list-phoneNumbers}"><i class="bi bi-sim"></i></i> Dodaj SIM</a><br>
-                </div>
 
-                <div class="navbar-nav" sec:authorize="isAuthenticated()">
+
+
 
                     <a class="nav-link" th:href="@{/Raport}"><i class="bi bi-newspaper"></i> Raport</a>
                     <a class="nav-link" th:href="@{/help}"><i class="bi bi-question-lg"></i> Pomoc</a>

@@ -50,7 +50,6 @@ public class HardwareController {
     Temp temp = new Temp();
 
 
-
     @ResponseBody
     @GetMapping({"/showLaptops"})
     public List<Laptop> getLaptops() {
@@ -214,7 +213,7 @@ public class HardwareController {
     }
 
     @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone)  {
+    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
         mobilePhoneService.save(mobilePhone);
 
 
@@ -241,10 +240,12 @@ public class HardwareController {
 
         return model;
     }
+
     @PostMapping({"/list-phones"})
     public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
         String mattern = '%' + temp.getTempString() + '%';
         model.addAttribute("phonesList", mobilePhoneService.search(mattern));
+        model.addAttribute("username", userService.findUserByUsername().getFullname());
         getAllPhones();
     }
 
@@ -339,6 +340,7 @@ public class HardwareController {
         return "/index";
     }
 
+    //-------------------COMPUTER---------------------------------------------
     @GetMapping({"/addComputer"})
     public String addComputerPage(Model model) {
         List<Windows> windowsKeys = windowsService.findAll();
@@ -351,12 +353,29 @@ public class HardwareController {
         return "/addComputer";
     }
 
+    @GetMapping({"list-computers"})
+    public ModelAndView getAllComputers() {
+        ModelAndView model = new ModelAndView("list-computers");
+        model.addObject("temp", new Temp());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("computerList", computerService.findAll());
+        return model;
+    }
+
+    @GetMapping({"/deleteComputer/{id}"})
+    public String deleteComputer(@PathVariable(value = "id") long id) {
+        computerService.delete(id);
+        getAllComputers();
+        return "redirect:/list-phones";
+    }
+
+
     @PostMapping({"/addComputer"})
     public String saveComputer(@ModelAttribute("computer") Computer computer) {
 
         computerService.save(computer);
         return "/index";
     }
-
+//-------------------END COMPUTER------------------------------------
 
 }
