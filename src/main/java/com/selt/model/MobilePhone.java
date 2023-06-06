@@ -37,6 +37,9 @@ public class MobilePhone {
     @Column
     private String color;
 
+    @Column
+    private Boolean demage;
+
 
     @OneToOne
     @JoinTable(

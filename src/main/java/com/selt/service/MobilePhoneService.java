@@ -32,6 +32,9 @@ public class MobilePhoneService {
     }
 
     public void save(MobilePhone mobilePhone) {
+        if(mobilePhone.getDemage()==null){
+            mobilePhone.setDemage(false);
+        }
         mobilePhoneRepo.save(mobilePhone);
     }
 
@@ -49,7 +52,9 @@ public class MobilePhoneService {
             mobilePhoneList=mobilePhoneRepo.findAllByMACIsLike(matter);
         } else if(mobilePhoneRepo.findAllByPhoneNumber_NumberIsLike(matter).size()!=0){
             mobilePhoneList=mobilePhoneRepo.findAllByPhoneNumber_NumberIsLike(matter);
-        } else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+        }  else if( mobilePhoneRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+            mobilePhoneList=mobilePhoneRepo.findAllBySerialNumberIsLike(matter);
+        }  else if(mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
             mobilePhoneList=mobilePhoneRepo.findAllByEmployee_LastnameIsLike(matter);
         } else if(mobilePhoneRepo.findAllBySerialNumberIsLike(matter).size()!=0){
             mobilePhoneList=mobilePhoneRepo.findAllBySerialNumberIsLike(matter);

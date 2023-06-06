@@ -15,7 +15,8 @@
     <a th:href="@{/addPhoneForm}" class="btn btn-primary">Dodaj telefon</a>
     <input id="search" th:field="*{tempString}" type="text" class="btn btn-outline-dark">
     <input type="submit" value="Szukaj" name="searchButton" class="btn btn-primary">
-    <a class="navbar-brand" th:text="${allert}"></a>
+    <a class="navbar-brand" th:text="${message}"></a>
+
     <br/><br/>
     <table class="table table-bordered table-striped">
         <thead>
@@ -37,7 +38,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="key : ${phonesList}" style="text-align: center;">
+        <tr th:each="key : ${phonesList}" style="text-align: center; ">
+            <div th:style="${key.getDemage()} == TRUE ? 'background: red': 'background: green'">
             <td th:text="${key.getPhoneNumber()?.number}"></td>
             <td th:text="${key.getPhoneNumber()?.SIMNumber}"></td>
             <td th:text="${key.getPhoneNumber()?.PIN}"></td>
@@ -59,6 +61,7 @@
                 <a th:href="@{/showPhoneInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
             </td>
             </td>
+            </div>
         </tr>
         </tbody>
     </table>

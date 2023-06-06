@@ -27,5 +27,8 @@ public class Configuration {
     @Column
     private Long serviceCallcounter;
 
+    @Column
+    private String folderPath;
+
 
 }

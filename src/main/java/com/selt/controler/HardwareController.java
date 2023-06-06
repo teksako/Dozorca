@@ -21,6 +21,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,7 @@ public class HardwareController {
     private final CounterService counterService;
     private final MobilePhoneRepo phoneRepo;
     private final MobilePhoneHistoryService mobilePhoneHistoryService;
+    private final TempService tempService;
     Temp temp = new Temp();
 
 
@@ -203,11 +205,12 @@ public class HardwareController {
 
     //--------------------------START MOBILEPHONE--------------------------------------
     @GetMapping({"/list-phones"})
-    public ModelAndView getAllPhones() {
+    public ModelAndView getAllPhones(String message) {
         ModelAndView model = new ModelAndView("list-phones");
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phonesList", mobilePhoneService.findAll());
+        model.addObject("message",message);
 
         return model;
     }
@@ -246,7 +249,7 @@ public class HardwareController {
         String mattern = '%' + temp.getTempString() + '%';
         model.addAttribute("phonesList", mobilePhoneService.search(mattern));
         model.addAttribute("username", userService.findUserByUsername().getFullname());
-        getAllPhones();
+        getAllPhones("Znaleziono wyniki!");
     }
 
     @GetMapping({"/addPhoneForm"})
@@ -273,48 +276,70 @@ public class HardwareController {
     @GetMapping({"/releasePhone/{id}"})
     public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-
+        String message = null;
         temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
         temp.setTempString1("Odbierający");
         temp.setTempString2("Przekazujący");
         temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+        try {
+            String pdfName = mobilePhoneHistoryService.validatePdfName();
 
-        if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-            ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp);
-            mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE");
+            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName);
+                message="Wydałeś telefon !";
+
+
+            }
 
         }
-        getAllPhones();
+        catch (StackOverflowError e){
+            message ="Nie udało się, wszystkie nazwy są już zajetę!";
+        }
+
+        getAllPhones(message);
         return "redirect:/list-phones";
     }
 
     @GetMapping({"/getPhone/{id}"})
     public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
 
-
+        String message = null;
         temp.setTempString("PROTOKÓŁ ZDANIA");
         temp.setTempString1("Przekazujący");
         temp.setTempString2("Odbierający");
         temp.setTempString3("");
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
 
+        try {
+            String pdfName = mobilePhoneHistoryService.validatePdfName();
 
-        if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-            ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp);
-            mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE");
-            //savePdf(mobilePhone.get());
+            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+
+                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName);
+                //savePdf(mobilePhone.get());
+            }
+            mobilePhone.get().setEmployee(null);
+            mobilePhone.get().setPhoneNumber(null);
+            savePhone(mobilePhone.get());
+
         }
-        mobilePhone.get().setEmployee(null);
-        mobilePhone.get().setPhoneNumber(null);
-        savePhone(mobilePhone.get());
-        getAllPhones();
+        catch (StackOverflowError e){
+            message ="Nie udało się, wszystkie nazwy są już zajetę!";
+        }
+
+        String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
+
+
+        getAllPhones("udało sie!");
         return "redirect:/list-phones";
     }
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {
         mobilePhoneService.deleteMobilePhone(id);
-        getAllPhones();
+        getAllPhones("udało sie!");
         return "redirect:/list-phones";
     }
 

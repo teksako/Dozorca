@@ -1,8 +1,10 @@
 package com.selt.service;
 import com.itextpdf.io.font.FontConstants;
+
 import com.itextpdf.io.image.ImageData;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
+
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Text;
@@ -27,13 +29,16 @@ import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.element.Image;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 
 @Data
+@Service
 public class ExportPDF {
 
     static UserService userService;
+    static ConfigService configService;
 
     static ByteArrayOutputStream out = new ByteArrayOutputStream();
     //static Document document=new Document();
@@ -45,16 +50,16 @@ public class ExportPDF {
     //static String attention="Telefon wraz z ładowarką.";
 
 
-    public static  int randomNumber() {
-        int min = 0;
-        int max = 100;
-        return (int) Math.floor(Math.random() * (max - min + 1) + min);
-    }
 
-    public static  ByteArrayInputStream protcol(MobilePhone mobilePhone, String username, Temp temp) throws IOException, DocumentException {
+
+    public static  ByteArrayInputStream protocol(MobilePhone mobilePhone, String username, Temp temp, String pdfName) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
-        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+"-"+temp.getTempString()+".pdf");
+
+
+        //PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+"-"+temp.getTempString()+".pdf");
+        //PdfWriter writer = new PdfWriter(configService.findById().get().getFolderPath()+"/"+pdfName+".pdf");
+         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ pdfName+".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         String footerPaath = "src/main/resources/images/footer.jpg";
@@ -163,7 +168,7 @@ public class ExportPDF {
         // Closing the document
         document.close();
 
-        System.out.println("Image added ");
+      //  System.out.println("Dokument utworzony poprawnie!");
 
         return new ByteArrayInputStream(out.toByteArray());
     }

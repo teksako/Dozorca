@@ -38,7 +38,11 @@ public class MobilePhoneHistory {
     @Column
     private String type;
 
-    @Column String protocolName;
+    @Column(unique = true)
+    private String protocolName;
+
+    @Column
+    private String user;
 
 
 }
