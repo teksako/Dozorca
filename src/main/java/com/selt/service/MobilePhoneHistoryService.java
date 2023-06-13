@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -18,6 +19,7 @@ public class MobilePhoneHistoryService {
     private final MobilePhoneHistoryRepo mobilePhoneHistoryRepo;
     private final UserService userService;
     private final TempService tempService;
+
 
     public List<MobilePhoneHistory> findAllByIMEI(String IMEI) {
         return mobilePhoneHistoryRepo.findAllByIMEI(IMEI);
@@ -61,5 +63,9 @@ public class MobilePhoneHistoryService {
         mobilePhoneHistory.setType(type);
         mobilePhoneHistory.setUser(userService.actualLoginUser());
         mobilePhoneHistoryRepo.save(mobilePhoneHistory);
+    }
+
+    public Optional<MobilePhoneHistory> findById(long id) {
+        return mobilePhoneHistoryRepo.findById(id);
     }
 }

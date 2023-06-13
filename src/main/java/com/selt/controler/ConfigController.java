@@ -34,9 +34,10 @@ public class ConfigController {
 
     @PostMapping({"/saveConfig"})
     public String saveConfig(@ModelAttribute Configuration configuration) {
+
         configService.save(configuration);
 
-        return "redirect:list-toners";
+        return "redirect:/config-form";
     }
 
     @NotNull

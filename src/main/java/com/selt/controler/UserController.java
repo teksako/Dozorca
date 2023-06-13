@@ -61,14 +61,13 @@ public class UserController {
     @GetMapping("/addUserForm")
     public ModelAndView addUserForm() {
         ModelAndView model = new ModelAndView("add-user-form");
-        User user = new User();
-        model.addObject("user", user);
+        model.addObject("user", new User());
         return getModelAndView(model);
 
     }
 
     @GetMapping({"/showUpdateUserForm"})
-    public ModelAndView showUpdateUserForm(@RequestParam Long userId) {
+    public ModelAndView showUpdateUserForm(@RequestParam long userId) {
         ModelAndView model = new ModelAndView("update-user-form");
         User user = userRepo.findById(userId).get();
         model.addObject("user", user);

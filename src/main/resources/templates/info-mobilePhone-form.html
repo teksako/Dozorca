@@ -31,6 +31,9 @@
         <td th:text="${key.phoneNumber}"></td>
         <td th:text="${key.simNumber}"></td>
         <td th:text="${key.type}"></td>
+        <td>
+            <a th:href="@{/openPDF/{id}(id=${key.id})}" class="btn btn-info">Otwórz</a>
+        </td>
 
     </tr>
     </tbody>

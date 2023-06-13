@@ -19,8 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +48,7 @@ public class HardwareController {
     private final MobilePhoneRepo phoneRepo;
     private final MobilePhoneHistoryService mobilePhoneHistoryService;
     private final TempService tempService;
+    private final ConfigService configService;
     Temp temp = new Temp();
 
 
@@ -210,7 +210,7 @@ public class HardwareController {
         model.addObject("temp", new Temp());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phonesList", mobilePhoneService.findAll());
-        model.addObject("message",message);
+        model.addObject("message", message);
 
         return model;
     }
@@ -223,7 +223,7 @@ public class HardwareController {
         return "redirect:/list-phones";
     }
 
-//    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
+    //    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
 //    public ResponseEntity<InputStreamResource> savePdf(MobilePhone mobilePhone) throws DocumentException, IOException {
 //
 ////         ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname(), "test");
@@ -232,6 +232,24 @@ public class HardwareController {
 ////        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bis));
 //
 //    }
+    @GetMapping(value = "/openPDF/{id}")
+    public ResponseEntity<InputStreamResource> getTermsConditions(@PathVariable(value = "id") long id) throws FileNotFoundException {
+
+        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+        String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
+        String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
+        File file = new File(filePath + fileName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "inline;filename=" + fileName);
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(resource);
+    }
 
 
     @GetMapping({"/showPhoneInfoForm"})
@@ -287,14 +305,13 @@ public class HardwareController {
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
                 mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName);
-                message="Wydałeś telefon !";
+                message = "Wydałeś telefon !";
 
 
             }
 
-        }
-        catch (StackOverflowError e){
-            message ="Nie udało się, wszystkie nazwy są już zajetę!";
+        } catch (StackOverflowError e) {
+            message = "Nie udało się, wszystkie nazwy są już zajetę!";
         }
 
         getAllPhones(message);
@@ -324,9 +341,8 @@ public class HardwareController {
             mobilePhone.get().setPhoneNumber(null);
             savePhone(mobilePhone.get());
 
-        }
-        catch (StackOverflowError e){
-            message ="Nie udało się, wszystkie nazwy są już zajetę!";
+        } catch (StackOverflowError e) {
+            message = "Nie udało się, wszystkie nazwy są już zajetę!";
         }
 
         String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
@@ -358,6 +374,8 @@ public class HardwareController {
         return "/addLaptop";
     }
 
+
+
     @PostMapping({"/addLaptop"})
     public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
 
@@ -376,6 +394,21 @@ public class HardwareController {
         return model;
     }
 
+    @GetMapping({"/showUpdateComputerForm"})
+    public ModelAndView showUpdateComputerForm(@RequestParam Long computerId) {
+        ModelAndView model = new ModelAndView("add-computer-form");
+        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("computer", computerService.getComputerRepo().findById(computerId).get());
+        return model;
+    }
+
+
+    @PostMapping({"/saveComputer"})
+    public String savecomputer(@ModelAttribute("computer") Computer computer) {
+        computerService.save(computer);
+       return "redirect:/list-computers";
+    }
 
     @GetMapping({"list-computers"})
     public ModelAndView getAllComputers() {
