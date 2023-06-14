@@ -8,20 +8,16 @@ import com.selt.repository.PrinterRepo;
 import com.selt.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.mail.MessagingException;
-import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -223,34 +219,34 @@ public class HardwareController {
         return "redirect:/list-phones";
     }
 
-    //    // @PostMapping(value = "/savePhone", produces = MediaType.APPLICATION_PDF_VALUE)
-//    public ResponseEntity<InputStreamResource> savePdf(MobilePhone mobilePhone) throws DocumentException, IOException {
-//
-////         ByteArrayInputStream bis = ExportPDF.protcol(mobilePhone, userService.findUserByUsername().getFullname(), "test");
-////        HttpHeaders headers = new HttpHeaders();
-////        headers.add("Content-Disposition", "attachment;filename=test.pdf");
-////        return ResponseEntity.ok().headers(headers).contentType(MediaType.APPLICATION_PDF).body(new InputStreamResource(bis));
-//
-//    }
     @GetMapping(value = "/openPDF/{id}")
     public ResponseEntity<InputStreamResource> getTermsConditions(@PathVariable(value = "id") long id) throws FileNotFoundException {
 
-        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
-        String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
-        String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
-        File file = new File(filePath + fileName);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content-disposition", "inline;filename=" + fileName);
 
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+            Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+            String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
+            String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
+            File file = new File(filePath + fileName);
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("content-disposition", "inline;filename=" + fileName);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/pdf"))
-                .body(resource);
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .contentLength(file.length())
+                    .contentType(MediaType.parseMediaType("application/pdf"))
+                    .body(resource);
     }
 
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String exception(final Throwable throwable, final Model model) {
+        //logger.error("Exception during execution of SpringSecurity application", throwable);
+        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
+        model.addAttribute("error", errorMessage);
+        return "error";
+    }
 
     @GetMapping({"/showPhoneInfoForm"})
     public ModelAndView showPhoneInfoForm(@RequestParam long id, String allert) {
