@@ -10,29 +10,34 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
-
+<div class="container" >
     <h3>Dodaj nowy telefon</h3>
 </hr>
-<form th:action="@{/savePhone}" th:object="${phone}" method="post">
+<form th:action="@{/savePhone}" th:object="${phone}" method="post"  class="form-control col-4 mb-4">
 
     <td>Producent: </td>
-    <input id="mark" th:field="*{mark}" type="text">
+    <input id="mark" th:field="*{mark}" type="text" class="form-control col-4 mb-4">
     <td>Model: </td>
-    <input id="model" th:field="*{model}" type="text">
+    <input id="model" th:field="*{model}" type="text" class="form-control col-4 mb-4">
     <td>Kolor: </td>
-    <input id="color" th:field="*{color}" type="text">
-    <td>IMEI: </td>
-    <input id="IMEI" th:field="*{IMEI}" type="text">
-    <td>IMEI2: </td>
-    <input id="IMEI2" th:field="*{IMEI2}" type="text">
-    <td>MAC: </td>
-    <input id="MAC" th:field="*{MAC}" type="text">
+    <input id="color" th:field="*{color}" type="text" class="form-control col-4 mb-4">
     <td>Numer seryjny: </td>
-    <input id="serialnumber" th:field="*{serialNumber}" type="text">
+    <input id="serialnumber" th:field="*{serialNumber}" type="text" class="form-control col-4 mb-4">
+    <td>IMEI: </td>
+    <input id="IMEI" th:field="*{IMEI}" type="text" class="form-control col-4 mb-4">
+    <td>IMEI2: </td>
+    <input id="IMEI2" th:field="*{IMEI2}" type="text" class="form-control col-4 mb-4">
+    <td>MAC: </td>
+    <input id="MAC" th:field="*{MAC}" type="text" class="form-control col-4 mb-4">
+    <td>Czy uszkodzony?</td>
+    </br>
+    <input id="enabled" th:field="*{demage}" type="checkbox" >
+    </br>
+    </br>
 
     <td>Numer telefonu</td>
 
-    <select name="phoneNumber" id="phoneNumber" th:field="*{phoneNumber}">
+    <select name="phoneNumber" id="phoneNumber" th:field="*{phoneNumber}" class="form-control col-4 mb-4">
         <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
         <option value="">Wybierz: </option>
         <option th:each="Key : ${phoneNumberList}"
@@ -42,7 +47,7 @@
     </td>
     <td>Użytkownik</td>
 
-    <select name="employee" id="employee" th:field="*{employee}">
+    <select name="employee" id="employee" th:field="*{employee}" class="form-control col-4 mb-4">
         <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
         <option value="">Wybierz: </option>
         <option th:each="Key : ${employeesList}"
@@ -51,11 +56,17 @@
     </select>
     </td>
 
+    <td>Notatka: </td>
+    <input id="Note" th:field="*{note}" type="text" class="form-control col-4 mb-4">
+
     <input type="button" value="Powrót" name="backButton"
            onClick="javascript:window.location.href='/index'" class="myButton shortButton">
     <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
     <input type="hidden" th:field="*{id}" />
-</form>
 
+
+
+</form>
+</div>
 </body>
 </html>

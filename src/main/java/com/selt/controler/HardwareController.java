@@ -249,7 +249,7 @@ public class HardwareController {
     }
 
     @GetMapping({"/showPhoneInfoForm"})
-    public ModelAndView showPhoneInfoForm(@RequestParam long id, String allert) {
+    public ModelAndView showPhoneInfoForm(@RequestParam long id) {
         ModelAndView model = new ModelAndView("info-mobilePhone-form");
         Temp temp = new Temp();
         model.addObject("username", userService.findUserByUsername().getFullname());
@@ -296,22 +296,26 @@ public class HardwareController {
         temp.setTempString2("Przekazujący");
         temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
         try {
-            String pdfName = mobilePhoneHistoryService.validatePdfName();
+
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName();
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
                 mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName);
+                mobilePhone.get().setHasUser(true);
+                mobilePhoneService.save(mobilePhone.get());
                 message = "Wydałeś telefon !";
-
 
             }
 
         } catch (StackOverflowError e) {
             message = "Nie udało się, wszystkie nazwy są już zajetę!";
+            //getAllPhones(message);
+
         }
 
-        getAllPhones(message);
-        return "redirect:/list-phones";
+        return "redirect:/showPhoneInfoForm?id="+id;
+
     }
 
     @GetMapping({"/getPhone/{id}"})
@@ -325,27 +329,30 @@ public class HardwareController {
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
 
         try {
-            String pdfName = mobilePhoneHistoryService.validatePdfName();
+            //String pdfName = mobilePhoneHistoryService.validatePdfName();
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName();
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
 
                 mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName);
+                mobilePhone.get().setHasUser(false);
+                mobilePhone.get().setEmployee(null);
+                mobilePhone.get().setPhoneNumber(null);
+                savePhone(mobilePhone.get());
                 //savePdf(mobilePhone.get());
             }
-            mobilePhone.get().setEmployee(null);
-            mobilePhone.get().setPhoneNumber(null);
-            savePhone(mobilePhone.get());
+
 
         } catch (StackOverflowError e) {
             message = "Nie udało się, wszystkie nazwy są już zajetę!";
         }
 
-        String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
+        //String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
 
 
-        getAllPhones("udało sie!");
-        return "redirect:/list-phones";
+        //getAllPhones("udało sie!");
+        return "redirect:/showPhoneInfoForm?id="+id;
     }
 
     @GetMapping({"/deletePhone/{id}"})

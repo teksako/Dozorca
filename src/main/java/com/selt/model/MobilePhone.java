@@ -40,6 +40,12 @@ public class MobilePhone {
     @Column
     private Boolean demage;
 
+    @Column
+    private Boolean hasUser;
+
+    @Column
+    private String note;
+
 
     @OneToOne
     @JoinTable(

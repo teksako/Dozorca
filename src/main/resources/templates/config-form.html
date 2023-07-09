@@ -4,6 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <title>SELT</title>
+    <!--
+    <script type="text/javascript">
+function getFilePath(){
+     $('input[type=file]').change(function () {
+         var filePath=$('#fileUpload').val();
+     });
+}
+</script> -->
+
+
+
 </head>
 
 <body>
@@ -11,6 +22,8 @@
 <div th:replace="navbar :: navbar"></div>
 
 <div class="position-relative">
+
+
 
 <form th:action="@{/saveConfig}" th:object="${config}" method="post" class="position-absolute top-50 start-50">
     <div class="row g-3 align-items-center">
@@ -28,6 +41,13 @@
             <label for="counter" class="form-label">Licznik stron przeglądów</label>
             <input type="text" th:field="*{serviceCallcounter}" class="form-control"
                    placeholder="Licznik przeglądów" id="counter">
+
+            <!--   <label for="FileUpload">Select folder</label>
+               <input type="file" th:field="*{folderPath}"id="fileUpload">
+
+        <input type="file" th:field="*{folderPath}" id="FileUpload" onchange="getfolder(event)"  webkitdirectory multiple />
+               <input type="file" th:field="*{folderPath}" id="folder" webkitdirectory multiple/>-->
+
 
             <input type="submit" value="Zapisz" name="saveButton" class="btn btn-primary">
         </div>

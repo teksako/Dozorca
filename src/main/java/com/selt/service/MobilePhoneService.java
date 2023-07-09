@@ -35,6 +35,9 @@ public class MobilePhoneService {
         if(mobilePhone.getDemage()==null){
             mobilePhone.setDemage(false);
         }
+        if(mobilePhone.getHasUser()==null){
+            mobilePhone.setHasUser(false);
+        }
         mobilePhoneRepo.save(mobilePhone);
     }
 
