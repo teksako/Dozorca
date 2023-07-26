@@ -17,10 +17,8 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.time.Month;
+import java.util.*;
 
 @Data
 @Service
@@ -36,7 +34,7 @@ public class CounterService {
     private final ConfigService configService;
 
 
-     //@Scheduled(fixedDelay = 10000)
+    //@Scheduled(fixedDelay = 10000)
     @Scheduled(cron = "0 30 8 * * MON-SUN")
     public void validateTonerLevel() {
         List<String> mailList = new ArrayList<>();
@@ -109,7 +107,6 @@ public class CounterService {
         System.out.println(onlineList);
         return onlineList;
     }
-
 
 
     //@Scheduled(cron = "30 * * ? * ?")
@@ -213,7 +210,7 @@ public class CounterService {
                     //String oid1 = oidRepo.findAllByOidName("Max Toner Capacity").get(0).getOidValue();
                     countList.add("Poziom czarnego toneru: " + getTonerLevel(ip, oid.getOidValue(), findOID(oidList, "Max Toner Capacity").getOidValue()) + "%");
                 } else if ((oid.getOidName().equals("Actual Drum Page Counter"))) {
-                    if (printer.get().getModel().equals("bizhub 20")||printer.get().getModel().equals("bizhub 20p")) {
+                    if (printer.get().getModel().equals("bizhub 20") || printer.get().getModel().equals("bizhub 20p")) {
                         countList.add("Kondycja bębna: " + (long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100) + "%");
                         System.out.println(Math.ceil((long) (((double) SNMP4J.snmpGet(ip, community, oid.getOidValue()) / 25000) * 100)) + "%");
                     } else {
@@ -323,28 +320,48 @@ public class CounterService {
         return counterList;
     }
 
+    public List<Month> monthList(List<Counter> counterList) {
+        List<Month> month = new ArrayList<>();
+        int i=1;
+        for (Counter counter : counterList) {
+            month.add(counter.getDate().getMonth());
+
+        }
+        System.out.println(month);
+        return month;
+    }
+
     public List<Counter> findAllMonthly(long id) {
         List<Counter> counterList = new ArrayList<>();
-        List<Long> subList = new ArrayList<>();
-        Long temp=0l;
         int day;
-        for (Counter counter : counterRepo.findAllByPrinter_idIsLike(id)
-        ) {
+        for (Counter counter : counterRepo.findAllByPrinter_idIsLike(id)) {
             day = counter.getDate().getDayOfMonth();
-           //day = counter.getDate().getDayOfWeek().toString();
-            if (day==1) {
+            if (day == 1) {
                 counterList.add(counter);
-
-               // System.out.println(counter);
+                //System.out.println(counter.getDate());
             }
+
         }
 
-        for(int i=0;i<counterList.size()-1;i++){
-            temp=counterList.get(i+1).getCounter() -counterList.get(i).getCounter();
-            System.out.println(temp);
-            subList.add(temp);
-        }
         return counterList;
+    }
+
+    public Map<Month, Long> printAnalysis(long id) {
+        List<Counter> counterList = findAllMonthly(id);
+        Map<Month, Long> printAnalysis = new HashMap<>();
+        List<Month> list=monthList(counterList);
+
+        for (int i = 0; i < counterList.size() - 1; i++) {
+
+            printAnalysis.put(list.get(i),
+                    counterList.get(i + 1).getCounter() - counterList.get(i).getCounter());
+           // list.remove(i);
+            //System.out.println(list.get(i));
+        }
+
+        System.out.println(printAnalysis);
+        return printAnalysis;
+
     }
 
 

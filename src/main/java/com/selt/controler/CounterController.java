@@ -113,7 +113,7 @@ public class CounterController {
         sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
 
         System.out.println("różnica = " + sub);
-
+        counterService.printAnalysis(printerId);
 
         return getCounters(printerId, (ArrayList<Counter>) counterList, allert);
 
