@@ -59,23 +59,30 @@
                 <td><a th:href="@{/deletePhone/{id}(id=${key.id})}" class="btn btn-danger">USUŃ</a>
                 </td>
                 <td>
-                    <div th:if="${key.getPhoneNumber()!=null and key.getEmployee!=null}">
-                        <div th:if="${key.getHasUser()==true}">
-                            <a th:href="@{/getPhone/{id}(id=${key.id})}" class="btn btn-info">Zdanie</a>
-                        </div>
-                        <div th:unless="${key.getHasUser()==true}">
-                            <a th:href="@{/releasePhone/{id}(id=${key.id})}" class="btn btn-info">Wydanie</a>
-                            </hr>
-                        </div>
-                    </div>
-                    <div th:if="${key.getPhoneNumber()==null and key.getEmployee==null}">
-                        <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
+                    <!--
+               <a th:href="@{/getPhone/{id}(id=${key.id})}" class="btn btn-info">Zdanie</a>
+               <a th:href="@{/releasePhone/{id}(id=${key.id})}" class="btn btn-info">Wydanie</a>
+               <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
+               </td>-->
 
-                    </div>
-                </td>
+                   <div th:if="${key.getPhoneNumber()!=null and key.getEmployee!=null}">
+                       <div th:if="${key.getHasUser()==true}">
+                           <a th:href="@{/getPhone/{id}(id=${key.id})}" class="btn btn-info">Zdanie</a>
+                       </div>
+                       <div th:unless="${key.getHasUser()==true}">
+                           <a th:href="@{/releasePhone/{id}(id=${key.id})}" class="btn btn-info">Wydanie</a>
+                           </hr>
+                       </div>
+                   </div>
+                   <div th:if="${key.getPhoneNumber()==null || key.getEmployee==null}">
+                       <a th:href="@{/showUpdatePhoneForm(phoneId=${key.id})}" class="btn btn-info">Update</a>
+
+                   </div>
+               </td>
                 <td>
                     <a th:href="@{/showPhoneInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>
+
 
 
             </tr>

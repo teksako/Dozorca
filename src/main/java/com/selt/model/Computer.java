@@ -17,6 +17,9 @@ public class Computer {
     private Long id;
 
     @Column
+    private String place;
+
+    @Column
     private String inventoryNumber;
 
     @Column
@@ -27,6 +30,9 @@ public class Computer {
 
     @Column
     private String serialNumber;
+
+    @Column
+    private String windowsVersion;
 
     @Column
     private String windowsKey;

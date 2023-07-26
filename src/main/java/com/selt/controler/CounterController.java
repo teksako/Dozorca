@@ -65,22 +65,30 @@ public class CounterController {
 
             if (temp.getRadio() == 0) {
                 counterList = counterService.findAllByPreviousMonth(printerId);
-
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
             }
             if (temp.getRadio() == 1) {
                 counterList = counterService.findAllByActualMonth(printerId);
-
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
             }
             if (temp.getRadio() == 2) {
                 counterList = counterService.findAllByPrinterId(printerId);
-
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
             }
             if (temp.getRadio() == 3) {
                 counterList = counterService.findAllByDateBetween(printerId, LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
+                sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
+                allert = "W okresie od "+LocalDate.parse(temp.getStart())+" do "+LocalDate.parse(temp.getEnd())+" zostało wydrukowanych " + sub + " stron.";
 
             }
             if (temp.getRadio() == 4) {
                 counterList = counterService.findAllWeekly(printerId);
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
+
+            }
+            if (temp.getRadio() == 5) {
+                counterList = counterService.findAllMonthly(printerId);
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
 
             }
 
@@ -94,7 +102,7 @@ public class CounterController {
                 if (counterList.size() == 0) {
                     allert = "Brak wyników spełniających kryteria!";
                 }
-                allert = "W wybranym okresie zostało wydrukowanych " + sub.toString() + " stron.";
+                allert = "W wybranym okresie zostało wydrukowanych " + sub + " stron.";
             } catch (IndexOutOfBoundsException exception2) {
                 allert = "Brak wyników spełniających kryteria!";
             }
@@ -102,6 +110,7 @@ public class CounterController {
         } catch (IndexOutOfBoundsException exception) {
             allert = "Brak wyników spełniających kryteria!";
         }
+        sub = counterList.get(counterList.size() - 1).getCounter() - counterList.get(0).getCounter();
 
         System.out.println("różnica = " + sub);
 

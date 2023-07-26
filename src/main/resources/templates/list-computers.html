@@ -55,12 +55,14 @@
                 <td th:text="${key.MACAdress}"></td>
                 <td th:text="${key.IPAdress}"></td>
                 <td th:text="${key.hostname}"></td>
+                <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
                 <td><a th:href="@{/deleteComputer/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
                 <td>
                     <a th:href="@{/showUpdateForm(computerId=${key.id})}" class="btn btn-success">Update</a></td>
                 <td>
                     <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>
+                </div>
             </tr>
             </tbody>
         </table>

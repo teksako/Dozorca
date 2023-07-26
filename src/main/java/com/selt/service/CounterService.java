@@ -317,11 +317,36 @@ public class CounterService {
             day = counter.getDate().getDayOfWeek().toString();
             if (day.equals("MONDAY")) {
                 counterList.add(counter);
-                System.out.println(counter);
+                //System.out.println(counter);
             }
         }
         return counterList;
     }
+
+    public List<Counter> findAllMonthly(long id) {
+        List<Counter> counterList = new ArrayList<>();
+        List<Long> subList = new ArrayList<>();
+        Long temp=0l;
+        int day;
+        for (Counter counter : counterRepo.findAllByPrinter_idIsLike(id)
+        ) {
+            day = counter.getDate().getDayOfMonth();
+           //day = counter.getDate().getDayOfWeek().toString();
+            if (day==1) {
+                counterList.add(counter);
+
+               // System.out.println(counter);
+            }
+        }
+
+        for(int i=0;i<counterList.size()-1;i++){
+            temp=counterList.get(i+1).getCounter() -counterList.get(i).getCounter();
+            System.out.println(temp);
+            subList.add(temp);
+        }
+        return counterList;
+    }
+
 
     public Counter findByPrinter_IdIsLikeAndDateIsLike(long id, LocalDate date) {
         return counterRepo.findByPrinter_IdIsLikeAndDateIsLike(id, date);
