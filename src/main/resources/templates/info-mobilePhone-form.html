@@ -4,12 +4,62 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SELT</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+    showOnFocus: false,
+                showTrigger: '#calImg',
+                beforeShowDay: $.datepicker.noWeekends,
+                pickerClass: 'noPrevNext',
+                numberOfMonths: 1,
+                dateFormat: 'yy-mm-dd',}
+    );
+  } );
+
+    </script>
 
 <body>
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 <br>
 <br><br>
+<div class="form-control col-4 mb-4">
+    <b>Producent: </b>
+    <p th:text="${phone.getMark()}"></p>
+    <b>Model: </b>
+    <p th:text="${phone.getModel()}"></p>
+    <b>Numer seryjny: </b>
+    <p th:text="${phone.getSerialNumber()}"></p>
+    <b>IMEI: </b>
+    <p th:text="${phone.getIMEI()}"></p>
+    <b>IMEI2: </b>
+    <p th:text="${phone.getIMEI2()}"></p>
+    <b>Adres MAC: </b>
+    <p th:text="${phone.getMAC()}"></p>
+    <b>Kolor: </b>
+    <p th:text="${phone.getColor()}"></p>
+    <b>Uszkodzony?: </b>
+    <p th:text="${phone.getDemage()}"></p>
+    <b>Notatka: </b>
+    <p th:text="${phone.getNote()}"></p>
+    <b>Użytkownik: </b>
+    <p><a th:text="${phone.getEmployee()?.firstname}"></a> <a
+            th:text="${phone.getEmployee()?.lastname}"></a></p>
+    <b>Przypisany numer: </b>
+    <p th:text="${phone.getPhoneNumber()?.number}"></p>
+</div>
+<form th:action="@{/showPhoneInfoForm}" th:object="${temp}" method="post">
+<div>
+    <input type="text" id="datepicker" class="myTextButton" placeholder="Data"/>
+    <a th:href="@{/getPhone/{id}(id=${phone.getId()})}" class="btn btn-info">Zdanie</a>
+    <a th:href="@{/releasePhone/{id}(id=${phone.getId()})}" class="btn btn-info">Wydanie</a>
+</div>
+</form>
 <table class="table table-bordered table-striped">
     <thead>
     <tr style="text-align: center; ">
