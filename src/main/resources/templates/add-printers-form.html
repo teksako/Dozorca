@@ -28,7 +28,11 @@
         <input th:field="*{inventoryNumber}" type="text" class="form-control col-4 mb-4"
                placeholder="Numer inwentarzowy">
         <input id="user" th:field="*{user}" type="text" class="form-control col-4 mb-4" placeholder="Użytkownik">
-
+        <td>Czy uszkodzony?</td>
+        </br>
+        <input id="demage" th:field="*{demage}" type="checkbox" >
+        </br>
+        </br>
 
         <select  th:field="*{department}" class="form-control col-4 mb-4" >
             <option value="">Wybierz dział</option>

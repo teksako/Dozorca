@@ -43,7 +43,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="key : ${printerList}" style="text-align: center; ">
+            <tr th:each="key : ${printerList}" style="text-align: center; "
+                th:style="${key.getDemage()} == TRUE ? 'background: orange': 'background: green'">
                 <td th:text="${key.id}"></td>
                 <td th:text="${key.manufacturer}"></td>
                 <td th:text="${key.model}"></td>
@@ -59,7 +60,7 @@
                 <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
                 <td><a th:href="@{/deletePrinter/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
                 <td>
-                    <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-success">Update</a></td>
+                    <a th:href="@{/showUpdateForm(printerId=${key.id})}" class="btn btn-info">Update</a></td>
                 <td>
                     <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
                 </td>

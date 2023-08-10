@@ -47,6 +47,8 @@ public class Printer {
     @Column
     private Long serviceCounter;
 
+    @Column
+    private Boolean demage;
 
 
     @OneToOne

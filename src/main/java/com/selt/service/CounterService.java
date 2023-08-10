@@ -320,11 +320,11 @@ public class CounterService {
         return counterList;
     }
 
-    public List<Month> monthList(List<Counter> counterList) {
-        List<Month> month = new ArrayList<>();
+    public List<String> monthList(List<Counter> counterList) {
+        List<String> month = new ArrayList<>();
         int i=1;
         for (Counter counter : counterList) {
-            month.add(counter.getDate().getMonth());
+            month.add(counter.getDate().getMonth()+" "+counter.getDate().getYear());
 
         }
         System.out.println(month);
@@ -346,10 +346,10 @@ public class CounterService {
         return counterList;
     }
 
-    public Map<Month, Long> printAnalysis(long id) {
+    public Map<String, Long> printAnalysis(long id) {
         List<Counter> counterList = findAllMonthly(id);
-        Map<Month, Long> printAnalysis = new HashMap<>();
-        List<Month> list=monthList(counterList);
+        Map<String, Long> printAnalysis = new HashMap<>();
+        List<String> list=monthList(counterList);
 
         for (int i = 0; i < counterList.size() - 1; i++) {
 
@@ -358,6 +358,8 @@ public class CounterService {
            // list.remove(i);
             //System.out.println(list.get(i));
         }
+
+
 
         System.out.println(printAnalysis);
         return printAnalysis;

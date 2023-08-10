@@ -78,6 +78,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/list-printers").hasAuthority("ADMIN")
                 .antMatchers("/list-employees").hasAuthority("ADMIN")
                 .antMatchers("/showUpdateForm").authenticated()
+                .antMatchers("/showUpdateUserForm").authenticated()
                 .antMatchers("/deleteToner").hasAuthority("ADMIN")
                 .anyRequest().authenticated()
                 .and()
