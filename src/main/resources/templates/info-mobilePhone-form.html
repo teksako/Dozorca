@@ -53,11 +53,14 @@
     <b>Przypisany numer: </b>
     <p th:text="${phone.getPhoneNumber()?.number}"></p>
 </div>
-<form th:action="@{/showPhoneInfoForm}" th:object="${temp}" method="post">
+<form th:action="@{/actionPhone/{id}(id=${phone.getId()})}" th:object="${temp}" method="post">
 <div>
-    <input type="text" id="datepicker" class="myTextButton" placeholder="Data"/>
+    <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/>
+    <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton" placeholder="notice">
+    <!--  <input type="hidden" id="mobilePhoneID" th:field="*{id_1}" th:value="${phone.getId()}"/>
     <a th:href="@{/getPhone/{id}(id=${phone.getId()})}" class="btn btn-info">Zdanie</a>
-    <a th:href="@{/releasePhone/{id}(id=${phone.getId()})}" class="btn btn-info">Wydanie</a>
+     <a th:href="@{/releasePhone/{id}(id=${phone.getId()})}" class="btn btn-info">Wydanie</a>-->
+    <input type="submit" value="Wykonaj" name="saveButton" class="mySubmitButton">
 </div>
 </form>
 <table class="table table-bordered table-striped">

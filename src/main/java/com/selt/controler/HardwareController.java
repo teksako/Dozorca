@@ -223,20 +223,20 @@ public class HardwareController {
     public ResponseEntity<InputStreamResource> getTermsConditions(@PathVariable(value = "id") long id) throws FileNotFoundException {
 
 
-            Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
-            String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
-            String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
-            File file = new File(filePath + fileName);
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("content-disposition", "inline;filename=" + fileName);
+        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+        String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
+        String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
+        File file = new File(filePath + fileName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "inline;filename=" + fileName);
 
-            InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(file.length())
-                    .contentType(MediaType.parseMediaType("application/pdf"))
-                    .body(resource);
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(resource);
     }
 
     @ExceptionHandler(Throwable.class)
@@ -252,8 +252,11 @@ public class HardwareController {
     public ModelAndView showPhoneInfoForm(@RequestParam long id) {
         ModelAndView model = new ModelAndView("info-mobilePhone-form");
         Temp temp = new Temp();
+        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
+        model.addObject("phone", mobilePhoneService.findById(id).get());
+        model.addObject("temp",temp);
 
         return model;
     }
@@ -284,6 +287,21 @@ public class HardwareController {
         model.addObject("phoneNumberList", phoneNumberService.findByOrderByNumberAsc());
         model.addObject("phone", phoneRepo.findById(phoneId).get());
         return model;
+    }
+
+    @PostMapping({"/actionPhone/{id}"})
+    public void actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
+
+        System.out.println(temp.getDate());
+        System.out.println(temp.getNotice());
+        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+        if(mobilePhone.get().getHasUser().equals(true)){
+            releasePhone(id);
+        }else{
+            getPhone(id);
+        }
+
+       // return "redirect:/showPhoneInfoForm?id="+id;
     }
 
 
@@ -410,7 +428,7 @@ public class HardwareController {
     @PostMapping({"/saveComputer"})
     public String savecomputer(@ModelAttribute("computer") Computer computer) {
         computerService.save(computer);
-       return "redirect:/list-computers";
+        return "redirect:/list-computers";
     }
 
     @GetMapping({"list-computers"})

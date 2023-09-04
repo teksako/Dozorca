@@ -4,6 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>SELT</title>
+    <script>
+           function myFunction() {
+            const checkBox = document.getElementById("search");
+            const text = document.getElementById("display");
+
+            if (checkBox.checked == true) {
+                text.style.display = "block";
+
+
+            } else if (checkBox.checked == false) {
+                text.style.display = "none";
+
+            }
+        }
+    </script>
+
 </head>
 
 <body>
@@ -59,13 +75,20 @@
     <td>Notatka: </td>
     <input id="Note" th:field="*{note}" type="text" class="form-control col-4 mb-4">
 
+
+    <!--<button onclick="myFunction()">Click Me</button>
+
+    <div id="myDIV" style="display:none">
+        <td>Notatka do protokołu: </td>
+        <input id="NoteToProtocol" th:field="*{noteToProtocol}" type="text" class="form-control col-4 mb-4" th:value="${7}>
+    </div>
+
+    <input id="NoteToProtocol" th:field="*{noteToProtocol}" type="text" class="form-control col-4 mb-4" th:value="${Telefon wraz z ładowarką oraz oryginalnym opakowaniem.}">
+    -->
     <input type="button" value="Powrót" name="backButton"
            onClick="javascript:window.location.href='/index'" class="myButton shortButton">
     <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
     <input type="hidden" th:field="*{id}" />
-
-
-
 </form>
 </div>
 </body>

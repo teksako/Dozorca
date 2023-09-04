@@ -24,6 +24,8 @@ public class Temp {
   private String tempString4;
   private Long id_1;
   private Long id_2;
+  private String date;
+  private String notice;
 
 
   public void setId(Long id) {
