@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -290,18 +291,20 @@ public class HardwareController {
     }
 
     @PostMapping({"/actionPhone/{id}"})
-    public void actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
-
+    public String actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd.MM.yyyy");
         System.out.println(temp.getDate());
+
+        System.out.println(dtf1.format(LocalDate.parse(temp.getDate())));
         System.out.println(temp.getNotice());
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
         if(mobilePhone.get().getHasUser().equals(true)){
-            releasePhone(id);
+           mobilePhoneService.releasePhone(mobilePhone,temp);
         }else{
-            getPhone(id);
-        }
+           mobilePhoneService.getPhone(mobilePhone,temp);
+       }
 
-       // return "redirect:/showPhoneInfoForm?id="+id;
+        return "redirect:/showPhoneInfoForm?id="+id;
     }
 
 
@@ -317,9 +320,9 @@ public class HardwareController {
 
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName();
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName);
+                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
                 mobilePhone.get().setHasUser(true);
                 mobilePhoneService.save(mobilePhone.get());
                 message = "Wydałeś telefon !";
@@ -350,10 +353,10 @@ public class HardwareController {
             //String pdfName = mobilePhoneHistoryService.validatePdfName();
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName();
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
 
-                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName);
+                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName,LocalDate.now());
                 mobilePhone.get().setHasUser(false);
                 mobilePhone.get().setEmployee(null);
                 mobilePhone.get().setPhoneNumber(null);

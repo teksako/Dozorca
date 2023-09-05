@@ -2,12 +2,17 @@ package com.selt.service;
 
 import com.itextpdf.text.DocumentException;
 import com.selt.model.MobilePhone;
+import com.selt.model.Temp;
 import com.selt.repository.MobilePhoneRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +25,71 @@ public class MobilePhoneService {
     private final MobilePhoneRepo mobilePhoneRepo;
     private final EmployeeService employeeService;
     private final PhoneNumberService numberService;
+    private final MobilePhoneHistoryService mobilePhoneHistoryService;
     private final UserService userService;
     //private final ExportPDF exportPDF;
 
     public Optional<MobilePhone> findById(long id){
         return mobilePhoneRepo.findById(id);
     }
+
+    public void releasePhone(Optional<MobilePhone> mobilePhone, Temp temp){
+
+        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
+        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+        temp.setTempString1("Odbierający");
+        temp.setTempString2("Przekazujący");
+        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+        try {
+
+
+            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.parse(temp.getDate()));
+                mobilePhone.get().setHasUser(true);
+                save(mobilePhone.get());
+
+
+            }
+
+        } catch (StackOverflowError | IOException | DocumentException e) {
+            System.out.println("Nie udało się, wszystkie nazwy są już zajetę!");
+            //getAllPhones(message);
+
+        }
+    }
+
+
+    public void getPhone(Optional<MobilePhone> mobilePhone, Temp temp){
+
+        temp.setTempString("PROTOKÓŁ ZDANIA");
+        temp.setTempString1("Przekazujący");
+        temp.setTempString2("Odbierający");
+        temp.setTempString3("");
+
+
+        try {
+            //String pdfName = mobilePhoneHistoryService.validatePdfName();
+
+            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+
+                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.parse(temp.getDate()));
+                mobilePhone.get().setHasUser(false);
+                mobilePhone.get().setEmployee(null);
+                mobilePhone.get().setPhoneNumber(null);
+                save(mobilePhone.get());
+                //savePdf(mobilePhone.get());
+            }
+
+
+        } catch (StackOverflowError | IOException | DocumentException e) {
+            System.out.println("Nie udało się, wszystkie nazwy są już zajetę!");
+        }
+    }
+
 
     public List<MobilePhone> findAll() {
         return mobilePhoneRepo.findAll();

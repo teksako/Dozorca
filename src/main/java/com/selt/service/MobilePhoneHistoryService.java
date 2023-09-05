@@ -37,12 +37,12 @@ public class MobilePhoneHistoryService {
 //
 //     return true;
 //    }
-    public String validatePdfName() {
-        String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
+    public String validatePdfName(LocalDate date) {
+        String pdfName = date + "-" + tempService.randomNumber();
         for (MobilePhoneHistory mobilePhoneHistory : mobilePhoneHistoryRepo.findAll()) {
             if (mobilePhoneHistory.getProtocolName().equals(pdfName)) {
                 System.out.println("taki kwit istnieje " + pdfName);
-                return validatePdfName();
+                return validatePdfName(date);
             }
         }
         System.out.println("nie ma takiego dokumentu, został utworzony");
@@ -50,9 +50,9 @@ public class MobilePhoneHistoryService {
         return pdfName;
     }
 
-    public void save(MobilePhone mobilePhone, String type, String pdfName) {
+    public void save(MobilePhone mobilePhone, String type, String pdfName, LocalDate date) {
         MobilePhoneHistory mobilePhoneHistory = new MobilePhoneHistory();
-        mobilePhoneHistory.setDate(LocalDate.now());
+        mobilePhoneHistory.setDate(date);
         mobilePhoneHistory.setEmployee(mobilePhone.getEmployee().getFirstname() + " " + mobilePhone.getEmployee().getLastname());
         mobilePhoneHistory.setPhoneNumber(mobilePhone.getPhoneNumber().getNumber());
         mobilePhoneHistory.setSimNumber(mobilePhone.getPhoneNumber().getSIMNumber());
