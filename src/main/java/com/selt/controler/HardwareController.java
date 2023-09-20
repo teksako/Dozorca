@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -257,7 +258,7 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
         model.addObject("phone", mobilePhoneService.findById(id).get());
-        model.addObject("temp",temp);
+        model.addObject("temp", temp);
 
         return model;
     }
@@ -298,13 +299,20 @@ public class HardwareController {
         System.out.println(dtf1.format(LocalDate.parse(temp.getDate())));
         System.out.println(temp.getNotice());
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-        if(mobilePhone.get().getHasUser().equals(true)){
-           mobilePhoneService.releasePhone(mobilePhone,temp);
-        }else{
-           mobilePhoneService.getPhone(mobilePhone,temp);
-       }
+        try {
+            if (mobilePhone.get().getHasUser().equals(true)) {
+                mobilePhoneService.getPhone(mobilePhone, temp);
 
-        return "redirect:/showPhoneInfoForm?id="+id;
+            } else {
+                mobilePhoneService.releasePhone(mobilePhone, temp);
+
+            }
+        }
+        catch (Exception e){
+
+        }
+
+        return "redirect:/showPhoneInfoForm?id=" + id;
     }
 
 
@@ -335,7 +343,7 @@ public class HardwareController {
 
         }
 
-        return "redirect:/showPhoneInfoForm?id="+id;
+        return "redirect:/showPhoneInfoForm?id=" + id;
 
     }
 
@@ -356,7 +364,7 @@ public class HardwareController {
                 String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
 
-                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName,LocalDate.now());
+                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
                 mobilePhone.get().setHasUser(false);
                 mobilePhone.get().setEmployee(null);
                 mobilePhone.get().setPhoneNumber(null);
@@ -373,7 +381,7 @@ public class HardwareController {
 
 
         //getAllPhones("udało sie!");
-        return "redirect:/showPhoneInfoForm?id="+id;
+        return "redirect:/showPhoneInfoForm?id=" + id;
     }
 
     @GetMapping({"/deletePhone/{id}"})
@@ -397,7 +405,6 @@ public class HardwareController {
         model.addAttribute("Keys", windowsKeys);
         return "/addLaptop";
     }
-
 
 
     @PostMapping({"/addLaptop"})
