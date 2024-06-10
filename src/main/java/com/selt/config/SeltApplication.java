@@ -123,6 +123,7 @@ public class SeltApplication implements CommandLineRunner {
         final List<String> printerList8 = new ArrayList<>();//HP Color
         printerList8.add("MFP M277");
         printerList8.add("MFP M283");
+        printerList8.add("M570dn");
 
         final List<String> printerList9 = new ArrayList<>();//HP Black
         printerList9.add("M402dne");
@@ -139,6 +140,7 @@ public class SeltApplication implements CommandLineRunner {
         printerList9.add("m201n");
         printerList9.add("M125nw");
         printerList9.add("137fnw");
+        printerList9.add("P2015dn");
 
         final List<String> printerList10 = new ArrayList<>();//HP All
         printerList10.addAll(printerList9);
@@ -147,6 +149,23 @@ public class SeltApplication implements CommandLineRunner {
         final List<String> printerList12 = new ArrayList<>();
         printerList12.add("M203dn");
         printerList12.add("M227sdn");
+
+        final List<String> printerList13 = new ArrayList<>();//Brother
+        printerList13.add("MFC-J200");
+        printerList13.add("MFC-B7710DN");
+        printerList13.add("MFC-T920DW");
+
+        final List<String> printerList14 = new ArrayList<>();//Canon
+        printerList14.add("MF4380dn");
+        printerList14.add("MF657CDW");
+
+        final List<String> printerList15 = new ArrayList<>();//Epson
+        printerList15.add("L1250");
+        printerList15.add("L455");
+
+        final List<String> printerList16 = new ArrayList<>();//Samsung
+        printerList16.add("M2026w");
+
 //
 //        Location location = new Location();
 //        Department department = new Department();
@@ -566,6 +585,56 @@ public class SeltApplication implements CommandLineRunner {
             oid45.setPrinterModel(printerList12);
             oid45.setOidProducent("HP");
             oidRepo.save(oid45);
+
+            //------------Brother---------------------
+
+            OID oid46 = new OID();
+            oid46.setOidName("Total Counter");
+            oid46.setOidValue("1.3.6.1.2.1.43.10.2.1.4.1.1");
+            oid46.setPrinterModel(printerList13);
+            oid46.setOidProducent("Brother");
+            oidRepo.save(oid46);
+
+            //-------------Canon--------------------
+
+            OID oid47 = new OID();
+            oid47.setOidName("Total Counter");
+            oid47.setOidValue("1.3.6.1.2.1.43.10.2.1.4.1.1");
+            oid47.setPrinterModel(printerList14);
+            oid47.setOidProducent("Canon");
+            oidRepo.save(oid47);
+
+            //-------------Epson--------------------
+
+            OID oid48 = new OID();
+            oid48.setOidName("Total Counter");
+            oid48.setOidValue("1.3.6.1.2.1.43.10.2.1.4.1.1");
+            oid48.setPrinterModel(printerList15);
+            oid48.setOidProducent("Epson");
+            oidRepo.save(oid48);
+
+            //----------Samsung----------------------
+            OID oid49 = new OID();
+            oid49.setOidName("Total Counter");
+            oid49.setOidValue("1.3.6.1.2.1.43.10.2.1.4.1.1");
+            oid49.setPrinterModel(printerList16);
+            oid49.setOidProducent("Samsung");
+            oidRepo.save(oid49);
+
+            OID oid50 = new OID();
+            oid50.setOidName("Max Toner Capacity");
+            oid50.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.1");
+            oid50.setPrinterModel(printerList16);
+            oid50.setOidProducent("Samsung");
+            oidRepo.save(oid50);
+
+            OID oid51 = new OID();
+            oid51.setOidName("Actual Toner Capacity");
+            oid51.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.1");
+            oid51.setPrinterModel(printerList16);
+            oid51.setOidProducent("Samsung");
+            oidRepo.save(oid51);
+
 
         }
 

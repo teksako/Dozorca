@@ -28,14 +28,15 @@ public class MailApi {
     private final MailService mailService;
     private final CounterService counterService;
     private final PrinterService printerService;
-//
-//    @GetMapping("/sendMail")
-//    public String sendMail() throws MessagingException {
-//        counterService.onlineList();
-//
-//            return "wysłano";
-//
-//    }
+
+    @GetMapping("/sendMail")
+    public String sendMail() throws MessagingException {
+        counterService.onlineList();
+        printerService.reload();
+
+            return "wysłano";
+
+    }
 
 //    @RequestMapping(value="/sendMail", method= RequestMethod.GET)
 //    public ResponseEntity<byte[]> getPDF1() {
@@ -53,22 +54,22 @@ public class MailApi {
 //        ResponseEntity<byte[]> response = new ResponseEntity<byte[]>(headers, HttpStatus.OK);
 //        return response;
 //    }
-
-    @GetMapping(value = "/sendMail")
-    public ResponseEntity<InputStreamResource> getTermsConditions() throws FileNotFoundException {
-
-        String filePath = "src/main/resources/Protocol/";
-        String fileName = "2023-06-07-11403"+".pdf";
-        File file = new File(filePath+fileName);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content-disposition", "inline;filename=" +fileName);
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/pdf"))
-                .body(resource);
-    }
+//
+//    @GetMapping(value = "/sendMail")
+//    public ResponseEntity<InputStreamResource> getTermsConditions() throws FileNotFoundException {
+//
+//        String filePath = "src/main/resources/Protocol/";
+//        String fileName = "2023-06-07-11403"+".pdf";
+//        File file = new File(filePath+fileName);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("content-disposition", "inline;filename=" +fileName);
+//
+//        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .contentLength(file.length())
+//                .contentType(MediaType.parseMediaType("application/pdf"))
+//                .body(resource);
+//    }
 }

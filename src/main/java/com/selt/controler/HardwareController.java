@@ -218,7 +218,7 @@ public class HardwareController {
         mobilePhoneService.save(mobilePhone);
 
 
-        return "redirect:/list-phones";
+        return "redirect:/showUpdatePhoneForm?phoneId=" + mobilePhone.getId();
     }
 
     @GetMapping(value = "/openPDF/{id}")
@@ -253,7 +253,7 @@ public class HardwareController {
     @GetMapping({"/showPhoneInfoForm"})
     public ModelAndView showPhoneInfoForm(@RequestParam long id) {
         ModelAndView model = new ModelAndView("info-mobilePhone-form");
-        Temp temp = new Temp();
+        model.addObject("temp", new Temp());
         temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
@@ -293,12 +293,10 @@ public class HardwareController {
 
     @PostMapping({"/actionPhone/{id}"})
     public String actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
-        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        System.out.println(temp.getDate());
 
-        System.out.println(dtf1.format(LocalDate.parse(temp.getDate())));
-        System.out.println(temp.getNotice());
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+        temp.setTempBoolen(false);
+        String message = null;
         try {
             if (mobilePhone.get().getHasUser().equals(true)) {
                 mobilePhoneService.getPhone(mobilePhone, temp);
@@ -307,9 +305,8 @@ public class HardwareController {
                 mobilePhoneService.releasePhone(mobilePhone, temp);
 
             }
-        }
-        catch (Exception e){
-
+        } catch (Exception e) {
+            System.out.println(e);
         }
 
         return "redirect:/showPhoneInfoForm?id=" + id;
@@ -320,10 +317,13 @@ public class HardwareController {
     public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
         String message = null;
+        temp.setTempBoolen(true);
         temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
         temp.setTempString1("Odbierający");
         temp.setTempString2("Przekazujący");
         temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+        //temp.setDate(LocalDate.now());
+        // System.out.println(temp.getDate());
         try {
 
 
@@ -349,13 +349,15 @@ public class HardwareController {
 
     @GetMapping({"/getPhone/{id}"})
     public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-
+        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
         String message = null;
+        temp.setTempBoolen(true);
         temp.setTempString("PROTOKÓŁ ZDANIA");
         temp.setTempString1("Przekazujący");
         temp.setTempString2("Odbierający");
         temp.setTempString3("");
-        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+        //temp.setDate(LocalDate.now());
+        //  System.out.println(temp.getDate());
 
         try {
             //String pdfName = mobilePhoneHistoryService.validatePdfName();

@@ -26,6 +26,7 @@ public class Temp {
   private Long id_2;
   private String date;
   private String notice;
+  private boolean tempBoolen;
 
 
   public void setId(Long id) {

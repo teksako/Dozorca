@@ -22,8 +22,10 @@
   } );
 
 
-    </script>
 
+
+    </script>
+</head>
 <body>
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
@@ -53,22 +55,33 @@
             th:text="${phone.getEmployee()?.lastname}"></a></p>
     <b>Przypisany numer: </b>
     <p th:text="${phone.getPhoneNumber()?.number}"></p>
+
+    <div th:if="${phone.getPhoneNumber()==null || phone.getEmployee==null}">
+        <a th:href="@{/showUpdatePhoneForm(phoneId=${phone.id})}" class="btn btn-info">Update</a>
+
+    </div>
 </div>
-<div th:if="${phone.getPhoneNumber()!=null and phone.getEmployee!=null}">
-    <form th:action="@{/actionPhone/{id}(id=${phone.getId()})}" th:object="${temp}" method="post">
-        <div>
-            <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/>
-            <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton"
-                   placeholder="notice">
-            <!--  <input type="hidden" id="mobilePhoneID" th:field="*{id_1}" th:value="${phone.getId()}"/>
-            <a th:href="@{/getPhone/{id}(id=${phone.getId()})}" class="btn btn-info">Zdanie</a>
-             <a th:href="@{/releasePhone/{id}(id=${phone.getId()})}" class="btn btn-info">Wydanie</a>-->
-            <input type="submit" value="Wykonaj" name="saveButton" class="mySubmitButton">
+
+<form th:action="@{/actionPhone/{id}(id=${phone.getId()})}" th:object="${temp}" method="post">
+    <div th:if="${phone.getPhoneNumber()!=null and phone.getEmployee!=null}">
+   <p> <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/></p>
+    <p> <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton"
+           placeholder="notice" size="100"></p>
+
+
+        <div th:if="${phone.getHasUser()==true}">
+            <input type="submit" value="Zdanie" name="saveButton" class="btn btn-info">
         </div>
-    </form>
-</div>
-<div th:if="${phone.getPhoneNumber()==null || phone.getEmployee==null}">
-    <a th:href="@{/showUpdatePhoneForm(phoneId=${phone.getId()})}" class="btn btn-info">Update</a>
+        <div th:unless="${phone.getHasUser()==true}">
+            <input type="submit" value="Wydanie" name="saveButton" class="btn btn-info">
+            </hr>
+        </div>
+    </div>
+    <div>
+
+
+    </div>
+</form>
 
 </div>
 

@@ -39,14 +39,15 @@ public class ExportPDF {
 
     static UserService userService;
     static ConfigService configService;
+    static Temp temp;
 
     static ByteArrayOutputStream out = new ByteArrayOutputStream();
-    //static Document document=new Document();
-    static LocalDate today = LocalDate.now();
+    static LocalDate localdate;
+    //static String today = temp.getDate();
     //static LocalTime actualTime = LocalTime.now();
     static String uradzenie="Telefon";
     //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
-    //static String attention="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
+    static String attention;//="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
     //static String attention="Telefon wraz z ładowarką.";
 
 
@@ -54,7 +55,13 @@ public class ExportPDF {
 
     public static  ByteArrayInputStream protocol(MobilePhone mobilePhone, String username, Temp temp, String pdfName) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
-        DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+        attention=temp.getNotice();
+        if(temp.isTempBoolen()==true){
+           localdate=LocalDate.now();
+        } else if(temp.isTempBoolen()==false){
+            localdate= LocalDate.parse(temp.getDate());
+        }
 
 
         //PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+"-"+temp.getTempString()+".pdf");
@@ -69,7 +76,7 @@ public class ExportPDF {
         Text template = new Text("Urządzenie: \n"+"Producent: \n"+ "Model: \n"+"Nr seryjny: \n"+ "IMEI: \n"+"SIM: \n"+"Nr telefonu: ").setBold();
         Text template2 = new Text("Telefon \n"+ mobilePhone.getMark()+"\n"+mobilePhone.getModel()+"\n"+mobilePhone.getSerialNumber()+"\n"+mobilePhone.getIMEI()+"\n"+mobilePhone.getPhoneNumber().getSIMNumber()+"\n"+mobilePhone.getPhoneNumber().getNumber());
         Text attentionTemplate = new Text("Uwagi: ").setBold();
-        Text atetnioData = new Text(temp.getNotice());
+        Text atetnioData = new Text(attention);
         Text info = new Text(temp.getTempString3()).setFontColor(Color.RED).setUnderline();
         Text receiver= new Text(temp.getTempString1());
         Text spender=new Text(temp.getTempString2());
@@ -97,8 +104,11 @@ public class ExportPDF {
 
         paragraph1.add(template2);
         phoneData.add(template);
-        Paragraph date = new Paragraph("Opole, " + dtf1.format(LocalDate.parse(temp.getDate())));//.format(DateTimeFormatter
-              //  .ofLocalizedDate(FormatStyle.SHORT)));
+       Paragraph date = new Paragraph("Opole, " + localdate.format(DateTimeFormatter
+               .ofLocalizedDate(FormatStyle.SHORT)));
+     //   Paragraph date = new Paragraph("Opole, " + today);
+
+
 
 
 

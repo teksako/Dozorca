@@ -25,27 +25,15 @@ public class MobilePhoneHistoryService {
         return mobilePhoneHistoryRepo.findAllByIMEI(IMEI);
     }
 
-    //    public Boolean validatePdfName(String pdfName) {
-//        //String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
-//        for (MobilePhoneHistory mobilePhoneHistory : mobilePhoneHistoryRepo.findAll()) {
-//            if (mobilePhoneHistory.getProtocolName().equals(pdfName)) {
-//                System.out.println("taki kwit istnieje");
-//                return false;
-//            }
-//        }
-//        System.out.println("nie ma takiego dokumentu, został utworzony");
-//
-//     return true;
-//    }
     public String validatePdfName(LocalDate date) {
         String pdfName = date + "-" + tempService.randomNumber();
         for (MobilePhoneHistory mobilePhoneHistory : mobilePhoneHistoryRepo.findAll()) {
             if (mobilePhoneHistory.getProtocolName().equals(pdfName)) {
-                System.out.println("taki kwit istnieje " + pdfName);
+                //System.out.println("taki kwit istnieje " + pdfName);
                 return validatePdfName(date);
             }
         }
-        System.out.println("nie ma takiego dokumentu, został utworzony");
+        System.out.println("Dokument " + pdfName + " został utworzony oraz zapisany");
 
         return pdfName;
     }
