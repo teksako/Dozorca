@@ -49,13 +49,111 @@ public class HardwareController {
     private final ConfigService configService;
     Temp temp = new Temp();
 
+    //--------------------LAPTOPS----------------------------------------
+//    @ResponseBody
+//    @GetMapping({"/list-laptops"})
+//    public List<Laptop> getAllLaptops() {
+//        return laptopService.findAll();
+//    }
 
-    @ResponseBody
-    @GetMapping({"/showLaptops"})
-    public List<Laptop> getLaptops() {
-        return laptopService.findAll();
+    @GetMapping({"/addLaptopForm"})
+    public ModelAndView addLaptopForm() {
+        ModelAndView model = new ModelAndView("add-laptop-form");
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("officeKeyList", officeService.findAll());
+        model.addObject("laptop", new Laptop());
+        model.addObject("employeesList", employeeService.findAll());
+        return model;
     }
 
+    @GetMapping({"/list-laptops"})
+    public ModelAndView getAllLaptops() {
+        ModelAndView model = new ModelAndView("list-laptops");
+        model.addObject("temp", new Temp());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("laptopList", laptopService.findAll());
+        return model;
+    }
+
+    @GetMapping({"/showUpdateLaptopForm"})
+    public ModelAndView showUpdateLaptopForm(@RequestParam Long laptopId) {
+        ModelAndView model = new ModelAndView("add-laptop-form");
+        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("laptop", laptopService.getLaptopRepo().findById(laptopId).get());
+        return model;
+    }
+
+
+    @PostMapping({"/saveLaptop"})
+    public String savelaptop(@ModelAttribute("laptop") Laptop laptop) {
+        laptopService.save(laptop);
+        return "redirect:/list-laptops";
+    }
+
+
+    @GetMapping({"/deleteLaptop/{id}"})
+    public String deleteLaptop(@PathVariable(value = "id") long id) {
+        laptopService.delete(id);
+        getAllLaptops();
+        return "redirect:/list-laptops";
+    }
+
+
+
+
+    //----------------END LAPTOPS-----------------------------------------
+    //-------------------COMPUTER---------------------------------------------
+    @GetMapping({"/addComputerForm"})
+    public ModelAndView addComputerForm() {
+        ModelAndView model = new ModelAndView("add-computer-form");
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("officeKeyList", officeService.findAll());
+        model.addObject("computer", new Computer());
+        model.addObject("employeesList", employeeService.findAll());
+        return model;
+    }
+
+    @GetMapping({"/showUpdateComputerForm"})
+    public ModelAndView showUpdateComputerForm(@RequestParam Long computerId) {
+        ModelAndView model = new ModelAndView("add-computer-form");
+        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("computer", computerService.getComputerRepo().findById(computerId).get());
+        return model;
+    }
+
+
+    @PostMapping({"/saveComputer"})
+    public String savecomputer(@ModelAttribute("computer") Computer computer) {
+        computerService.save(computer);
+        return "redirect:/list-computers";
+    }
+
+    @GetMapping({"list-computers"})
+    public ModelAndView getAllComputers() {
+        ModelAndView model = new ModelAndView("list-computers");
+        model.addObject("temp", new Temp());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("computerList", computerService.findAll());
+        return model;
+    }
+
+    @GetMapping({"/deleteComputer/{id}"})
+    public String deleteComputer(@PathVariable(value = "id") long id) {
+        computerService.delete(id);
+        getAllComputers();
+        return "redirect:/list-phones";
+    }
+
+
+    @PostMapping({"/addComputer"})
+    public String saveComputer(@ModelAttribute("computer") Computer computer) {
+
+        computerService.save(computer);
+        return "/index";
+    }
+//-------------------END COMPUTER------------------------------------
 
     @GetMapping({"/showUserHardware"})
     public String getHardwares(Model model) {
@@ -416,56 +514,5 @@ public class HardwareController {
         return "/index";
     }
 
-    //-------------------COMPUTER---------------------------------------------
-    @GetMapping({"/addComputerForm"})
-    public ModelAndView addComputerForm() {
-        ModelAndView model = new ModelAndView("add-computer-form");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("officeKeyList", officeService.findAll());
-        model.addObject("computer", new Computer());
-        model.addObject("employeesList", employeeService.findAll());
-        return model;
-    }
-
-    @GetMapping({"/showUpdateComputerForm"})
-    public ModelAndView showUpdateComputerForm(@RequestParam Long computerId) {
-        ModelAndView model = new ModelAndView("add-computer-form");
-        model.addObject("employeesList", employeeService.findAll());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("computer", computerService.getComputerRepo().findById(computerId).get());
-        return model;
-    }
-
-
-    @PostMapping({"/saveComputer"})
-    public String savecomputer(@ModelAttribute("computer") Computer computer) {
-        computerService.save(computer);
-        return "redirect:/list-computers";
-    }
-
-    @GetMapping({"list-computers"})
-    public ModelAndView getAllComputers() {
-        ModelAndView model = new ModelAndView("list-computers");
-        model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("computerList", computerService.findAll());
-        return model;
-    }
-
-    @GetMapping({"/deleteComputer/{id}"})
-    public String deleteComputer(@PathVariable(value = "id") long id) {
-        computerService.delete(id);
-        getAllComputers();
-        return "redirect:/list-phones";
-    }
-
-
-    @PostMapping({"/addComputer"})
-    public String saveComputer(@ModelAttribute("computer") Computer computer) {
-
-        computerService.save(computer);
-        return "/index";
-    }
-//-------------------END COMPUTER------------------------------------
 
 }

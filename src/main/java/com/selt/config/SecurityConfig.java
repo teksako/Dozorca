@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/index").authenticated()
                 .antMatchers("/changePassword").authenticated()
                 .antMatchers("/resetPassword").hasAuthority("ADMIN")
-                .antMatchers("/showLaptops").authenticated()
+                .antMatchers("/list-laptops").authenticated()
                 .antMatchers("/addEmployee").authenticated()
                 .antMatchers("/addLaptop").hasAuthority("ADMIN")
                 .antMatchers("/addWindowsLicense").hasAuthority("ADMIN")

@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="UTF-8">
     <title>SELT</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
 </head>
+
 <body>
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
+<div class="container">
 <form th:action="@{/addLaptop}" th:object="${laptop}" method="post">
     <p class="error" th:text="${commonErrro}"></p>
 

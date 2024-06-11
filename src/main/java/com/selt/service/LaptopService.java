@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -20,8 +21,9 @@ public class LaptopService {
         laptopRepo.save(laptop);
     }
 
-    public void delete(Laptop laptop) {
-        laptopRepo.delete(laptop);
+    public void delete(Long id) {
+        Optional<Laptop> laptop = laptopRepo.findById(id);
+        laptopRepo.delete(laptop.get());
     }
 
     public List<Laptop> findAll() {
