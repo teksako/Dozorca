@@ -70,6 +70,7 @@
             });
         });
 
+
     </script>
 </head>
 <body>
@@ -77,117 +78,120 @@
 <div th:replace="navbar :: navbar"></div>
 
 <div class="container">
-<form th:action="@{/Raport}" th:object="${temp}" method="post">
+    <form th:action="@{/Raport}" th:object="${temp}" method="post">
 
-    <ul>
-        <li>
-            <input id="features" name="features" type="radio" th:field="*{radio}" th:value="${0}"
-                   onclick="myFunction()"/>
-
-            <label for="features">Pokaz poprzedni miesiąc</label>
-        </li>
-        <li>
-            <input id="features1" name="features" type="radio" th:field="*{radio}" th:value="${1}"
-                   onclick="myFunction()"/>
-
-            <label for="features1">Pokaz aktualny miesiąc</label>
-        </li>
-        <li>
-            <input id="features2" name="features" type="radio" th:field="*{radio}" th:value="${2}"
-                   onclick="myFunction()"/>
-
-            <label for="features2">Pokaż wszystko</label>
-        </li>
-
-        <li>
-            <input id="search" name="features" type="radio" th:field="*{radio}" th:value="${4}"
-                   onclick="myFunction() "/>
-
-            <label for="search">Wyszukaj</label>
-        </li>
-    </ul>
-
-
-    <div id="display" style="display:none">
         <ul>
+            <li>
+                <input id="features" name="features" type="radio" th:field="*{radio}" th:value="${0}"
+                       onclick="myFunction()"/>
 
-            <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
-                   onclick="myFunction2()"/>
-            <label for="searchDate">Po dacie</label>
+                <label for="features">Pokaz poprzedni miesiąc</label>
+            </li>
+            <li>
+                <input id="features1" name="features" type="radio" th:field="*{radio}" th:value="${1}"
+                       onclick="myFunction()"/>
 
-            <input id="searchPrinter" name="features" type="radio" th:field="*{radio}" th:value="${5}"
-                   onclick="myFunction2()"/>
-            <label for="searchPrinter">Po drukarce</label>
+                <label for="features1">Pokaz aktualny miesiąc</label>
+            </li>
+            <li>
+                <input id="features2" name="features" type="radio" th:field="*{radio}" th:value="${2}"
+                       onclick="myFunction()"/>
 
-            <input id="searchToner" name="features" type="radio" th:field="*{radio}" th:value="${6}"
-                   onclick="myFunction2()"/>
-            <label for="searchToner">Po tonerze</label>
+                <label for="features2">Pokaż wszystko</label>
+            </li>
 
-            <input id="searchDepartment" name="features" type="radio" th:field="*{radio}" th:value="${7}"
-                   onclick="myFunction2()"/>
-            <label for="searchDepartment">Po dziale</label>
+            <li>
+                <input id="search" name="features" type="radio" th:field="*{radio}" th:value="${4}"
+                       onclick="myFunction() "/>
 
-
+                <label for="search">Wyszukaj</label>
+            </li>
         </ul>
-    </div>
-    <div id="displayDate" style="display:none">
-        <label for="from">Dzień rozpoczęcia:</label>
-        <input type="text" id="from" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
-
-        <label for="from">Dzień zakończenia:</label>
-        <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
-
-    </div>
-
-    <div id="displayOtherSearch" style="display:none">
-        <label for="temp">Wpisz frazę:</label>
-        <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
-    </div>
-    <input type="submit" value="Wyświetl" name="saveButton"  class="btn btn-primary">
-    <a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
-</form>
 
 
+        <div id="display" style="display:none">
+            <ul>
 
-<a th:text="${alert}"></a>
-<table class="table table-bordered table-striped" >
+                <input id="searchDate" name="features" type="radio" th:field="*{radio}" th:value="${3}"
+                       onclick="myFunction2()"/>
+                <label for="searchDate">Po dacie</label>
 
-    <thead>
-    <tr style="text-align: center; ">
-        <div sec:authorize="isAuthenticated()">
-        <th>Toner</th>
-        <th>Ilość</th>
-        <th>Drukarka</th>
-        <th>Nr. inwentarzowy</th>
-        <th>Dział</th>
-        <th>MPK</th>
-        <th>Data</th>
+                <input id="searchPrinter" name="features" type="radio" th:field="*{radio}" th:value="${5}"
+                       onclick="myFunction2()"/>
+                <label for="searchPrinter">Po drukarce</label>
+
+                <input id="searchToner" name="features" type="radio" th:field="*{radio}" th:value="${6}"
+                       onclick="myFunction2()"/>
+                <label for="searchToner">Po tonerze</label>
+
+                <input id="searchDepartment" name="features" type="radio" th:field="*{radio}" th:value="${7}"
+                       onclick="myFunction2()"/>
+                <label for="searchDepartment">Po dziale</label>
+
+
+            </ul>
         </div>
-        <div sec:authorize="hasAuthority('ADMIN')">
-        <th>Wydający</th>
+        <div id="displayDate" style="display:none">
+            <label for="from">Dzień rozpoczęcia:</label>
+            <input type="text" id="from" class="myTextButton" th:field="*{start}" placeholder="startDate"/>
+
+            <label for="from">Dzień zakończenia:</label>
+            <input type="text" id="to" class="myTextButton" th:field="*{end}" placeholder="endDate"/>
+
         </div>
-    </tr>
-    </thead>
-    <tbody>
+
+        <div id="displayOtherSearch" style="display:none">
+            <label for="temp">Wpisz frazę:</label>
+            <input type="text" id="temp" class="myTextButton" th:field="*{tempString}"/>
+        </div>
+        <input type="submit" value="Wyświetl" name="saveButton" class="btn btn-primary">
+        <a th:href="@{/exportpdf}" class="btn btn-primary">Generuj PDF</a>
+    </form>
+
+
+    <a th:text="${alert}"></a>
+    <p>
+        <a th:text="${tonerCount}"></a>
+    </p>
+
+    <table class="table table-bordered table-striped">
+
+        <thead>
+        <tr style="text-align: center; ">
+            <div sec:authorize="isAuthenticated()">
+                <th>Toner</th>
+                <th>Ilość</th>
+                <th>Drukarka</th>
+                <th>Nr. inwentarzowy</th>
+                <th>Dział</th>
+                <th>MPK</th>
+                <th>Data</th>
+            </div>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <th>Wydający</th>
+            </div>
+        </tr>
+        </thead>
+        <tbody>
         <tr th:each="key : ${raport}" style="text-align: center;">
-        <div sec:authorize="isAuthenticated()">
-            <td th:text="${key.toner}"></td>
-            <td th:text="${key.count}"></td>
-            <td th:text="${key.printer}"></td>
-            <td th:text="${key.inventoryNumber}"></td>
-            <td th:text="${key.department}"></td>
-            <td th:text="${key.MPK}"></td>
-            <td th:text="${key.date}"></td>
-        </div>
+            <div sec:authorize="isAuthenticated()">
+                <td th:text="${key.toner}"></td>
+                <td th:text="${key.count}"></td>
+                <td th:text="${key.printer}"></td>
+                <td th:text="${key.inventoryNumber}"></td>
+                <td th:text="${key.department}"></td>
+                <td th:text="${key.MPK}"></td>
+                <td th:text="${key.date}"></td>
+            </div>
 
-        <div sec:authorize="hasAuthority('ADMIN')">
-            <td th:text="${key.user}"></td>
-        </div>
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <td th:text="${key.user}"></td>
+            </div>
 
 
-    </tr>
-    </tbody>
-</table>
+        </tr>
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

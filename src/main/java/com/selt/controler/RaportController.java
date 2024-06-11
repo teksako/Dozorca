@@ -58,45 +58,53 @@ public class RaportController {
 
         List<Raport> raport = null;
         String mattern = '%' + temp.getTempString() + '%';
-        String alert="Znaleziono wyniki!";
+        String alert = "Znaleziono wyniki!";
+        long suma = 0l;
 
-        try{
+        try {
 
-        if (temp.getRadio() == 0) {
-            raport = raportService.findAllByPreviousMonth();
-        }
-        if (temp.getRadio() == 2) {
+            if (temp.getRadio() == 0) {
+                raport = raportService.findAllByPreviousMonth();
+
+            }
+            if (temp.getRadio() == 2) {
+                raport = raportService.findAll();
+            }
+            if (temp.getRadio() == 1) {
+                raport = raportService.findAllByActualMonth();
+            }
+
+            if (temp.getRadio() == 3) {
+                raport = raportService.findAllByDateBetween(LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
+            }
+            if (temp.getRadio() == 4) {
+                raport = raportService.search(mattern);
+            }
+            if (temp.getRadio() == 5) {
+                raport = raportService.search(mattern);
+            }
+            if (temp.getRadio() == 6) {
+                raport = raportService.findAllByTonerIsLike(mattern);
+            }
+            if (temp.getRadio() == 7) {
+                raport = raportService.findAllByDepartmentIsLike(mattern);
+            }
+        } catch (NullPointerException exception) {
             raport = raportService.findAll();
-        }
-        if (temp.getRadio() == 1) {
-            raport = raportService.findAllByActualMonth();
+            alert = "Nie znaleziono pasujących wyników, zostały wyświetlone wszystkie dane!";
         }
 
-        if (temp.getRadio() == 3) {
-            raport = raportService.findAllByDateBetween(LocalDate.parse(temp.getStart()), LocalDate.parse(temp.getEnd()));
-        }
-        if (temp.getRadio() == 4) {
-            raport = raportService.search(mattern);
-        }
-        if (temp.getRadio() == 5) {
-            raport = raportService.search(mattern);
-        }
-        if (temp.getRadio() == 6) {
-            raport = raportService.findAllByTonerIsLike(mattern);
-        }
-        if (temp.getRadio() == 7) {
-            raport = raportService.findAllByDepartmentIsLike(mattern);
-        }
-        }
-        catch (NullPointerException exception){
-            raport = raportService.findAll();
-            alert="Nie znaleziono pasujących wyników, zostały wyświetlone wszystkie dane!";
+        for (Raport raportlist : raport) {
+            suma = suma + raportlist.getCount();
+
         }
 
         model.addAttribute("raport", raport);
         model.addAttribute("alert", alert);
-        getRaport(model,alert);
-        raportList=raport;
+        model.addAttribute("tonerCount", "Wydano " + suma + " tonerów.");
+        getRaport(model, alert);
+        raportList = raport;
+
         return "/Raport";
 
     }
