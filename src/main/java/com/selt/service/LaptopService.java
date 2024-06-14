@@ -35,4 +35,7 @@ public class LaptopService {
     }
 
 
+    public Optional<Laptop> findById(long id) {
+        return laptopRepo.findById(id);
+    }
 }

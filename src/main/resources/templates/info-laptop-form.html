@@ -1,10 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SELT</title>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
 </head>
 <body>
+<!--HEADER-->
+<div th:replace="navbar :: navbar"></div>
+<br>
+<br>
+<br><br>
+<div class="form-control col-4 mb-4">
+    <b>Użytkownik: </b>
+    <p><a th:text="${laptop.getEmployee()?.firstname}"></a> <a
+            th:text="${laptop.getEmployee()?.lastname}"></a></p>
+    <b>Producent: </b>
+    <p th:text="${laptop.getManufacturer()}"></p>
+    <b>Model: </b>
+    <p th:text="${laptop.getModel()}"></p>
+    <b>Numer seryjny: </b>
+    <p th:text="${laptop.getSerialNumber()}"></p>
+
+    <div th:if="${laptop.getEmployee==null}">
+        <a th:href="@{/showUpdateLaptopForm(laptopId=${laptop.id})}" class="btn btn-info">Update</a>
+
+    </div>
+</div>
 
 </body>
 </html>

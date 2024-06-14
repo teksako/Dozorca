@@ -47,6 +47,7 @@ public class HardwareController {
     private final MobilePhoneHistoryService mobilePhoneHistoryService;
     private final TempService tempService;
     private final ConfigService configService;
+
     Temp temp = new Temp();
 
     //--------------------LAPTOPS----------------------------------------
@@ -86,7 +87,7 @@ public class HardwareController {
 
 
     @PostMapping({"/saveLaptop"})
-    public String savelaptop(@ModelAttribute("laptop") Laptop laptop) {
+    public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
         laptopService.save(laptop);
         return "redirect:/list-laptops";
     }
@@ -104,12 +105,7 @@ public class HardwareController {
         ModelAndView model = new ModelAndView("info-laptop-form");
         Temp temp = new Temp();
         model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
-        model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
-        model.addObject("counter", counterService.getActualCounter(id));
-        model.addObject("printerId", id);
-        model.addObject("temp", temp);
-        model.addObject("tonerList", printerService.findAlltoner(id));
+        model.addObject("laptop", laptopService.findById(id).get());
         model.addObject("allert", allert);
 
         return model;
@@ -509,25 +505,7 @@ public class HardwareController {
 
 //-------------------------END MOBILEPHONE---------------------------------
 
-    @GetMapping({"/addLaptop"})
-    public String addLaptopPage(Model model) {
-        List<Windows> windowsKeys = windowsService.findAll();
-        List<Office> officeKeys = officeService.findAll();
-        List<Employee> employees = employeeService.findAll();
-        model.addAttribute("laptop", new Laptop());
-        model.addAttribute("owners", employees);
-        model.addAttribute("officeKeys", officeKeys);
-        model.addAttribute("Keys", windowsKeys);
-        return "/addLaptop";
-    }
 
-
-    @PostMapping({"/addLaptop"})
-    public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
-
-        laptopService.save(laptop);
-        return "/index";
-    }
 
 
 }
