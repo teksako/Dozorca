@@ -99,6 +99,21 @@ public class HardwareController {
         return "redirect:/list-laptops";
     }
 
+    @GetMapping({"/showLaptopInfoForm"})
+    public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
+        ModelAndView model = new ModelAndView("info-laptop-form");
+        Temp temp = new Temp();
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
+        model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
+        model.addObject("counter", counterService.getActualCounter(id));
+        model.addObject("printerId", id);
+        model.addObject("temp", temp);
+        model.addObject("tonerList", printerService.findAlltoner(id));
+        model.addObject("allert", allert);
+
+        return model;
+    }
 
 
 

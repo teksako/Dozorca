@@ -16,6 +16,8 @@ public class Laptop {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "LAPTOP_ID")
     private Long id;
+    @Column
+    private String inventoryNumber;
 
     @Column
     private String manufacturer;
@@ -27,38 +29,52 @@ public class Laptop {
     private String serialNumber;
 
     @Column
-    private String hostname;
-
-    @Column
     private String MACAdress;
 
     @Column
     private String IPAdress;
 
+    @Column
+    private String MACAdressWifi;
+
+    @Column
+    private String IPAdressWifi;
+
+    @Column
+    private String hostname;
+
+    @Column
+    private String bitlocker;
+
+    @Column
+    private String discId;
+
+    @Column
+    private String recoveryKey;
+
+    @Column
+    private Boolean demage;
+
 
     @Column
     private String note;
 
-    @OneToOne
-    @JoinTable(
-            name = "laptop_license",
-            joinColumns = {@JoinColumn(name = "LAPTOP_ID")},
-            inverseJoinColumns = {@JoinColumn(name = "WINDOWS_ID")}
-    )
-    private Windows windowsKey;
+    @Column
+    private String windowsKey;
+
 
     @OneToOne
     @JoinTable(
-            name="laptop_office_license",
-            joinColumns = {@JoinColumn(name="LAPTOP_ID")},
-            inverseJoinColumns ={@JoinColumn(name="OFFICE_ID")}
+            name = "laptop_office_license",
+            joinColumns = {@JoinColumn(name = "LAPTOP_ID")},
+            inverseJoinColumns = {@JoinColumn(name = "OFFICE_ID")}
     )
     private Office officeKey;
 
     @OneToOne
     @JoinTable(
-            name="laptop_owner",
-            joinColumns = {@JoinColumn(name ="LAPTOP_ID")},
+            name = "laptop_owner",
+            joinColumns = {@JoinColumn(name = "LAPTOP_ID")},
             inverseJoinColumns = {@JoinColumn(name = "EMPLOYEE_ID")}
     )
     private Employee employee;
