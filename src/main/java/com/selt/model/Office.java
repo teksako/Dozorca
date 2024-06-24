@@ -21,4 +21,14 @@ public class Office {
 
     @Column
     private String officeKey;
+
+    @Column
+    private String officeAccount;
+
+    @Column
+    private Boolean hasBeenUse;
+
+
+
+
 }

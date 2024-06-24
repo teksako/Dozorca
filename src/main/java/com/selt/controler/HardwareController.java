@@ -100,6 +100,16 @@ public class HardwareController {
         return "redirect:/list-laptops";
     }
 
+    @GetMapping({"/showLaptopUpdateForm"})
+    public ModelAndView showLaptopUpdateForm(@RequestParam Long laptopId) {
+        ModelAndView model = new ModelAndView("add-laptop-form");
+        Laptop laptop = laptopService.findById(laptopId).get();
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("laptop", laptop);
+
+        return model;
+    }
+
     @GetMapping({"/showLaptopInfoForm"})
     public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
         ModelAndView model = new ModelAndView("info-laptop-form");
