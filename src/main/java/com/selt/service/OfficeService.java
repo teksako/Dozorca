@@ -6,6 +6,7 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -23,7 +24,18 @@ public class OfficeService {
 
     }
 
+    public List<Office> findAllByHasBeenUse(Boolean use) {
+        return officeRepo.findAllByHasBeenUse(use);
+
+    }
+
+
+    public Optional<Office> findById(long id){
+        return officeRepo.findById(id);
+    }
     public void delete(Office office) {
         officeRepo.delete(office);
     }
+
+
 }

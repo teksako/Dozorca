@@ -8,6 +8,9 @@ import java.util.List;
 
 @Repository
 public interface OfficeRepo extends JpaRepository<Office, Long> {
+    List<Office> findAll();
+    List<Office> findAllByHasBeenUse(Boolean use);
+
 
 
 }

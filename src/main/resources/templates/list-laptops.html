@@ -53,7 +53,7 @@
                 <td th:text="${key.model}"></td>
                 <td th:text="${key.serialNumber}"></td>
                 <td th:text="${key.windowsKey}"></td>
-                <td th:text="${key.officeKey}"></td>
+                <td th:text="${key.getOfficeKey()?.officeKey}"></td>
                 <td th:text="${key.MACAdress}"></td>
                 <td th:text="${key.IPAdress}"></td>
                 <td th:text="${key.hostname}"></td>

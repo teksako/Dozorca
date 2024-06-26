@@ -23,6 +23,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
+import static java.lang.Boolean.TRUE;
+
 @Controller
 
 @RequiredArgsConstructor
@@ -82,12 +84,20 @@ public class HardwareController {
         model.addObject("employeesList", employeeService.findAll());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("laptop", laptopService.getLaptopRepo().findById(laptopId).get());
+        model.addObject("officeKeys", officeService.findAllByHasBeenUse(false));
         return model;
     }
 
 
     @PostMapping({"/saveLaptop"})
     public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
+
+        Office office = laptop.getOfficeKey();
+        if(office.getHasBeenUse().equals(false)){
+            office.setHasBeenUse(true);
+            officeService.save(office);
+        }
+
         laptopService.save(laptop);
         return "redirect:/list-laptops";
     }
@@ -100,15 +110,15 @@ public class HardwareController {
         return "redirect:/list-laptops";
     }
 
-    @GetMapping({"/showLaptopUpdateForm"})
-    public ModelAndView showLaptopUpdateForm(@RequestParam Long laptopId) {
-        ModelAndView model = new ModelAndView("add-laptop-form");
-        Laptop laptop = laptopService.findById(laptopId).get();
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("laptop", laptop);
-
-        return model;
-    }
+//    @GetMapping({"/showLaptopUpdateForm"})
+//    public ModelAndView showLaptopUpdateForm(@RequestParam Long laptopId) {
+//        ModelAndView model = new ModelAndView("add-laptop-form");
+//        Laptop laptop = laptopService.findById(laptopId).get();
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("laptop", laptop);
+//
+//        return model;
+//    }
 
     @GetMapping({"/showLaptopInfoForm"})
     public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
