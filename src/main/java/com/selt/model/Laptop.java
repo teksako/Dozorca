@@ -62,8 +62,10 @@ public class Laptop {
     @Column
     private String windowsKey;
 
-
+    @Column
+    private Boolean hasUser;
     @OneToOne
+
     @JoinTable(
             name = "laptop_office_license",
             joinColumns = {@JoinColumn(name = "LAPTOP_ID")},

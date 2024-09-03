@@ -35,8 +35,10 @@
                 <th>Nr seryjny</th>
                 <th>System</th>
                 <th>Office</th>
-                <th>Adres Mac</th>
+                <th>Adres MAC</th>
                 <th>Adres IP</th>
+                <th>Adres MAC Wifi</th>
+                <th>Adres IP Wifi</th>
                 <th>Hostname</th>
 
 
@@ -56,15 +58,31 @@
                 <td th:text="${key.getOfficeKey()?.officeKey}"></td>
                 <td th:text="${key.MACAdress}"></td>
                 <td th:text="${key.IPAdress}"></td>
+                <td th:text="${key.MACAdressWifi}"></td>
+                <td th:text="${key.IPAdressWifi}"></td>
                 <td th:text="${key.hostname}"></td>
-                <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
-                    <td><a th:href="@{/deleteLaptop/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
-                    <td>
-                        <a th:href="@{/showUpdateLaptopForm(laptopId=${key.id})}" class="btn btn-success">Update</a></td>
-                    <td>
-                        <a th:href="@{/showLaptopInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
-                    </td>
-                </div>
+
+                <td><a th:href="@{/deleteLaptop/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
+                <td>
+                    <div th:if="${key.getEmployee!=null}">
+                        <div th:if="${key.getHasUser()==true}">
+                            <a th:href="@{/getLaptop/{id}(id=${key.id})}" class="btn btn-info">Zdanie</a>
+                        </div>
+                        <div th:unless="${key.getHasUser()==true}">
+                            <a th:href="@{/releaseLaptop/{id}(id=${key.id})}" class="btn btn-info">Wydanie</a>
+                            </hr>
+                        </div>
+                    </div>
+                    <div th:if="${key.getEmployee==null}">
+                        <a th:href="@{/showUpdateLaptopForm(laptopId=${key.id})}" class="btn btn-success">Update</a>
+
+                    </div>
+                </td>
+
+                <td>
+                    <a th:href="@{/showLaptopInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
+                </td>
+
             </tr>
             </tbody>
         </table>

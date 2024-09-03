@@ -1,4 +1,5 @@
 package com.selt.service;
+
 import com.itextpdf.io.font.FontConstants;
 
 import com.itextpdf.io.image.ImageData;
@@ -11,20 +12,25 @@ import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
+import com.selt.model.Laptop;
 import com.selt.model.MobilePhone;
 import com.selt.model.Raport;
 import com.selt.model.Temp;
 import lombok.Data;
 import com.itextpdf.kernel.pdf.PdfPage;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+
 import com.itextpdf.layout.element.Paragraph;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.List;
+
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
@@ -43,54 +49,44 @@ public class ExportPDF {
 
     static ByteArrayOutputStream out = new ByteArrayOutputStream();
     static LocalDate localdate;
-    //static String today = temp.getDate();
-    //static LocalTime actualTime = LocalTime.now();
-    static String uradzenie="Telefon";
-    //static String attention="Telefon fabrycznie nowy w oryginalnym opakowaniu wraz ładowarką. Wyżej wymieniona karta SIM została przełożona z telefonu Samsung Galaxy J5 o nr: IMEI: 356388087255872.";
-    static String attention;//="Telefon wraz z ładowarką oraz oryginalnym opakowaniem.";
-    //static String attention="Telefon wraz z ładowarką.";
+    static String attention;
 
 
-
-
-    public static  ByteArrayInputStream protocol(MobilePhone mobilePhone, String username, Temp temp, String pdfName) throws IOException, DocumentException {
+    public static ByteArrayInputStream protocol(MobilePhone mobilePhone, String username, Temp temp, String pdfName) throws IOException, DocumentException {
         PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
 
-        attention=temp.getNotice();
-        if(temp.isTempBoolen()==true){
-           localdate=LocalDate.now();
-        } else if(temp.isTempBoolen()==false){
-            localdate= LocalDate.parse(temp.getDate());
+        attention = temp.getNotice();
+        if (temp.isTempBoolen() == true) {
+            localdate = LocalDate.now();
+        } else if (temp.isTempBoolen() == false) {
+            localdate = LocalDate.parse(temp.getDate());
         }
 
-
-        //PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"-"+mobilePhone.getPhoneNumber().getNumber()+"-"+temp.getTempString()+".pdf");
-        //PdfWriter writer = new PdfWriter(configService.findById().get().getFolderPath()+"/"+pdfName+".pdf");
-         PdfWriter writer = new PdfWriter("src/main/resources/Protocol/"+ pdfName+".pdf");
+        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/" + pdfName + ".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         String footerPaath = "src/main/resources/images/footer.jpg";
-        String headerPath= "src/main/resources/images/header.jpg";
+        String headerPath = "src/main/resources/images/header.jpg";
 
         Text docTitle = new Text(temp.getTempString()).setBold();
-        Text template = new Text("Urządzenie: \n"+"Producent: \n"+ "Model: \n"+"Nr seryjny: \n"+ "IMEI: \n"+"SIM: \n"+"Nr telefonu: ").setBold();
-        Text template2 = new Text("Telefon \n"+ mobilePhone.getMark()+"\n"+mobilePhone.getModel()+"\n"+mobilePhone.getSerialNumber()+"\n"+mobilePhone.getIMEI()+"\n"+mobilePhone.getPhoneNumber().getSIMNumber()+"\n"+mobilePhone.getPhoneNumber().getNumber());
+        Text template = new Text("Urządzenie: \n" + "Producent: \n" + "Model: \n" + "Nr seryjny: \n" + "IMEI: \n" + "SIM: \n" + "Nr telefonu: ").setBold();
+        Text template2 = new Text("Telefon \n" + mobilePhone.getMark() + "\n" + mobilePhone.getModel() + "\n" + mobilePhone.getSerialNumber() + "\n" + mobilePhone.getIMEI() + "\n" + mobilePhone.getPhoneNumber().getSIMNumber() + "\n" + mobilePhone.getPhoneNumber().getNumber());
         Text attentionTemplate = new Text("Uwagi: ").setBold();
         Text atetnioData = new Text(attention);
         Text info = new Text(temp.getTempString3()).setFontColor(Color.RED).setUnderline();
-        Text receiver= new Text(temp.getTempString1());
-        Text spender=new Text(temp.getTempString2());
-        Text rPerson= new Text(mobilePhone.getEmployee().getFirstname()+" " +mobilePhone.getEmployee().getLastname()+"\n");
-        Text sPerson = new Text(username+"\n");
+        Text receiver = new Text(temp.getTempString1());
+        Text spender = new Text(temp.getTempString2());
+        Text rPerson = new Text(mobilePhone.getEmployee().getFirstname() + " " + mobilePhone.getEmployee().getLastname() + "\n");
+        Text sPerson = new Text(username + "\n");
 
         PdfPage pdfPage = pdf.addNewPage();
 
         Paragraph paragraph = new Paragraph();
         Paragraph paragraph2 = new Paragraph();
         Paragraph paragraph1 = new Paragraph();
-        Paragraph phoneData=new Paragraph();
+        Paragraph phoneData = new Paragraph();
         Paragraph attentionParagraph = new Paragraph(attentionTemplate);
-        Paragraph attentioDataParagraph=new Paragraph(atetnioData);
+        Paragraph attentioDataParagraph = new Paragraph(atetnioData);
         Paragraph infoParagraph = new Paragraph(info);
         Paragraph receiverParagraph = new Paragraph(rPerson.setBold().getText() + receiver.getText());
         Paragraph spenderParagraph = new Paragraph(sPerson.setBold().getText() + spender.getText());
@@ -104,52 +100,49 @@ public class ExportPDF {
 
         paragraph1.add(template2);
         phoneData.add(template);
-       Paragraph date = new Paragraph("Opole, " + localdate.format(DateTimeFormatter
-               .ofLocalizedDate(FormatStyle.SHORT)));
-     //   Paragraph date = new Paragraph("Opole, " + today);
-
-
-
+        Paragraph date = new Paragraph("Opole, " + localdate.format(DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.SHORT)));
+        //   Paragraph date = new Paragraph("Opole, " + today);
 
 
         docTitle.setFont(helvetica);
-        paragraph2.setFixedPosition(0,640,600);
+        paragraph2.setFixedPosition(0, 640, 600);
         paragraph2.setTextAlignment(TextAlignment.CENTER);
 
 
-        header.scaleToFit(555,100);
-        header.setFixedPosition(15,758);
-        footer.scaleToFit(592,100);
+        header.scaleToFit(555, 100);
+        header.setFixedPosition(15, 758);
+        footer.scaleToFit(592, 100);
         footer.setFixedPosition(3, 0);
 
 
         phoneData.setFont(helvetica);
-        phoneData.setFixedPosition(50,450,100);
+        phoneData.setFixedPosition(50, 450, 100);
         phoneData.setTextAlignment(TextAlignment.RIGHT);
 
         paragraph1.setFont(helvetica);
-        paragraph1.setFixedPosition(155,450,150);
+        paragraph1.setFixedPosition(155, 450, 150);
         paragraph1.setTextAlignment(TextAlignment.LEFT);
 
         attentionParagraph.setFont(helvetica);
-        attentionParagraph.setFixedPosition(50,370,100);
+        attentionParagraph.setFixedPosition(50, 370, 100);
         attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
 
         attentioDataParagraph.setFont(helvetica);
-        attentioDataParagraph.setFixedPosition(155,370,365);
+        attentioDataParagraph.setFixedPosition(155, 370, 365);
         attentioDataParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
 
 
         infoParagraph.setFont(helvetica);
-        infoParagraph.setFixedPosition(50, 300,470);
+        infoParagraph.setFixedPosition(50, 300, 470);
         infoParagraph.setTextAlignment(TextAlignment.JUSTIFIED).setBold();
 
         receiverParagraph.setFont(helvetica);
-        receiverParagraph.setFixedPosition(400,200, 150);
+        receiverParagraph.setFixedPosition(400, 200, 150);
         receiverParagraph.setTextAlignment(TextAlignment.CENTER);
 
         spenderParagraph.setFont(helvetica);
-        spenderParagraph.setFixedPosition(50,200,150);
+        spenderParagraph.setFixedPosition(50, 200, 150);
         spenderParagraph.setTextAlignment(TextAlignment.CENTER);
 
         docTitle.setFontSize(17);
@@ -157,9 +150,9 @@ public class ExportPDF {
         docTitle.setFont(helvetica);
         paragraph2.add(docTitle);
 
-        date.setFixedPosition(456,730,100);
+        date.setFixedPosition(456, 730, 100);
         date.setFontSize(11);
-        paragraph.setFixedPosition(20,10,500);
+        paragraph.setFixedPosition(20, 10, 500);
         paragraph.setFontSize(7);
 
         document.add(receiverParagraph);
@@ -178,7 +171,131 @@ public class ExportPDF {
         // Closing the document
         document.close();
 
-      //  System.out.println("Dokument utworzony poprawnie!");
+        //  System.out.println("Dokument utworzony poprawnie!");
+
+        return new ByteArrayInputStream(out.toByteArray());
+    }
+
+    public static ByteArrayInputStream laptopProtocol(Laptop laptop, String username, Temp temp, String pdfName) throws IOException, DocumentException {
+        PdfFont helvetica = PdfFontFactory.createFont(FontConstants.HELVETICA, BaseFont.CP1250, BaseFont.EMBEDDED);
+
+        attention = temp.getNotice();
+        if (temp.isTempBoolen() == true) {
+            localdate = LocalDate.now();
+        } else if (temp.isTempBoolen() == false) {
+            localdate = LocalDate.parse(temp.getDate());
+        }
+
+        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/Laptop/" + pdfName + ".pdf");
+        PdfDocument pdf = new PdfDocument(writer);
+        Document document = new Document(pdf);
+        String footerPaath = "src/main/resources/images/footer.jpg";
+        String headerPath = "src/main/resources/images/header.jpg";
+
+        Text docTitle = new Text(temp.getTempString()).setBold();
+        Text template = new Text("Urządzenie: \n" + "Producent: \n" + "Model: \n" + "Nr seryjny: \n" + "Nr inw.: ").setBold();//\n" + "SIM: \n" + "Nr telefonu: ").setBold();
+        Text template2 = new Text("Laptop \n" + laptop.getManufacturer() + "\n" + laptop.getModel() + "\n" + laptop.getSerialNumber() + "\n" + laptop.getInventoryNumber());// + "\n" + mobilePhone.getPhoneNumber().getSIMNumber() + "\n" + mobilePhone.getPhoneNumber().getNumber());
+        Text attentionTemplate = new Text("Uwagi: ").setBold();
+        Text atetnioData = new Text(attention);
+        Text info = new Text(temp.getTempString3()).setFontColor(Color.RED).setUnderline();
+        Text receiver = new Text(temp.getTempString1());
+        Text spender = new Text(temp.getTempString2());
+        Text rPerson = new Text(laptop.getEmployee().getFirstname() + " " + laptop.getEmployee().getLastname() + "\n");
+        Text sPerson = new Text(username + "\n");
+
+        PdfPage pdfPage = pdf.addNewPage();
+
+        Paragraph paragraph = new Paragraph();
+        Paragraph paragraph2 = new Paragraph();
+        Paragraph paragraph1 = new Paragraph();
+        Paragraph laptopData = new Paragraph();
+        Paragraph attentionParagraph = new Paragraph(attentionTemplate);
+        Paragraph attentioDataParagraph = new Paragraph(atetnioData);
+        Paragraph infoParagraph = new Paragraph(info);
+        Paragraph receiverParagraph = new Paragraph(rPerson.setBold().getText() + receiver.getText());
+        Paragraph spenderParagraph = new Paragraph(sPerson.setBold().getText() + spender.getText());
+
+
+        ImageData data = ImageDataFactory.create(footerPaath);
+        ImageData data2 = ImageDataFactory.create(headerPath);
+
+        Image header = new Image(data2);
+        Image footer = new Image(data);
+
+        paragraph1.add(template2);
+        laptopData.add(template);
+        Paragraph date = new Paragraph("Opole, " + localdate.format(DateTimeFormatter
+                .ofLocalizedDate(FormatStyle.SHORT)));
+        //   Paragraph date = new Paragraph("Opole, " + today);
+
+
+        docTitle.setFont(helvetica);
+        paragraph2.setFixedPosition(0, 640, 600);
+        paragraph2.setTextAlignment(TextAlignment.CENTER);
+
+
+        header.scaleToFit(555, 100);
+        header.setFixedPosition(15, 758);
+        footer.scaleToFit(592, 100);
+        footer.setFixedPosition(3, 0);
+
+
+        laptopData.setFont(helvetica);
+        laptopData.setFixedPosition(50, 450, 100);
+        laptopData.setTextAlignment(TextAlignment.RIGHT);
+
+        paragraph1.setFont(helvetica);
+        paragraph1.setFixedPosition(155, 450, 170);
+        paragraph1.setTextAlignment(TextAlignment.LEFT);
+
+        attentionParagraph.setFont(helvetica);
+        attentionParagraph.setFixedPosition(50, 370, 100);
+        attentionParagraph.setTextAlignment(TextAlignment.RIGHT);
+
+        attentioDataParagraph.setFont(helvetica);
+        attentioDataParagraph.setFixedPosition(155, 370, 365);
+        attentioDataParagraph.setTextAlignment(TextAlignment.JUSTIFIED);
+
+
+        infoParagraph.setFont(helvetica);
+        infoParagraph.setFixedPosition(50, 300, 470);
+        infoParagraph.setTextAlignment(TextAlignment.JUSTIFIED).setBold();
+
+        receiverParagraph.setFont(helvetica);
+        receiverParagraph.setFixedPosition(400, 200, 150);
+        receiverParagraph.setTextAlignment(TextAlignment.CENTER);
+
+        spenderParagraph.setFont(helvetica);
+        spenderParagraph.setFixedPosition(50, 200, 150);
+        spenderParagraph.setTextAlignment(TextAlignment.CENTER);
+
+        docTitle.setFontSize(17);
+        docTitle.setBold();
+        docTitle.setFont(helvetica);
+        paragraph2.add(docTitle);
+
+        date.setFixedPosition(456, 730, 100);
+        date.setFontSize(11);
+        paragraph.setFixedPosition(20, 10, 500);
+        paragraph.setFontSize(7);
+
+        document.add(receiverParagraph);
+        document.add(spenderParagraph);
+        document.add(infoParagraph);
+        document.add(paragraph1);
+        document.add(laptopData);
+        document.add(paragraph2);
+        document.add(date);
+        document.add(header);
+        document.add(footer);
+        document.add(paragraph);
+        document.add(attentionParagraph);
+        document.add(attentioDataParagraph);
+
+        // Closing the document
+        document.close();
+
+        System.out.println("Dokument utworzony poprawnie!");
 
         return new ByteArrayInputStream(out.toByteArray());
     }

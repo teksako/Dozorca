@@ -11,28 +11,38 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 <div class="container">
-    <form th:action="@{/saveLaptop}" th:object="${laptop}" method="post">
+    <form th:action="@{/saveLaptop}" th:object="${laptop}" method="post" class="form-control col-4 mb-4">
         <p class="error" th:text="${commonErrro}"></p>
 
         <td>Producent:</td>
-        <input id="laptopManufacturer" type="text" th:field="*{manufacturer}">
+        <input id="laptopManufacturer" type="text" th:field="*{manufacturer}" class="form-control col-4 mb-4">
         <td>Model:</td>
-        <input id="laptopModel" type="text" th:field="*{model}">
+        <input id="laptopModel" type="text" th:field="*{model}" class="form-control col-4 mb-4">
         <td>Numer seryjny:</td>
-        <input id="laptopSerial" type="text" th:field="*{serialNumber}">
+        <input id="laptopSerial" type="text" th:field="*{serialNumber}" class="form-control col-4 mb-4" >
+        <td>Numer inwentarzowy:</td>
+        <input id="inventoryNumber" type="text" th:field="*{inventoryNumber}" class="form-control col-4 mb-4" >
         <td>MAC adres:</td>
-        <input id="macAdress" type="text" th:field="*{MACAdress}">
+        <input id="macAdress" type="text" th:field="*{MACAdress}" class="form-control col-4 mb-4">
         <td>IP adres:</td>
-        <input id="IPAdress" type="text" th:field="*{IPAdress}">
+        <input id="IPAdress" type="text" th:field="*{IPAdress}" class="form-control col-4 mb-4">
+        <td>MAC adres Wifi:</td>
+        <input id="macAdresswifi" type="text" th:field="*{MACAdressWifi}" class="form-control col-4 mb-4">
+        <td>IP adres Wifi:</td>
+        <input id="IPAdress Wifi" type="text" th:field="*{IPAdressWifi}" class="form-control col-4 mb-4">
         <td>Hostname:</td>
-        <input id="hostname" type="text" th:field="*{hostname}">
+        <input id="hostname" type="text" th:field="*{hostname}" class="form-control col-4 mb-4">
         <td>OS:</td>
-        <input id="OS" type="text" th:field="*{windowsKey}">
-
+        <input id="OS" type="text" th:field="*{windowsKey}" class="form-control col-4 mb-4">
+        <td>Czy uszkodzony?</td>
+        </br>
+        <input id="enabled" th:field="*{demage}" type="checkbox">
+        </br>
+        </br>
 
         <td>Klucz Office</td>
 
-        <select name="officeKey" id="officeKey" th:field="*{officeKey}">
+        <select name="officeKey" id="officeKey" th:field="*{officeKey}" class="form-control col-4 mb-4">
             <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
             <option value="">Wybierz:</option>
             <option th:each="Key : ${officeKeys}"
@@ -43,7 +53,7 @@
 
         <td>Użytkownik</td>
 
-        <select name="employee" id="employee" th:field="*{employee}">
+        <select name="employee" id="employee" th:field="*{employee}" class="form-control col-4 mb-4">
             <!--<select name="replacement person" id="replacement" th:field="*{replacement}" placeholder="replacement">-->
             <option value="">Wybierz:</option>
             <option th:each="Key : ${employeesList}"
@@ -52,7 +62,7 @@
         </select>
         </td>
 
-        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" th:field="*{id}"/>
         <br>
         <input type="button" value="Powrót" name="backButton"
                onClick="javascript:window.location.href='/index'" class="myButton shortButton">

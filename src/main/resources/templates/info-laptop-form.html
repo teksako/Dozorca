@@ -9,7 +9,22 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <script>
+  $( function() {
+    $( "#datepicker" ).datepicker({
+    showOnFocus: false,
+                showTrigger: '#calImg',
+                beforeShowDay: $.datepicker.noWeekends,
+                pickerClass: 'noPrevNext',
+                numberOfMonths: 1,
+                dateFormat: 'yy-mm-dd',}
+    );
+  } );
 
+
+
+
+    </script>
 </head>
 <body>
 <!--HEADER-->
@@ -27,12 +42,76 @@
     <p th:text="${laptop.getModel()}"></p>
     <b>Numer seryjny: </b>
     <p th:text="${laptop.getSerialNumber()}"></p>
+    <b>Numer inwentarzowy: </b>
+    <p th:text="${laptop.getInventoryNumber()}"></p>
+    <b>MAC LAN: </b>
+    <p th:text="${laptop.getMACAdress()}"></p>
+    <b>IP LAN: </b>
+    <p th:text="${laptop.getIPAdress()}"></p>
+    <b>MAC WiFi: </b>
+    <p th:text="${laptop.getMACAdressWifi()}"></p>
+    <b>IP WiFi: </b>
+    <p th:text="${laptop.getIPAdressWifi()}"></p>
+    <b>Hostanme: </b>
+    <p th:text="${laptop.getHostname()}"></p>
+    <b>ID dysku: </b>
+    <p th:text="${laptop.getDiscId()}"></p>
+    <b>Bitlocker: </b>
+    <p th:text="${laptop.getBitlocker()}"></p>
 
     <div th:if="${laptop.getEmployee==null}">
         <a th:href="@{/showUpdateLaptopForm(laptopId=${laptop.id})}" class="btn btn-info">Update</a>
 
     </div>
+    <form th:action="@{/actionLaptop/{id}(id=${laptop.getId()})}" th:object="${temp}" method="post">
+        <div th:if="${laptop.getEmployee!=null}">
+            <p> <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/></p>
+            <p> <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton"
+                       placeholder="notice" size="100"></p>
+
+
+            <div th:if="${laptop.getHasUser()==true}">
+                <input type="submit" value="Zdanie" name="saveButton" class="btn btn-info">
+            </div>
+            <div th:unless="${laptop.getHasUser()==true}">
+                <input type="submit" value="Wydanie" name="saveButton" class="btn btn-info">
+                </hr>
+            </div>
+        </div>
+        <div>
+
+
+        </div>
+    </form>
 </div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr style="text-align: center; ">
+
+        <th>Data</th>
+        <th>Użytkownik</th>
+        <th>Typ</th>
+
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="key : ${laptopHistoryList}" style="text-align: center; ">
+
+        <td th:text="${key.date}"></td>
+        <td th:text="${key.employee}"></td>
+        <td th:text="${key.type}"></td>
+        <td>
+            <a th:href="@{/openLaptopPDF/{id}(id=${key.id})}" class="btn btn-info">Otwórz</a>
+        </td>
+
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
 
 </body>
 </html>

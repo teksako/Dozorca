@@ -1,13 +1,13 @@
 package com.selt.service;
 
+import com.selt.model.Laptop;
 import com.selt.model.LaptopHistory;
+import com.selt.model.MobilePhone;
 import com.selt.model.MobilePhoneHistory;
-import com.selt.model.Temp;
 import com.selt.repository.LaptopHistoryRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -16,17 +16,28 @@ import java.util.Optional;
 @Data
 @RequiredArgsConstructor
 @Service
-public class LaptopHistoryservice {
+public class LaptopHistoryService {
 
     private final LaptopHistoryRepo laptopHistoryRepo;
     private final TempService tempService;
+    private final UserService userService;
 
     public List<LaptopHistory> findAll() {
         return laptopHistoryRepo.findAll();
     }
 
-    public void save(LaptopHistory history) {
-        laptopHistoryRepo.save(history);
+    public void save(Laptop laptop, String type, String pdfName, LocalDate date) {
+        LaptopHistory laptopHistory = new LaptopHistory();
+        laptopHistory.setDate(date);
+        laptopHistory.setEmployee(laptop.getEmployee().getFirstname() + " " + laptop.getEmployee().getLastname());
+        laptopHistory.setInventoryNumber(laptop.getInventoryNumber());
+        laptopHistory.setManufacturer(laptop.getManufacturer());
+        laptopHistory.setModel(laptop.getModel());
+        laptopHistory.setProtocolName(pdfName);
+        laptopHistory.setSerialNumber(laptop.getSerialNumber());
+        laptopHistory.setType(type);
+        laptopHistory.setUser(userService.actualLoginUser());
+       laptopHistoryRepo.save(laptopHistory);
     }
 
     public void delete(LaptopHistory history) {

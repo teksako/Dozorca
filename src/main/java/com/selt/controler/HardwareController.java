@@ -19,11 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-
-import static java.lang.Boolean.TRUE;
 
 @Controller
 
@@ -49,6 +46,7 @@ public class HardwareController {
     private final MobilePhoneHistoryService mobilePhoneHistoryService;
     private final TempService tempService;
     private final ConfigService configService;
+    private final LaptopHistoryService laptopHistoryservice;
 
     Temp temp = new Temp();
 
@@ -92,14 +90,15 @@ public class HardwareController {
     @PostMapping({"/saveLaptop"})
     public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
 
-        Office office = laptop.getOfficeKey();
-        if(office.getHasBeenUse().equals(false)){
-            office.setHasBeenUse(true);
-            officeService.save(office);
-        }
-
+//        Office office = laptop.getOfficeKey();
+//        System.out.println(office);
+//        if (office.getHasBeenUse().equals(false)) {
+//            office.setHasBeenUse(true);
+//            officeService.save(office);
+//        }
+//        System.out.println(office);
         laptopService.save(laptop);
-        return "redirect:/list-laptops";
+        return "redirect:/showUpdateLaptopForm?laptopId=" + laptop.getId();
     }
 
 
@@ -110,27 +109,141 @@ public class HardwareController {
         return "redirect:/list-laptops";
     }
 
-//    @GetMapping({"/showLaptopUpdateForm"})
-//    public ModelAndView showLaptopUpdateForm(@RequestParam Long laptopId) {
-//        ModelAndView model = new ModelAndView("add-laptop-form");
-//        Laptop laptop = laptopService.findById(laptopId).get();
-//        model.addObject("username", userService.findUserByUsername().getFullname());
-//        model.addObject("laptop", laptop);
-//
-//        return model;
-//    }
 
     @GetMapping({"/showLaptopInfoForm"})
     public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
         ModelAndView model = new ModelAndView("info-laptop-form");
-        Temp temp = new Temp();
+        model.addObject("temp", new Temp());
+        temp.setNotice("Laptop wraz z ładowarką.");
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("laptop", laptopService.findById(id).get());
         model.addObject("allert", allert);
-
+        model.addObject("laptopHistoryList", laptopHistoryservice.findAllBySerialNumber(laptopService.findById(id).get().getSerialNumber()));
+        model.addObject("temp", temp);
         return model;
     }
 
+
+
+    @GetMapping(value = "/openLaptopPDF/{id}")
+    public ResponseEntity<InputStreamResource> openLaptopPDF(@PathVariable(value = "id") long id) throws FileNotFoundException {
+
+
+        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+        Optional<LaptopHistory> laptopHistory = laptopHistoryservice.findById(id);
+        String filePath ="src/main/resources/Protocol/Laptop/";
+        String fileName = laptopHistory.get().getProtocolName() + ".pdf";
+        File file = new File(filePath + fileName);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("content-disposition", "inline;filename=" + fileName);
+
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/pdf"))
+                .body(resource);
+    }
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String exception2(final Throwable throwable, final Model model) {
+        //logger.error("Exception during execution of SpringSecurity application", throwable);
+        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
+        model.addAttribute("error", errorMessage);
+        return "error";
+    }
+
+
+
+    @PostMapping({"/actionLaptop/{id}"})
+    public String actionLaptop(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
+
+        Optional<Laptop> laptop = laptopService.findById(id);
+
+        temp.setTempBoolen(false);
+        String message = null;
+      //  try {
+            if (laptop.get().getHasUser().equals(true)) {
+                laptopService.getLaptop(laptop, temp);
+
+            } else {
+                laptopService.releaseLaptop(laptop, temp);
+
+            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+
+        return "redirect:/showLaptopInfoForm?id=" + id;
+    }
+
+
+    @GetMapping({"/releaseLaptop/{id}"})
+    public String releaseLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+
+        Optional<Laptop> laptop = laptopService.findById(id);
+        String message = null;
+        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+        temp.setTempString1("Odbierający");
+        temp.setTempString2("Przekazujący");
+        //temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+        temp.setTempString3("");
+        temp.setNotice("Laptop wraz z ładowarką, torba oraz myszką bezprzewodową.");
+        temp.setDate(String.valueOf(LocalDate.now()));
+        try {
+
+
+            if (laptop.get().getEmployee() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+                laptopHistoryservice.save(laptop.get(), "WYDANIE", pdfName, LocalDate.now());
+                laptop.get().setHasUser(true);
+                laptopService.save(laptop.get());
+                message = "Wydałeś telefon !";
+
+            }
+
+        } catch (StackOverflowError e) {
+            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+
+
+        }
+
+        return "redirect:/showLaptopInfoForm?id=" + id;
+    }
+
+    @GetMapping({"/getLaptop/{id}"})
+    public String getLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+        Optional<Laptop> laptop = laptopService.findById(id);
+        String message = null;
+        temp.setTempString("PROTOKÓŁ ZDANIA");
+        temp.setTempString1("Przekazujący");
+        temp.setTempString2("Odbierający");
+        temp.setTempString3("");
+        temp.setNotice("Laptop wraz z ładowarką.");
+        temp.setDate(String.valueOf(LocalDate.now()));
+        try {
+
+
+            if (laptop.get().getEmployee() != null) {
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+
+                laptopHistoryservice.save(laptop.get(), "ZDANIE", pdfName, LocalDate.now());
+                laptop.get().setHasUser(false);
+                laptop.get().setEmployee(null);
+                saveLaptop(laptop.get());
+            }
+
+
+        } catch (StackOverflowError e) {
+            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+        }
+
+        return "redirect:/showLaptopInfoForm?id=" + id;
+    }
 
 
     //----------------END LAPTOPS-----------------------------------------
@@ -345,8 +458,6 @@ public class HardwareController {
     @PostMapping({"/savePhone"})
     public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
         mobilePhoneService.save(mobilePhone);
-
-
         return "redirect:/showUpdatePhoneForm?phoneId=" + mobilePhone.getId();
     }
 
@@ -446,18 +557,17 @@ public class HardwareController {
     public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
         Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
         String message = null;
-        temp.setTempBoolen(true);
         temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
         temp.setTempString1("Odbierający");
         temp.setTempString2("Przekazujący");
         temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
-        //temp.setDate(LocalDate.now());
-        // System.out.println(temp.getDate());
+        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
+        temp.setDate(String.valueOf(LocalDate.now()));
         try {
 
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
                 mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
                 mobilePhone.get().setHasUser(true);
@@ -468,31 +578,29 @@ public class HardwareController {
 
         } catch (StackOverflowError e) {
             message = "Nie udało się, wszystkie nazwy są już zajetę!";
-            //getAllPhones(message);
+
 
         }
 
         return "redirect:/showPhoneInfoForm?id=" + id;
-
     }
 
     @GetMapping({"/getPhone/{id}"})
     public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+
         String message = null;
-        temp.setTempBoolen(true);
         temp.setTempString("PROTOKÓŁ ZDANIA");
         temp.setTempString1("Przekazujący");
         temp.setTempString2("Odbierający");
         temp.setTempString3("");
-        //temp.setDate(LocalDate.now());
-        //  System.out.println(temp.getDate());
-
+        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
+        temp.setDate(String.valueOf(LocalDate.now()));
         try {
-            //String pdfName = mobilePhoneHistoryService.validatePdfName();
+
 
             if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
+                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
                 ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
 
                 mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
@@ -500,7 +608,7 @@ public class HardwareController {
                 mobilePhone.get().setEmployee(null);
                 mobilePhone.get().setPhoneNumber(null);
                 savePhone(mobilePhone.get());
-                //savePdf(mobilePhone.get());
+
             }
 
 
@@ -508,12 +616,88 @@ public class HardwareController {
             message = "Nie udało się, wszystkie nazwy są już zajetę!";
         }
 
-        //String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
-
-
-        //getAllPhones("udało sie!");
         return "redirect:/showPhoneInfoForm?id=" + id;
     }
+
+//
+//        @GetMapping({"/releasePhone/{id}"})
+//    public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+//        String message = null;
+//        temp.setTempBoolen(true);
+//        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+//        temp.setTempString1("Odbierający");
+//        temp.setTempString2("Przekazujący");
+//        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+//        if(temp.getDate().isEmpty()){
+//            temp.setDate(String.valueOf(LocalDate.now()));
+//        }
+//
+//        System.out.println(temp.getDate());
+//        try {
+//
+//
+//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
+//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
+//                mobilePhone.get().setHasUser(true);
+//                mobilePhoneService.save(mobilePhone.get());
+//                message = "Wydałeś telefon !";
+//
+//            }
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//            //getAllPhones(message);
+//
+//        }
+//
+//        return "redirect:/showPhoneInfoForm?id=" + id;
+//
+//    }
+//
+//    @GetMapping({"/getPhone/{id}"})
+//    public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+//        String message = null;
+//        temp.setTempBoolen(true);
+//        temp.setTempString("PROTOKÓŁ ZDANIA");
+//        temp.setTempString1("Przekazujący");
+//        temp.setTempString2("Odbierający");
+//        temp.setTempString3("");
+//        if(temp.getDate()==null){
+//            temp.setDate(String.valueOf(LocalDate.now()));
+//        }
+//
+//          System.out.println(temp.getDate());
+//
+//        try {
+//            //String pdfName = mobilePhoneHistoryService.validatePdfName();
+//
+//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
+//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//
+//                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
+//                mobilePhone.get().setHasUser(false);
+//                mobilePhone.get().setEmployee(null);
+//                mobilePhone.get().setPhoneNumber(null);
+//                savePhone(mobilePhone.get());
+//                //savePdf(mobilePhone.get());
+//            }
+//
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//        }
+//
+//        //String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
+//
+//
+//        //getAllPhones("udało sie!");
+//        return "redirect:/showPhoneInfoForm?id=" + id;
+//    }
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {
@@ -524,8 +708,6 @@ public class HardwareController {
 
 
 //-------------------------END MOBILEPHONE---------------------------------
-
-
 
 
 }
