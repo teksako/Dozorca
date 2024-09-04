@@ -164,7 +164,7 @@ public class HardwareController {
 
         temp.setTempBoolen(false);
         String message = null;
-      //  try {
+       try {
             if (laptop.get().getHasUser().equals(true)) {
                 laptopService.getLaptop(laptop, temp);
 
@@ -172,9 +172,9 @@ public class HardwareController {
                 laptopService.releaseLaptop(laptop, temp);
 
             }
-//        } catch (Exception e) {
-//            System.out.println(e);
-//        }
+       } catch (Exception e) {
+            System.out.println(e);
+       }
 
         return "redirect:/showLaptopInfoForm?id=" + id;
     }
