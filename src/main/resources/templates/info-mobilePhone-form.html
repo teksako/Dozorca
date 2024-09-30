@@ -64,9 +64,9 @@
 
 <form th:action="@{/actionPhone/{id}(id=${phone.getId()})}" th:object="${temp}" method="post">
     <div th:if="${phone.getPhoneNumber()!=null and phone.getEmployee!=null}">
-   <p> <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/></p>
-    <p> <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton"
-           placeholder="notice" size="100"></p>
+        <p> <input type="text" id="datepicker" th:field="*{date}" class="myTextButton" placeholder="Data"/></p>
+        <p> <input type="text" th:field="*{notice}" th:value="${temp.getNotice()}" class="myTextButton"
+                   placeholder="notice" size="100"></p>
 
 
         <div th:if="${phone.getHasUser()==true}">

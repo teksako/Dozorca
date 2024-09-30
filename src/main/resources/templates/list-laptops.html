@@ -33,8 +33,11 @@
                 <th>Producnet</th>
                 <th>Model</th>
                 <th>Nr seryjny</th>
-                <th>System</th>
+                <th>Wersja OS</th>
+                <th>Klucz OS</th>
                 <th>Office</th>
+                <th>Klucz office</th>
+                <th>Konto office</th>
                 <th>Adres MAC</th>
                 <th>Adres IP</th>
                 <th>Adres MAC Wifi</th>
@@ -54,8 +57,11 @@
                 <td th:text="${key.manufacturer}"></td>
                 <td th:text="${key.model}"></td>
                 <td th:text="${key.serialNumber}"></td>
+                <td th:text="${key.OSVersion}"></td>
                 <td th:text="${key.windowsKey}"></td>
+                <td th:text="${key.getOfficeKey()?.officeVersion}"></td>
                 <td th:text="${key.getOfficeKey()?.officeKey}"></td>
+                <td th:text="${key.getOfficeKey()?.officeAccount}"></td>
                 <td th:text="${key.MACAdress}"></td>
                 <td th:text="${key.IPAdress}"></td>
                 <td th:text="${key.MACAdressWifi}"></td>

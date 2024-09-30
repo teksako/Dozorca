@@ -35,7 +35,7 @@
     <input type="submit" value="Wyświetl" name="saveButton" class="mySubmitButton">
 </form>
 <a th:text="${error}"></a>
-<table >
+<table class="table table-bordered table-striped">
     <tbody>
     <thead>
     <tr>
@@ -47,7 +47,7 @@
     <tr th:each="key : ${tonerLists}"
         th:style="${key.count} == 0 ? 'background: red': 'background: green'">
 
-        <td th:text="${key.Toner.getTonerName()}"></td>
+        <td th:text="${key.Toner.getTonerName() }"></td>
         <td th:text="${key.count}"></td>
 
 

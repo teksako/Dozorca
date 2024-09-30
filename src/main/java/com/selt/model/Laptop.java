@@ -41,6 +41,9 @@ public class Laptop {
     private String IPAdressWifi;
 
     @Column
+    private String OSVersion;
+
+    @Column
     private String hostname;
 
     @Column

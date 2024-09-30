@@ -37,8 +37,76 @@ public class LaptopService {
             laptop.setSerialNumber("-");
         }
 
+        if(laptop.getHasUser()==null){
+            laptop.setHasUser(false);
+        }
         laptopRepo.save(laptop);
     }
+
+    public List<Laptop> search(String matter){
+        List<Laptop> laptopList=null;
+        if(laptopRepo.findAllByModelIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByModelIsLike(matter);
+        } else if(laptopRepo.findAllByWindowsKeyIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByWindowsKeyIsLike(matter);
+        } else if(laptopRepo.findAllByHostnameIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByHostnameIsLike(matter);
+        } else if(laptopRepo.findAllByManufacturerIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByManufacturerIsLike(matter);
+        } else if(laptopRepo.findAllByMACAdressWifiIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByMACAdressWifiIsLike(matter);
+        }  else if( laptopRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllBySerialNumberIsLike(matter);
+        }  else if(laptopRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByEmployee_LastnameIsLike(matter);
+        } else if(laptopRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllBySerialNumberIsLike(matter);
+        } else if(laptopRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+            laptopList=laptopRepo.findAllByEmployee_FirstnameIsLike(matter);
+        } else if(laptopRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter).size()!=0){
+            laptopList=laptopRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter);
+        }
+
+        return laptopList;
+    }
+
+
+//    public List<Laptop> search(String matter){
+//        List<Laptop> laptopList=null;
+//        if(laptopRepo.findAllByModelIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByModelIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByWindowsKeyIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByWindowsKeyIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByHostnameIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByHostnameIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByManufacturerIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByManufacturerIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByMACAdressWifiIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByMACAdressWifiIsLike(matter));
+//        }
+//        if( laptopRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllBySerialNumberIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByEmployee_LastnameIsLike(matter));
+//        }
+//        if(laptopRepo.findAllBySerialNumberIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllBySerialNumberIsLike(matter));
+//        }
+//        if(laptopRepo.findAllByEmployee_LastnameIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo.findAllByEmployee_FirstnameIsLike(matter));
+//        }
+//
+//        if(laptopRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter).size()!=0){
+//            laptopList.add((Laptop) laptopRepo. findAllByEmployee_Department_NameOfDepartmentIsLike(matter));
+//        }
+//
+//        return laptopList;
+//    }
 
     public void delete(Long id) {
         Optional<Laptop> laptop = laptopRepo.findById(id);
@@ -49,9 +117,9 @@ public class LaptopService {
         return laptopRepo.findAll();
     }
 
-    public List<Laptop> findAllByEmployee() {
-        return laptopRepo.findAllByEmployee_Lastname("Sobolewski");
-    }
+//    public List<Laptop> findAllByEmployee() {
+//        return laptopRepo.findAllByEmployee_Lastname("Sobolewski");
+//    }
 
 
     public Optional<Laptop> findById(long id) {
@@ -64,7 +132,7 @@ public class LaptopService {
         temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
         temp.setTempString1("Odbierający");
         temp.setTempString2("Przekazujący");
-        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+        temp.setTempString3("");
         try {
 
 
@@ -102,7 +170,7 @@ public class LaptopService {
                 String pdfName = laptopHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
                 ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
 
-              laptopHistoryService.save(laptop.get(), "ZDANIE", pdfName, LocalDate.parse(temp.getDate()));
+                laptopHistoryService.save(laptop.get(), "ZDANIE", pdfName, LocalDate.parse(temp.getDate()));
                 laptop.get().setHasUser(false);
                 laptop.get().setEmployee(null);
                 save(laptop.get());

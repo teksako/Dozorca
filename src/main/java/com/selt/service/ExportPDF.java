@@ -62,7 +62,7 @@ public class ExportPDF {
             localdate = LocalDate.parse(temp.getDate());
         }
 
-        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/" + pdfName + ".pdf");
+        PdfWriter writer = new PdfWriter("src/main/resources/Protocol/MobilePhone/" + pdfName + ".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         String footerPaath = "src/main/resources/images/footer.jpg";

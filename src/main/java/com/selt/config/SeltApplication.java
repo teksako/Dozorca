@@ -124,6 +124,7 @@ public class SeltApplication implements CommandLineRunner {
         printerList8.add("MFP M277");
         printerList8.add("MFP M283");
         printerList8.add("M570dn");
+        printerList8.add("LaserJet CP1025nw color");
 
         final List<String> printerList9 = new ArrayList<>();//HP Black
         printerList9.add("M402dne");
@@ -154,6 +155,8 @@ public class SeltApplication implements CommandLineRunner {
         printerList13.add("MFC-J200");
         printerList13.add("MFC-B7710DN");
         printerList13.add("MFC-T920DW");
+        printerList13.add("MFC-L2922DW");
+        printerList13.add("HL-L2442DW");
 
         final List<String> printerList14 = new ArrayList<>();//Canon
         printerList14.add("MF4380dn");
@@ -594,6 +597,20 @@ public class SeltApplication implements CommandLineRunner {
             oid46.setPrinterModel(printerList13);
             oid46.setOidProducent("Brother");
             oidRepo.save(oid46);
+
+            OID oid52 = new OID();
+            oid52.setOidName("Max Drum Page Counter");
+            oid52.setOidValue("1.3.6.1.2.1.43.11.1.1.8.1.2");
+            oid52.setPrinterModel(printerList13);
+            oid52.setOidProducent("Brother");
+            oidRepo.save(oid52);
+
+            OID oid53 = new OID();
+            oid53.setOidName("Actual Drum Page Counter");
+            oid53.setOidValue("1.3.6.1.2.1.43.11.1.1.9.1.2");
+            oid53.setPrinterModel(printerList13);
+            oid53.setOidProducent("Brother");
+            oidRepo.save(oid53);
 
             //-------------Canon--------------------
 

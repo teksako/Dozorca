@@ -32,8 +32,16 @@
         <input id="IPAdress Wifi" type="text" th:field="*{IPAdressWifi}" class="form-control col-4 mb-4">
         <td>Hostname:</td>
         <input id="hostname" type="text" th:field="*{hostname}" class="form-control col-4 mb-4">
-        <td>OS:</td>
-        <input id="OS" type="text" th:field="*{windowsKey}" class="form-control col-4 mb-4">
+        <td>WersjaOS:</td>
+        <input id="OSversion" type="text" th:field="*{OSVersion}" class="form-control col-4 mb-4">
+        <td>Klucz OS:</td>
+        <input id="OSKey" type="text" th:field="*{windowsKey}" class="form-control col-4 mb-4">
+        <td>Bitlocker:</td>
+        <input id="Bitlocker" type="text" th:field="*{bitlocker}" class="form-control col-4 mb-4">
+        <td>Identyfikator dyskur:</td>
+        <input id="Identyfikator dysku" type="text" th:field="*{discId}" class="form-control col-4 mb-4">
+        <td>Klucz odzyskiwania:</td>
+        <input id="Klucz odzyskiwania" type="text" th:field="*{recoveryKey}" class="form-control col-4 mb-4">
         <td>Czy uszkodzony?</td>
         </br>
         <input id="enabled" th:field="*{demage}" type="checkbox">
@@ -58,14 +66,16 @@
             <option value="">Wybierz:</option>
             <option th:each="Key : ${employeesList}"
                     th:value="${Key.id}"
-                    th:text="${Key.firstname+ '  '+ Key.lastname}"></option>
+                    th:text="${Key.lastname+ '  '+ Key.firstname}"></option>
         </select>
         </td>
 
         <input type="hidden" th:field="*{id}"/>
         <br>
         <input type="button" value="Powrót" name="backButton"
-               onClick="javascript:window.location.href='/index'" class="myButton shortButton">
+               onClick="javascript:history.go(-1)" class="myButton shortButton">
+       <!-- <input type="button" value="Powrót" name="backButton"
+               onClick="javascript:window.location.href='/index'" class="myButton shortButton">-->
         <input type="submit" value="Zapisz" name="saveButton" class="mySubmitButton">
     </form>
 </div>

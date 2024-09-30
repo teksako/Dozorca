@@ -43,6 +43,8 @@ public class SNMP4J {
 
     public static String snmpGet(String ip, String community, String oidValue, String oidName) {
 
+
+
         String info = new String();
 
         CommunityTarget target = createDefault(ip, community);
@@ -79,6 +81,10 @@ public class SNMP4J {
 
     public static Long snmpGet(String ip, String community, String oidValue) {
 
+        System.out.println(oidValue);
+        System.out.println(ip);
+        System.out.println(community);
+
         String info = null;
         CommunityTarget target = createDefault(ip, community);
         Snmp snmp = null;
@@ -101,7 +107,7 @@ public class SNMP4J {
                 }
             }
         } catch (Exception  e) {
-           // e.printStackTrace();
+           e.printStackTrace();
             System.out.println("brak połaczenia");
 
         } finally {
@@ -117,6 +123,7 @@ public class SNMP4J {
         try {
             return Long.parseLong(info);
         }catch (NumberFormatException e){
+            System.out.println(e);
             info ="0";
             return Long.parseLong(info);
         }

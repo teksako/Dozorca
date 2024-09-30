@@ -63,7 +63,7 @@ public class HardwareController {
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("officeKeyList", officeService.findAll());
         model.addObject("laptop", new Laptop());
-        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
         return model;
     }
 
@@ -79,10 +79,10 @@ public class HardwareController {
     @GetMapping({"/showUpdateLaptopForm"})
     public ModelAndView showUpdateLaptopForm(@RequestParam Long laptopId) {
         ModelAndView model = new ModelAndView("add-laptop-form");
-        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("laptop", laptopService.getLaptopRepo().findById(laptopId).get());
-        model.addObject("officeKeys", officeService.findAllByHasBeenUse(false));
+        model.addObject("officeKeys", officeService.findAll());
         return model;
     }
 
@@ -101,6 +101,13 @@ public class HardwareController {
         return "redirect:/showUpdateLaptopForm?laptopId=" + laptop.getId();
     }
 
+    @PostMapping({"/list-laptops"})
+    public void searchLaptops(@ModelAttribute("temp") Temp temp, Model model) {
+        String mattern = '%' + temp.getTempString() + '%';
+        model.addAttribute("laptopList", laptopService.search(mattern));
+        model.addAttribute("username", userService.findUserByUsername().getFullname());
+        getAllPhones("Znaleziono wyniki!");
+    }
 
     @GetMapping({"/deleteLaptop/{id}"})
     public String deleteLaptop(@PathVariable(value = "id") long id) {
@@ -299,15 +306,15 @@ public class HardwareController {
     }
 //-------------------END COMPUTER------------------------------------
 
-    @GetMapping({"/showUserHardware"})
-    public String getHardwares(Model model) {
-
-        List<Computer> computerList = computerService.findAllByEmployee();
-        List<Laptop> laptopList = laptopService.findAllByEmployee();
-        model.addAttribute("computer", computerList);
-        model.addAttribute("laptop", laptopList);
-        return "/showUserHardware";
-    }
+//    @GetMapping({"/showUserHardware"})
+//    public String getHardwares(Model model) {
+//
+//        List<Computer> computerList = computerService.findAllByEmployee();
+//        List<Laptop> laptopList = laptopService.findAllByEmployee();
+//        model.addAttribute("computer", computerList);
+//        model.addAttribute("laptop", laptopList);
+//        return "/showUserHardware";
+//    }
 
     //---------------------OIDS-------------------------
     @PostMapping({"/saveOid"})
@@ -524,7 +531,7 @@ public class HardwareController {
     @GetMapping({"/showUpdatePhoneForm"})
     public ModelAndView showUpdatePhoneForm(@RequestParam Long phoneId) {
         ModelAndView model = new ModelAndView("add-phone-form");
-        model.addObject("employeesList", employeeService.findAll());
+        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
         model.addObject("username", userService.findUserByUsername().getFullname());
         model.addObject("phoneNumberList", phoneNumberService.findByOrderByNumberAsc());
         model.addObject("phone", phoneRepo.findById(phoneId).get());
@@ -619,85 +626,6 @@ public class HardwareController {
         return "redirect:/showPhoneInfoForm?id=" + id;
     }
 
-//
-//        @GetMapping({"/releasePhone/{id}"})
-//    public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-//        String message = null;
-//        temp.setTempBoolen(true);
-//        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
-//        temp.setTempString1("Odbierający");
-//        temp.setTempString2("Przekazujący");
-//        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
-//        if(temp.getDate().isEmpty()){
-//            temp.setDate(String.valueOf(LocalDate.now()));
-//        }
-//
-//        System.out.println(temp.getDate());
-//        try {
-//
-//
-//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
-//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-//                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
-//                mobilePhone.get().setHasUser(true);
-//                mobilePhoneService.save(mobilePhone.get());
-//                message = "Wydałeś telefon !";
-//
-//            }
-//
-//        } catch (StackOverflowError e) {
-//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-//            //getAllPhones(message);
-//
-//        }
-//
-//        return "redirect:/showPhoneInfoForm?id=" + id;
-//
-//    }
-//
-//    @GetMapping({"/getPhone/{id}"})
-//    public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-//        String message = null;
-//        temp.setTempBoolen(true);
-//        temp.setTempString("PROTOKÓŁ ZDANIA");
-//        temp.setTempString1("Przekazujący");
-//        temp.setTempString2("Odbierający");
-//        temp.setTempString3("");
-//        if(temp.getDate()==null){
-//            temp.setDate(String.valueOf(LocalDate.now()));
-//        }
-//
-//          System.out.println(temp.getDate());
-//
-//        try {
-//            //String pdfName = mobilePhoneHistoryService.validatePdfName();
-//
-//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.now());
-//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-//
-//                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
-//                mobilePhone.get().setHasUser(false);
-//                mobilePhone.get().setEmployee(null);
-//                mobilePhone.get().setPhoneNumber(null);
-//                savePhone(mobilePhone.get());
-//                //savePdf(mobilePhone.get());
-//            }
-//
-//
-//        } catch (StackOverflowError e) {
-//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-//        }
-//
-//        //String pdfName = LocalDate.now() + "-" + tempService.randomNumber();
-//
-//
-//        //getAllPhones("udało sie!");
-//        return "redirect:/showPhoneInfoForm?id=" + id;
-//    }
 
     @GetMapping({"/deletePhone/{id}"})
     public String deletePhone(@PathVariable(value = "id") long id) {

@@ -58,6 +58,8 @@
     <p th:text="${laptop.getDiscId()}"></p>
     <b>Bitlocker: </b>
     <p th:text="${laptop.getBitlocker()}"></p>
+    <b>Klucz odzyskiwania: </b>
+    <p th:text="${laptop.getRecoveryKey()}"></p>
 
     <div th:if="${laptop.getEmployee==null}">
         <a th:href="@{/showUpdateLaptopForm(laptopId=${laptop.id})}" class="btn btn-info">Update</a>
