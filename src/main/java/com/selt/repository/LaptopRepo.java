@@ -19,4 +19,5 @@ public interface LaptopRepo extends JpaRepository<Laptop, Long> {
     List<Laptop> findAllByEmployee_LastnameIsLike(String lastName);
     List<Laptop> findAllByEmployee_Department_NameOfDepartmentIsLike(String department);
     //List<Laptop> findAllByEmployee_Lastname(String lastname);
+    List<Laptop> findAllByEmployee_IdIs(long id);
 }

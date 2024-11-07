@@ -22,7 +22,7 @@ public class MobilePhoneHistoryService {
 
 
     public List<MobilePhoneHistory> findAllByIMEI(String IMEI) {
-        return mobilePhoneHistoryRepo.findAllByIMEI(IMEI);
+        return mobilePhoneHistoryRepo.findAllByIMEIOrderByDateAsc(IMEI);
     }
 
     public String validatePdfName(LocalDate date) {

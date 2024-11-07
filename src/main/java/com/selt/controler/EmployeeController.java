@@ -4,6 +4,8 @@ import com.selt.model.Department;
 import com.selt.model.Employee;
 import com.selt.model.Temp;
 import com.selt.repository.EmployeeRepo;
+import com.selt.repository.LaptopRepo;
+import com.selt.repository.MobilePhoneRepo;
 import com.selt.service.*;
 import lombok.RequiredArgsConstructor;
 import org.dom4j.rule.Mode;
@@ -24,6 +26,9 @@ public class EmployeeController {
     private final DepartmentService departmentService;
     private final UserService userService;
     public final EmployeeRepo employeeRepo;
+    private final LaptopService laptopService;
+    private final MobilePhoneService phoneService;
+    private final ComputerService computerService;
 
 
         @GetMapping({"list-employees"})
@@ -64,9 +69,8 @@ public class EmployeeController {
     public ModelAndView showUpdateEmployeeForm(@RequestParam Long employeeId) {
         ModelAndView model = new ModelAndView("add-employee-form");
         model.addObject("username", userService.findUserByUsername().getFullname());
-        Employee employee = employeeRepo.findById(employeeId).get();
         model.addObject("departmentList", departmentService.findAll());
-        model.addObject("employee", employee);
+        model.addObject("employee", employeeRepo.findById(employeeId).get());
         return model;
     }
 
@@ -76,5 +80,19 @@ public class EmployeeController {
         getAllEmployees();
         return "redirect:/list-employees";
     }
+
+    @GetMapping({"/showEmployeeInfoForm"})
+    public ModelAndView showInfoForm(@RequestParam long id, String allert) {
+        ModelAndView model = new ModelAndView("info-employee-form");
+        Temp temp = new Temp();
+        model.addObject("employee", employeeService.findById(id).get());
+        model.addObject("username", userService.findUserByUsername().getFullname());
+        model.addObject("laptop", laptopService.findAllByEmployee_IdIs(id));
+        model.addObject("mobilePhone", phoneService.findAllByEmployee_IdIs(id));
+        model.addObject("computer", computerService.findAllByEmployee_IdIs(id));
+        return model;
+    }
+
+
 
 }

@@ -50,6 +50,18 @@ public class HardwareController {
 
     Temp temp = new Temp();
 
+
+    @GetMapping({"/showUserHardware"})
+    public String getHardwares(Model model) {
+
+        List<Computer> computerList = computerService.findAllByEmployee();
+        List<Laptop> laptopList = laptopService.findAllByEmployee();
+        List<MobilePhone>  mobilePhones = mobilePhoneService.findAllByEmployee();
+        model.addAttribute("computer", computerList);
+        model.addAttribute("laptop", laptopList);
+        model.addAttribute("mobilePhones", mobilePhones);
+        return "/showUserHardware";
+    }
     //--------------------LAPTOPS----------------------------------------
 //    @ResponseBody
 //    @GetMapping({"/list-laptops"})

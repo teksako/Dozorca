@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface MobilePhoneHistoryRepo extends JpaRepository<MobilePhoneHistory, Long> {
-List<MobilePhoneHistory> findAllByIMEI(String IMEI);
+List<MobilePhoneHistory> findAllByIMEIOrderByDateAsc(String IMEI);
 }

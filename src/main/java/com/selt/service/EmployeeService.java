@@ -1,13 +1,11 @@
 package com.selt.service;
 
-import com.selt.model.Department;
 import com.selt.model.Employee;
 import com.selt.repository.EmployeeRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,6 +57,10 @@ public class EmployeeService {
 
         employeeRepo.save(employee);
 
+    }
+
+    public Optional<Employee> findById(long id){
+        return employeeRepo.findById(id);
     }
 
 

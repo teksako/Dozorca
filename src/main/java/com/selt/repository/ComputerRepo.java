@@ -9,5 +9,6 @@ import java.util.List;
 @Repository
 public interface ComputerRepo extends JpaRepository<Computer, Long> {
 
+    List<Computer> findAllByEmployee_IdIs(long id);
     List<Computer> findAllByEmployee_LastnameIs(String employe);
 }

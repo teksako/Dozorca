@@ -142,6 +142,7 @@ public class SeltApplication implements CommandLineRunner {
         printerList9.add("M125nw");
         printerList9.add("137fnw");
         printerList9.add("P2015dn");
+        printerList9.add("LaserJet Pro MFP 4102fdw");
 
         final List<String> printerList10 = new ArrayList<>();//HP All
         printerList10.addAll(printerList9);

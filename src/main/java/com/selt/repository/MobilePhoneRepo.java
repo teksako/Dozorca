@@ -18,6 +18,9 @@ public interface MobilePhoneRepo extends JpaRepository<MobilePhone, Long> {
     List<MobilePhone> findAllByEmployee_FirstnameIsLike(String number);
     List<MobilePhone> findAllByEmployee_LastnameIsLike(String number);
     List<MobilePhone> findAllByEmployee_Department_NameOfDepartmentIsLike(String department);
+    List<MobilePhone> findAllByEmployee_LastnameIs(String name);
+    List<MobilePhone> findAllByEmployee_IdIs(long id);
+
 
 
 }

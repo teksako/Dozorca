@@ -1,11 +1,8 @@
 package com.selt.service;
 
 import com.selt.model.Computer;
-import com.selt.model.MobilePhone;
-import com.selt.model.Toner;
 import com.selt.repository.ComputerRepo;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +19,12 @@ public class ComputerService {
     public List<Computer> findAll() {
         return computerRepo.findAll();
     }
+    public List<Computer> findAllByEmployee_IdIs(long id){
+        return computerRepo.findAllByEmployee_IdIs(id);
+    }
 
     public List<Computer> findAllByEmployee() {
-        return computerRepo.findAllByEmployee_LastnameIs("Sobolewski");
+        return computerRepo.findAllByEmployee_LastnameIs("Kwapisiński");
     }
 
     public void save(Computer computer) {

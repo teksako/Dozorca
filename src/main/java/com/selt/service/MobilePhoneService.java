@@ -1,6 +1,8 @@
 package com.selt.service;
 
 import com.itextpdf.text.DocumentException;
+import com.selt.model.Computer;
+import com.selt.model.Laptop;
 import com.selt.model.MobilePhone;
 import com.selt.model.Temp;
 import com.selt.repository.MobilePhoneRepo;
@@ -33,6 +35,9 @@ public class MobilePhoneService {
         return mobilePhoneRepo.findById(id);
     }
 
+    public List<MobilePhone>findAllByEmployee_IdIs(long id){
+        return mobilePhoneRepo.findAllByEmployee_IdIs(id);
+    }
     public void releasePhone(Optional<MobilePhone> mobilePhone, Temp temp){
 
         DateTimeFormatter dtf1 = DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm");
@@ -140,4 +145,9 @@ public class MobilePhoneService {
         mobilePhoneRepo.delete(mobilePhone.get());
     }
 
+
+
+    public List<MobilePhone> findAllByEmployee() {
+        return mobilePhoneRepo.findAllByEmployee_LastnameIs("Kwapisiński");
+    }
 }

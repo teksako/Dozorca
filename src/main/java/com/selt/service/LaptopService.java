@@ -1,9 +1,11 @@
 package com.selt.service;
 
 import com.itextpdf.text.DocumentException;
+import com.selt.model.Computer;
+import com.selt.model.Employee;
 import com.selt.model.Laptop;
-import com.selt.model.MobilePhone;
 import com.selt.model.Temp;
+import com.selt.repository.EmployeeRepo;
 import com.selt.repository.LaptopRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ public class LaptopService {
     private final LaptopRepo laptopRepo;
     private final LaptopHistoryService laptopHistoryService;
     private final UserService userService;
+    private final EmployeeRepo employeeRepo;
 
     public void save(Laptop laptop) {
         if(laptop.getDemage()==null){
@@ -41,6 +44,10 @@ public class LaptopService {
             laptop.setHasUser(false);
         }
         laptopRepo.save(laptop);
+    }
+
+    public List<Laptop>findAllByEmployee_IdIs( long id){
+        return laptopRepo.findAllByEmployee_IdIs(id);
     }
 
     public List<Laptop> search(String matter){
@@ -153,7 +160,15 @@ public class LaptopService {
         }
     }
 
+//public Optional<Employee> findAllByEmployee(Employee employee){
+//
+//return employeeRepo.findById(employee.getId());
+//}
 
+
+    public List<Laptop> findAllByEmployee() {
+        return laptopRepo.findAllByEmployee_LastnameIsLike("Kwapisiński");
+    }
 
     public void getLaptop(Optional<Laptop> laptop, Temp temp){
 
