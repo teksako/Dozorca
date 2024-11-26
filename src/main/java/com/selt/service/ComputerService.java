@@ -15,6 +15,7 @@ public class ComputerService {
 
     @Autowired
     private final ComputerRepo computerRepo;
+    private final WakeOnLan wakeOnLan;
 
     public List<Computer> findAll() {
         return computerRepo.findAll();
@@ -37,9 +38,18 @@ public class ComputerService {
     }
 
     public void update(Computer computer) {
-        Optional<Computer> computer1 = computerRepo.findById(computer.getId());
+        Optional<Computer> computer1 = findById(computer.getId());
         computer1.get().setIPAdress(computer.getIPAdress());
         computerRepo.save(computer1.get());
+
+    }
+
+    public Optional<Computer> findById(long id){
+        return computerRepo.findById(id);
+    }
+
+    public void wakeUp(long id){
+        wakeOnLan.sentPacket("192.168.0.255",findById(id).get().getMACAdress());
 
     }
 }

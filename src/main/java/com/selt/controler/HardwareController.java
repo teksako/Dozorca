@@ -309,6 +309,14 @@ public class HardwareController {
         return "redirect:/list-phones";
     }
 
+    @GetMapping({"/wakeUp/{id}"})
+    public String wakeUp(@PathVariable(value = "id") long id) {
+        computerService.wakeUp(id);
+        //getAllComputers();
+        return "redirect:/list-phones";
+    }
+
+
 
     @PostMapping({"/addComputer"})
     public String saveComputer(@ModelAttribute("computer") Computer computer) {

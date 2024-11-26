@@ -45,7 +45,8 @@
             <tbody>
             <tr th:each="key : ${computerList}" style="text-align: center; ">
                 <td th:text="${key.id}"></td>
-                <td><a th:text="${key.getEmployee()?.firstname}"></a> <a th:text="${key.getEmployee()?.lastname}"></a></td>
+                <td><a th:text="${key.getEmployee()?.firstname}"></a> <a th:text="${key.getEmployee()?.lastname}"></a>
+                </td>
                 <td th:text="${key.inventoryNumber}"></td>
                 <td th:text="${key.manufacturer}"></td>
                 <td th:text="${key.model}"></td>
@@ -56,12 +57,15 @@
                 <td th:text="${key.IPAdress}"></td>
                 <td th:text="${key.hostname}"></td>
                 <div class="navbar-nav" sec:authorize="hasAuthority('ADMIN')">
-                <td><a th:href="@{/deleteComputer/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
-                <td>
-                    <a th:href="@{/showUpdateForm(computerId=${key.id})}" class="btn btn-success">Update</a></td>
-                <td>
-                    <a th:href="@{/showInfoForm(id=${key.id})}" class="btn btn-info">Info</a>
-                </td>
+                    <td><a th:href="@{/deleteComputer/{id}(id=${key.id})}" class="btn btn-danger">Usuń</a></td>
+                    <td>
+                        <a th:href="@{/showUpdateForm/{id}(computerId=${key.id})}" class="btn btn-success">Update</a></td>
+                    <td>
+                        <a th:href="@{/showInfoForm/{id}(id=${key.id})}" class="btn btn-info">Info</a>
+                    </td>
+                    <td>
+                        <a th:href="@{/wakeUp/{id}(id=${key.id})}" class="btn btn-info">Włącz</a>
+                    </td>
                 </div>
             </tr>
             </tbody>
