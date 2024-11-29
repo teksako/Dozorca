@@ -20,6 +20,7 @@ public class MagazineController {
     private final UserService userService;
     private final HardwareController hardwareController;
     private final RaportService raportService;
+    private final PrinterController printerController;
 
 
     @GetMapping({"/Magazine"})
@@ -74,7 +75,7 @@ public class MagazineController {
 
         }
 
-        return hardwareController.showInfoForm(printerId, allert);
+        return printerController.showInfoForm(printerId, allert);
 
     }
 

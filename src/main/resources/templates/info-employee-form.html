@@ -8,15 +8,28 @@
 <!--HEADER-->
 <div th:replace="navbar :: navbar"></div>
 
-
-
-<img th:src="@{src/main/resources/images/photo}" alt="photo">
-
+<div>
+    <p><a th:text="${employee.getFirstname()}"></a> <a
+            th:text="${employee.getLastname()}"></a></p>
+    <p th:text="${employee.getWorkplace()}"></p>
+</div>
 <table border="1" class="table table-striped table-responsive-md">
+    <thead>
+    <tr style="text-align: center; ">
+        <th>Producent</th>
+        <th>Model</th>
+        <th>IMEI</th>
+        <th>IMEI2</th>
+        <th>Numer seryjny</th>
+        <th>Numer tel.</th>
+        <th>Numer SIM</th>
+
+    </tr>
+    </thead>
     <tbody>
-    <tr th:each="phone : ${mobilePhone}">
-        <td th:text="${phone.model}"></td>
+    <tr th:each="phone : ${mobilePhone}" style="text-align: center; ">
         <td th:text="${phone.mark}"></td>
+        <td th:text="${phone.model}"></td>
         <td th:text="${phone.IMEI}"></td>
         <td th:text="${phone.IMEI2}"></td>
         <td th:text="${phone.serialNumber}"></td>
@@ -36,7 +49,18 @@
 
 <table border="1" class="table table-striped table-responsive-md">
     <tbody>
-    <tr th:each="laptop : ${laptop}">
+    <thead>
+    <tr style="text-align: center; ">
+        <th>Producent</th>
+        <th>Model</th>
+        <th>Numer seryjny</th>
+        <th>Numer inw.</th>
+        <th>Hostname</th>
+
+
+    </tr>
+    </thead>
+    <tr th:each="laptop : ${laptop}" style="text-align: center; ">
 
         <td th:text="${laptop.manufacturer}"></td>
         <td th:text="${laptop.model}"></td>
@@ -70,8 +94,6 @@
     </tr>
     </tbody>
 </table>
-
-
 
 
 </body>

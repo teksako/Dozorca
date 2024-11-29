@@ -51,279 +51,268 @@ public class HardwareController {
     Temp temp = new Temp();
 
 
-    @GetMapping({"/showUserHardware"})
-    public String getHardwares(Model model) {
-
-        List<Computer> computerList = computerService.findAllByEmployee();
-        List<Laptop> laptopList = laptopService.findAllByEmployee();
-        List<MobilePhone>  mobilePhones = mobilePhoneService.findAllByEmployee();
-        model.addAttribute("computer", computerList);
-        model.addAttribute("laptop", laptopList);
-        model.addAttribute("mobilePhones", mobilePhones);
-        return "/showUserHardware";
-    }
-    //--------------------LAPTOPS----------------------------------------
-//    @ResponseBody
-//    @GetMapping({"/list-laptops"})
-//    public List<Laptop> getAllLaptops() {
-//        return laptopService.findAll();
+//    @GetMapping({"/showUserHardware"})
+//    public String getHardwares(Model model) {
+//
+//        List<Computer> computerList = computerService.findAllByEmployee();
+//        List<Laptop> laptopList = laptopService.findAllByEmployee();
+//        List<MobilePhone>  mobilePhones = mobilePhoneService.findAllByEmployee();
+//        model.addAttribute("computer", computerList);
+//        model.addAttribute("laptop", laptopList);
+//        model.addAttribute("mobilePhones", mobilePhones);
+//        return "/showUserHardware";
 //    }
-
-    @GetMapping({"/addLaptopForm"})
-    public ModelAndView addLaptopForm() {
-        ModelAndView model = new ModelAndView("add-laptop-form");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("officeKeyList", officeService.findAll());
-        model.addObject("laptop", new Laptop());
-        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
-        return model;
-    }
-
-    @GetMapping({"/list-laptops"})
-    public ModelAndView getAllLaptops() {
-        ModelAndView model = new ModelAndView("list-laptops");
-        model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("laptopList", laptopService.findAll());
-        return model;
-    }
-
-    @GetMapping({"/showUpdateLaptopForm"})
-    public ModelAndView showUpdateLaptopForm(@RequestParam Long laptopId) {
-        ModelAndView model = new ModelAndView("add-laptop-form");
-        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("laptop", laptopService.getLaptopRepo().findById(laptopId).get());
-        model.addObject("officeKeys", officeService.findAll());
-        return model;
-    }
+    //--------------------LAPTOPS----------------------------------------
 
 
-    @PostMapping({"/saveLaptop"})
-    public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
-
-//        Office office = laptop.getOfficeKey();
-//        System.out.println(office);
-//        if (office.getHasBeenUse().equals(false)) {
-//            office.setHasBeenUse(true);
-//            officeService.save(office);
+//    @GetMapping({"/addLaptopForm"})
+//    public ModelAndView addLaptopForm() {
+//        ModelAndView model = new ModelAndView("add-laptop-form");
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("officeKeyList", officeService.findAll());
+//        model.addObject("laptop", new Laptop());
+//        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
+//        return model;
+//    }
+//
+//    @GetMapping({"/list-laptops"})
+//    public ModelAndView getAllLaptops() {
+//        ModelAndView model = new ModelAndView("list-laptops");
+//        model.addObject("temp", new Temp());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("laptopList", laptopService.findAll());
+//        return model;
+//    }
+//
+//    @GetMapping({"/showUpdateLaptopForm"})
+//    public ModelAndView showUpdateLaptopForm(@RequestParam Long laptopId) {
+//        ModelAndView model = new ModelAndView("add-laptop-form");
+//        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("laptop", laptopService.getLaptopRepo().findById(laptopId).get());
+//        model.addObject("officeKeys", officeService.findAll());
+//        return model;
+//    }
+//
+//
+//    @PostMapping({"/saveLaptop"})
+//    public String saveLaptop(@ModelAttribute("laptop") Laptop laptop) {
+//
+//        laptopService.save(laptop);
+//        return "redirect:/showUpdateLaptopForm?laptopId=" + laptop.getId();
+//    }
+//
+//    @PostMapping({"/list-laptops"})
+//    public void searchLaptops(@ModelAttribute("temp") Temp temp, Model model) {
+//        String mattern = '%' + temp.getTempString() + '%';
+//        model.addAttribute("laptopList", laptopService.search(mattern));
+//        model.addAttribute("username", userService.findUserByUsername().getFullname());
+//        getAllPhones("Znaleziono wyniki!");
+//    }
+//
+//    @GetMapping({"/deleteLaptop/{id}"})
+//    public String deleteLaptop(@PathVariable(value = "id") long id) {
+//        laptopService.delete(id);
+//        getAllLaptops();
+//        return "redirect:/list-laptops";
+//    }
+//
+//
+//    @GetMapping({"/showLaptopInfoForm"})
+//    public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
+//        ModelAndView model = new ModelAndView("info-laptop-form");
+//        model.addObject("temp", new Temp());
+//        temp.setNotice("Laptop wraz z ładowarką.");
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("laptop", laptopService.findById(id).get());
+//        model.addObject("allert", allert);
+//        model.addObject("laptopHistoryList", laptopHistoryservice.findAllBySerialNumber(laptopService.findById(id).get().getSerialNumber()));
+//        model.addObject("temp", temp);
+//        return model;
+//    }
+//
+//
+//
+//    @GetMapping(value = "/openLaptopPDF/{id}")
+//    public ResponseEntity<InputStreamResource> openLaptopPDF(@PathVariable(value = "id") long id) throws FileNotFoundException {
+//
+//
+//        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+//        Optional<LaptopHistory> laptopHistory = laptopHistoryservice.findById(id);
+//        String filePath ="src/main/resources/Protocol/Laptop/";
+//        String fileName = laptopHistory.get().getProtocolName() + ".pdf";
+//        File file = new File(filePath + fileName);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("content-disposition", "inline;filename=" + fileName);
+//
+//        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .contentLength(file.length())
+//                .contentType(MediaType.parseMediaType("application/pdf"))
+//                .body(resource);
+//    }
+//
+//    @ExceptionHandler(Throwable.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public String exception2(final Throwable throwable, final Model model) {
+//        //logger.error("Exception during execution of SpringSecurity application", throwable);
+//        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
+//        model.addAttribute("error", errorMessage);
+//        return "error";
+//    }
+//
+//
+//
+//    @PostMapping({"/actionLaptop/{id}"})
+//    public String actionLaptop(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
+//
+//        Optional<Laptop> laptop = laptopService.findById(id);
+//
+//        temp.setTempBoolen(false);
+//        String message = null;
+//       try {
+//            if (laptop.get().getHasUser().equals(true)) {
+//                laptopService.getLaptop(laptop, temp);
+//
+//            } else {
+//                laptopService.releaseLaptop(laptop, temp);
+//
+//            }
+//       } catch (Exception e) {
+//            System.out.println(e);
+//       }
+//
+//        return "redirect:/showLaptopInfoForm?id=" + id;
+//    }
+//
+//
+//    @GetMapping({"/releaseLaptop/{id}"})
+//    public String releaseLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//
+//        Optional<Laptop> laptop = laptopService.findById(id);
+//        String message = null;
+//        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+//        temp.setTempString1("Odbierający");
+//        temp.setTempString2("Przekazujący");
+//        //temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+//        temp.setTempString3("");
+//        temp.setNotice("Laptop wraz z ładowarką, torba oraz myszką bezprzewodową.");
+//        temp.setDate(String.valueOf(LocalDate.now()));
+//        try {
+//
+//
+//            if (laptop.get().getEmployee() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+//                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//                laptopHistoryservice.save(laptop.get(), "WYDANIE", pdfName, LocalDate.now());
+//                laptop.get().setHasUser(true);
+//                laptopService.save(laptop.get());
+//                message = "Wydałeś telefon !";
+//
+//            }
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//
+//
 //        }
-//        System.out.println(office);
-        laptopService.save(laptop);
-        return "redirect:/showUpdateLaptopForm?laptopId=" + laptop.getId();
-    }
-
-    @PostMapping({"/list-laptops"})
-    public void searchLaptops(@ModelAttribute("temp") Temp temp, Model model) {
-        String mattern = '%' + temp.getTempString() + '%';
-        model.addAttribute("laptopList", laptopService.search(mattern));
-        model.addAttribute("username", userService.findUserByUsername().getFullname());
-        getAllPhones("Znaleziono wyniki!");
-    }
-
-    @GetMapping({"/deleteLaptop/{id}"})
-    public String deleteLaptop(@PathVariable(value = "id") long id) {
-        laptopService.delete(id);
-        getAllLaptops();
-        return "redirect:/list-laptops";
-    }
-
-
-    @GetMapping({"/showLaptopInfoForm"})
-    public ModelAndView showLaptopInfoForm(@RequestParam long id, String allert) {
-        ModelAndView model = new ModelAndView("info-laptop-form");
-        model.addObject("temp", new Temp());
-        temp.setNotice("Laptop wraz z ładowarką.");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("laptop", laptopService.findById(id).get());
-        model.addObject("allert", allert);
-        model.addObject("laptopHistoryList", laptopHistoryservice.findAllBySerialNumber(laptopService.findById(id).get().getSerialNumber()));
-        model.addObject("temp", temp);
-        return model;
-    }
-
-
-
-    @GetMapping(value = "/openLaptopPDF/{id}")
-    public ResponseEntity<InputStreamResource> openLaptopPDF(@PathVariable(value = "id") long id) throws FileNotFoundException {
-
-
-        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
-        Optional<LaptopHistory> laptopHistory = laptopHistoryservice.findById(id);
-        String filePath ="src/main/resources/Protocol/Laptop/";
-        String fileName = laptopHistory.get().getProtocolName() + ".pdf";
-        File file = new File(filePath + fileName);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content-disposition", "inline;filename=" + fileName);
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/pdf"))
-                .body(resource);
-    }
-
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String exception2(final Throwable throwable, final Model model) {
-        //logger.error("Exception during execution of SpringSecurity application", throwable);
-        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
-        model.addAttribute("error", errorMessage);
-        return "error";
-    }
-
-
-
-    @PostMapping({"/actionLaptop/{id}"})
-    public String actionLaptop(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
-
-        Optional<Laptop> laptop = laptopService.findById(id);
-
-        temp.setTempBoolen(false);
-        String message = null;
-       try {
-            if (laptop.get().getHasUser().equals(true)) {
-                laptopService.getLaptop(laptop, temp);
-
-            } else {
-                laptopService.releaseLaptop(laptop, temp);
-
-            }
-       } catch (Exception e) {
-            System.out.println(e);
-       }
-
-        return "redirect:/showLaptopInfoForm?id=" + id;
-    }
-
-
-    @GetMapping({"/releaseLaptop/{id}"})
-    public String releaseLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-
-        Optional<Laptop> laptop = laptopService.findById(id);
-        String message = null;
-        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
-        temp.setTempString1("Odbierający");
-        temp.setTempString2("Przekazujący");
-        //temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
-        temp.setTempString3("");
-        temp.setNotice("Laptop wraz z ładowarką, torba oraz myszką bezprzewodową.");
-        temp.setDate(String.valueOf(LocalDate.now()));
-        try {
-
-
-            if (laptop.get().getEmployee() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
-                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-                laptopHistoryservice.save(laptop.get(), "WYDANIE", pdfName, LocalDate.now());
-                laptop.get().setHasUser(true);
-                laptopService.save(laptop.get());
-                message = "Wydałeś telefon !";
-
-            }
-
-        } catch (StackOverflowError e) {
-            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-
-
-        }
-
-        return "redirect:/showLaptopInfoForm?id=" + id;
-    }
-
-    @GetMapping({"/getLaptop/{id}"})
-    public String getLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-        Optional<Laptop> laptop = laptopService.findById(id);
-        String message = null;
-        temp.setTempString("PROTOKÓŁ ZDANIA");
-        temp.setTempString1("Przekazujący");
-        temp.setTempString2("Odbierający");
-        temp.setTempString3("");
-        temp.setNotice("Laptop wraz z ładowarką.");
-        temp.setDate(String.valueOf(LocalDate.now()));
-        try {
-
-
-            if (laptop.get().getEmployee() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
-                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-
-                laptopHistoryservice.save(laptop.get(), "ZDANIE", pdfName, LocalDate.now());
-                laptop.get().setHasUser(false);
-                laptop.get().setEmployee(null);
-                saveLaptop(laptop.get());
-            }
-
-
-        } catch (StackOverflowError e) {
-            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-        }
-
-        return "redirect:/showLaptopInfoForm?id=" + id;
-    }
+//
+//        return "redirect:/showLaptopInfoForm?id=" + id;
+//    }
+//
+//    @GetMapping({"/getLaptop/{id}"})
+//    public String getLaptop(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//        Optional<Laptop> laptop = laptopService.findById(id);
+//        String message = null;
+//        temp.setTempString("PROTOKÓŁ ZDANIA");
+//        temp.setTempString1("Przekazujący");
+//        temp.setTempString2("Odbierający");
+//        temp.setTempString3("");
+//        temp.setNotice("Laptop wraz z ładowarką.");
+//        temp.setDate(String.valueOf(LocalDate.now()));
+//        try {
+//
+//
+//            if (laptop.get().getEmployee() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+//                ByteArrayInputStream bis = ExportPDF.laptopProtocol(laptop.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//
+//                laptopHistoryservice.save(laptop.get(), "ZDANIE", pdfName, LocalDate.now());
+//                laptop.get().setHasUser(false);
+//                laptop.get().setEmployee(null);
+//                saveLaptop(laptop.get());
+//            }
+//
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//        }
+//
+//        return "redirect:/showLaptopInfoForm?id=" + id;
+//    }
 
 
     //----------------END LAPTOPS-----------------------------------------
     //-------------------COMPUTER---------------------------------------------
-    @GetMapping({"/addComputerForm"})
-    public ModelAndView addComputerForm() {
-        ModelAndView model = new ModelAndView("add-computer-form");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("officeKeyList", officeService.findAll());
-        model.addObject("computer", new Computer());
-        model.addObject("employeesList", employeeService.findAll());
-        return model;
-    }
-
-    @GetMapping({"/showUpdateComputerForm"})
-    public ModelAndView showUpdateComputerForm(@RequestParam Long computerId) {
-        ModelAndView model = new ModelAndView("add-computer-form");
-        model.addObject("employeesList", employeeService.findAll());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("computer", computerService.getComputerRepo().findById(computerId).get());
-        return model;
-    }
-
-
-    @PostMapping({"/saveComputer"})
-    public String savecomputer(@ModelAttribute("computer") Computer computer) {
-        computerService.save(computer);
-        return "redirect:/list-computers";
-    }
-
-    @GetMapping({"list-computers"})
-    public ModelAndView getAllComputers() {
-        ModelAndView model = new ModelAndView("list-computers");
-        model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("computerList", computerService.findAll());
-        return model;
-    }
-
-    @GetMapping({"/deleteComputer/{id}"})
-    public String deleteComputer(@PathVariable(value = "id") long id) {
-        computerService.delete(id);
-        getAllComputers();
-        return "redirect:/list-phones";
-    }
-
-    @GetMapping({"/wakeUp/{id}"})
-    public String wakeUp(@PathVariable(value = "id") long id) {
-        computerService.wakeUp(id);
-        //getAllComputers();
-        return "redirect:/list-phones";
-    }
-
-
-
-    @PostMapping({"/addComputer"})
-    public String saveComputer(@ModelAttribute("computer") Computer computer) {
-
-        computerService.save(computer);
-        return "/index";
-    }
+//    @GetMapping({"/addComputerForm"})
+//    public ModelAndView addComputerForm() {
+//        ModelAndView model = new ModelAndView("add-computer-form");
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("officeKeyList", officeService.findAll());
+//        model.addObject("computer", new Computer());
+//        model.addObject("employeesList", employeeService.findAll());
+//        return model;
+//    }
+//
+//    @GetMapping({"/showUpdateComputerForm"})
+//    public ModelAndView showUpdateComputerForm(@RequestParam Long computerId) {
+//        ModelAndView model = new ModelAndView("add-computer-form");
+//        model.addObject("employeesList", employeeService.findAll());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("computer", computerService.getComputerRepo().findById(computerId).get());
+//        return model;
+//    }
+//
+//
+//    @PostMapping({"/saveComputer"})
+//    public String savecomputer(@ModelAttribute("computer") Computer computer) {
+//        computerService.save(computer);
+//        return "redirect:/list-computers";
+//    }
+//
+//    @GetMapping({"list-computers"})
+//    public ModelAndView getAllComputers() {
+//        ModelAndView model = new ModelAndView("list-computers");
+//        model.addObject("temp", new Temp());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("computerList", computerService.findAll());
+//        return model;
+//    }
+//
+//    @GetMapping({"/deleteComputer/{id}"})
+//    public String deleteComputer(@PathVariable(value = "id") long id) {
+//        computerService.delete(id);
+//        getAllComputers();
+//        return "redirect:/list-computers";
+//    }
+//
+//    @GetMapping({"/wakeUp/{id}"})
+//    public String wakeUp(@PathVariable(value = "id") long id) {
+//        computerService.wakeUp(id);
+//        //getAllComputers();
+//        return "redirect:/list-computers";
+//    }
+//
+//
+//
+//    @PostMapping({"/addComputer"})
+//    public String saveComputer(@ModelAttribute("computer") Computer computer) {
+//
+//        computerService.save(computer);
+//        return "/index";
+//    }
 //-------------------END COMPUTER------------------------------------
 
 //    @GetMapping({"/showUserHardware"})
@@ -344,315 +333,315 @@ public class HardwareController {
     }
 
     //-------------------------PRINTERS----------------------------------
-    @GetMapping({"list-printers"})
-    public ModelAndView getAllPrinters() {
-        ModelAndView model = new ModelAndView("list-printers");
-        model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printerList", printerService.findAll());
-        return model;
-    }
-
-
-    @GetMapping({"/showInfoForm"})
-    public ModelAndView showInfoForm(@RequestParam long id, String allert) {
-        ModelAndView model = new ModelAndView("info-printer-form");
-        Temp temp = new Temp();
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
-        model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
-        model.addObject("counter", counterService.getActualCounter(id));
-        model.addObject("printerId", id);
-        model.addObject("temp", temp);
-        model.addObject("tonerList", printerService.findAlltoner(id));
-        model.addObject("allert", allert);
-        model.addObject("serviceCounter", printerService.validateServiceCounter(id));
-        return model;
-    }
-
-    @GetMapping("/resetCounter")
-    public ModelAndView reset(@RequestParam Long printerId) {
-
-        printerService.resetServiceCounter(printerId);
-        String allert = "Wyzerowano licznik!";
-        return showInfoForm(printerId, allert);
-
-    }
-
-
-    @GetMapping({"/addPrinterForm"})
-    public ModelAndView addPrinterForm() {
-        ModelAndView model = new ModelAndView("add-printers-form");
-        Printer printer = new Printer();
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printer", printer);
-        List<Department> departmentList = departmentService.findAll();
-        List<OID> oidList = oidRepo.findAll();
-        List<Toner> tonerList = tonerService.findAll();
-        model.addObject("oidlist", oidList);
-        model.addObject("toners", tonerList);
-        model.addObject("departments", departmentList);
-
-        return model;
-
-    }
-
-    @PostMapping({"/savePrinter"})
-    public String savePrinter(@ModelAttribute Printer printer) {
-        printerService.save(printer);
-        return "redirect:/list-printers";
-    }
-
-    @GetMapping({"/deletePrinter/{id}"})
-    public String deletePrinter(@PathVariable(value = "id") long id) {
-        printerService.deletePrinter(id);
-        getAllPrinters();
-        return "redirect:/list-printers";
-    }
-
-
-    @PostMapping({"/list-printers"})
-    public void searchPrinters(@ModelAttribute("temp") Temp temp, Model model) {
-
-        List<Printer> printerList = null;
-        String mattern = '%' + temp.getTempString() + '%';
-
-        if (temp.getTempString() == null) {
-            if (printerList == null) {
-                model.addAttribute("allert", "Brak danych!");
-            }
-            printerList = printerService.findAll();
-
-        } else {
-            if (printerService.findAllByModelIsLike(mattern).size() != 0) {
-                printerList = printerService.findAllByModelIsLike(mattern);
-
-            } else if (printerRepo.findAllByManufacturerIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByManufacturerIsLike(mattern);
-            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
-            } else if (printerRepo.findAllByMACAdressIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByMACAdressIsLike(mattern);
-            } else if (printerRepo.findAllBySerialNumberIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllBySerialNumberIsLike(mattern);
-            } else if (printerRepo.findAllByUserIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByUserIsLike(mattern);
-            } else if (printerRepo.findAllByInventoryNumberIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByInventoryNumberIsLike(mattern);
-            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
-            } else if (printerRepo.findAllByTonerList_TonerNameIsLike(mattern).size() != 0) {
-                printerList = printerRepo.findAllByTonerList_TonerNameIsLike(mattern);
-            } else {
-                printerList = printerRepo.findAllByIPAdressIsLike(mattern);
-            }
-
-        }
-        model.addAttribute("printerList", printerList);
-        model.addAttribute("username", userService.findUserByUsername().getFullname());
-        getAllPrinters();
-
-    }
-
-    @GetMapping({"/showUpdateForm"})
-    public ModelAndView showUpdateForm(@RequestParam Long printerId) {
-        ModelAndView model = new ModelAndView("add-printers-form");
-        Printer printer = printerRepo.findById(printerId).get();
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("printer", printer);
-        model.addObject("oidlist", oidRepo.findAll());
-        model.addObject("toners", tonerService.findAll());
-        model.addObject("departments", departmentService.findAll());
-
-        return model;
-    }
+//    @GetMapping({"list-printers"})
+//    public ModelAndView getAllPrinters() {
+//        ModelAndView model = new ModelAndView("list-printers");
+//        model.addObject("temp", new Temp());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("printerList", printerService.findAll());
+//        return model;
+//    }
+//
+//
+//    @GetMapping({"/showInfoForm"})
+//    public ModelAndView showInfoForm(@RequestParam long id, String allert) {
+//        ModelAndView model = new ModelAndView("info-printer-form");
+//        Temp temp = new Temp();
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("printer", printerService.findById(id).get().getManufacturer() + " " + printerRepo.findById(id).get().getModel() + " w dziale " + printerRepo.findById(id).get().getDepartment().getNameOfDepartment());
+//        model.addObject("printerIP", printerService.findById(id).get().getIPAdress());
+//        model.addObject("counter", counterService.getActualCounter(id));
+//        model.addObject("printerId", id);
+//        model.addObject("temp", temp);
+//        model.addObject("tonerList", printerService.findAlltoner(id));
+//        model.addObject("allert", allert);
+//        model.addObject("serviceCounter", printerService.validateServiceCounter(id));
+//        return model;
+//    }
+//
+//    @GetMapping("/resetCounter")
+//    public ModelAndView reset(@RequestParam Long printerId) {
+//
+//        printerService.resetServiceCounter(printerId);
+//        String allert = "Wyzerowano licznik!";
+//        return showInfoForm(printerId, allert);
+//
+//    }
+//
+//
+//    @GetMapping({"/addPrinterForm"})
+//    public ModelAndView addPrinterForm() {
+//        ModelAndView model = new ModelAndView("add-printers-form");
+//        Printer printer = new Printer();
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("printer", printer);
+//        List<Department> departmentList = departmentService.findAll();
+//        List<OID> oidList = oidRepo.findAll();
+//        List<Toner> tonerList = tonerService.findAll();
+//        model.addObject("oidlist", oidList);
+//        model.addObject("toners", tonerList);
+//        model.addObject("departments", departmentList);
+//
+//        return model;
+//
+//    }
+//
+//    @PostMapping({"/savePrinter"})
+//    public String savePrinter(@ModelAttribute Printer printer) {
+//        printerService.save(printer);
+//        return "redirect:/list-printers";
+//    }
+//
+//    @GetMapping({"/deletePrinter/{id}"})
+//    public String deletePrinter(@PathVariable(value = "id") long id) {
+//        printerService.deletePrinter(id);
+//        getAllPrinters();
+//        return "redirect:/list-printers";
+//    }
+//
+//
+//    @PostMapping({"/list-printers"})
+//    public void searchPrinters(@ModelAttribute("temp") Temp temp, Model model) {
+//
+//        List<Printer> printerList = null;
+//        String mattern = '%' + temp.getTempString() + '%';
+//
+//        if (temp.getTempString() == null) {
+//            if (printerList == null) {
+//                model.addAttribute("allert", "Brak danych!");
+//            }
+//            printerList = printerService.findAll();
+//
+//        } else {
+//            if (printerService.findAllByModelIsLike(mattern).size() != 0) {
+//                printerList = printerService.findAllByModelIsLike(mattern);
+//
+//            } else if (printerRepo.findAllByManufacturerIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByManufacturerIsLike(mattern);
+//            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
+//            } else if (printerRepo.findAllByMACAdressIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByMACAdressIsLike(mattern);
+//            } else if (printerRepo.findAllBySerialNumberIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllBySerialNumberIsLike(mattern);
+//            } else if (printerRepo.findAllByUserIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByUserIsLike(mattern);
+//            } else if (printerRepo.findAllByInventoryNumberIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByInventoryNumberIsLike(mattern);
+//            } else if (printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByDepartment_NameOfDepartmentIsLike(mattern);
+//            } else if (printerRepo.findAllByTonerList_TonerNameIsLike(mattern).size() != 0) {
+//                printerList = printerRepo.findAllByTonerList_TonerNameIsLike(mattern);
+//            } else {
+//                printerList = printerRepo.findAllByIPAdressIsLike(mattern);
+//            }
+//
+//        }
+//        model.addAttribute("printerList", printerList);
+//        model.addAttribute("username", userService.findUserByUsername().getFullname());
+//        getAllPrinters();
+//
+//    }
+//
+//    @GetMapping({"/showUpdateForm"})
+//    public ModelAndView showUpdateForm(@RequestParam Long printerId) {
+//        ModelAndView model = new ModelAndView("add-printers-form");
+//        Printer printer = printerRepo.findById(printerId).get();
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("printer", printer);
+//        model.addObject("oidlist", oidRepo.findAll());
+//        model.addObject("toners", tonerService.findAll());
+//        model.addObject("departments", departmentService.findAll());
+//
+//        return model;
+//    }
 
 
     //---------------------------END PRINTERS--------------------------------------------------
 
     //--------------------------START MOBILEPHONE--------------------------------------
-    @GetMapping({"/list-phones"})
-    public ModelAndView getAllPhones(String message) {
-        ModelAndView model = new ModelAndView("list-phones");
-        model.addObject("temp", new Temp());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phonesList", mobilePhoneService.findAll());
-        model.addObject("message", message);
-
-        return model;
-    }
-
-    @PostMapping({"/savePhone"})
-    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
-        mobilePhoneService.save(mobilePhone);
-        return "redirect:/showUpdatePhoneForm?phoneId=" + mobilePhone.getId();
-    }
-
-    @GetMapping(value = "/openPDF/{id}")
-    public ResponseEntity<InputStreamResource> getTermsConditions(@PathVariable(value = "id") long id) throws FileNotFoundException {
-
-
-        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
-        String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
-        String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
-        File file = new File(filePath + fileName);
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("content-disposition", "inline;filename=" + fileName);
-
-        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .contentLength(file.length())
-                .contentType(MediaType.parseMediaType("application/pdf"))
-                .body(resource);
-    }
-
-    @ExceptionHandler(Throwable.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String exception(final Throwable throwable, final Model model) {
-        //logger.error("Exception during execution of SpringSecurity application", throwable);
-        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
-        model.addAttribute("error", errorMessage);
-        return "error";
-    }
-
-    @GetMapping({"/showPhoneInfoForm"})
-    public ModelAndView showPhoneInfoForm(@RequestParam long id) {
-        ModelAndView model = new ModelAndView("info-mobilePhone-form");
-        model.addObject("temp", new Temp());
-        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
-        model.addObject("phone", mobilePhoneService.findById(id).get());
-        model.addObject("temp", temp);
-
-        return model;
-    }
-
-    @PostMapping({"/list-phones"})
-    public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
-        String mattern = '%' + temp.getTempString() + '%';
-        model.addAttribute("phonesList", mobilePhoneService.search(mattern));
-        model.addAttribute("username", userService.findUserByUsername().getFullname());
-        getAllPhones("Znaleziono wyniki!");
-    }
-
-    @GetMapping({"/addPhoneForm"})
-    public ModelAndView addPhonePage() {
-        ModelAndView model = new ModelAndView("add-phone-form");
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phoneNumberList", phoneNumberService.findAll());
-        model.addObject("phone", new MobilePhone());
-        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
-        return model;
-    }
-
-    @GetMapping({"/showUpdatePhoneForm"})
-    public ModelAndView showUpdatePhoneForm(@RequestParam Long phoneId) {
-        ModelAndView model = new ModelAndView("add-phone-form");
-        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
-        model.addObject("username", userService.findUserByUsername().getFullname());
-        model.addObject("phoneNumberList", phoneNumberService.findByOrderByNumberAsc());
-        model.addObject("phone", phoneRepo.findById(phoneId).get());
-        return model;
-    }
-
-    @PostMapping({"/actionPhone/{id}"})
-    public String actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
-
-        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-        temp.setTempBoolen(false);
-        String message = null;
-        try {
-            if (mobilePhone.get().getHasUser().equals(true)) {
-                mobilePhoneService.getPhone(mobilePhone, temp);
-
-            } else {
-                mobilePhoneService.releasePhone(mobilePhone, temp);
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        return "redirect:/showPhoneInfoForm?id=" + id;
-    }
-
-
-    @GetMapping({"/releasePhone/{id}"})
-    public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-        String message = null;
-        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
-        temp.setTempString1("Odbierający");
-        temp.setTempString2("Przekazujący");
-        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
-        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
-        temp.setDate(String.valueOf(LocalDate.now()));
-        try {
-
-
-            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
-                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
-                mobilePhone.get().setHasUser(true);
-                mobilePhoneService.save(mobilePhone.get());
-                message = "Wydałeś telefon !";
-
-            }
-
-        } catch (StackOverflowError e) {
-            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-
-
-        }
-
-        return "redirect:/showPhoneInfoForm?id=" + id;
-    }
-
-    @GetMapping({"/getPhone/{id}"})
-    public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
-
-        String message = null;
-        temp.setTempString("PROTOKÓŁ ZDANIA");
-        temp.setTempString1("Przekazujący");
-        temp.setTempString2("Odbierający");
-        temp.setTempString3("");
-        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
-        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
-        temp.setDate(String.valueOf(LocalDate.now()));
-        try {
-
-
-            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
-                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
-                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
-
-                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
-                mobilePhone.get().setHasUser(false);
-                mobilePhone.get().setEmployee(null);
-                mobilePhone.get().setPhoneNumber(null);
-                savePhone(mobilePhone.get());
-
-            }
-
-
-        } catch (StackOverflowError e) {
-            message = "Nie udało się, wszystkie nazwy są już zajetę!";
-        }
-
-        return "redirect:/showPhoneInfoForm?id=" + id;
-    }
-
-
-    @GetMapping({"/deletePhone/{id}"})
-    public String deletePhone(@PathVariable(value = "id") long id) {
-        mobilePhoneService.deleteMobilePhone(id);
-        getAllPhones("udało sie!");
-        return "redirect:/list-phones";
-    }
+//    @GetMapping({"/list-phones"})
+//    public ModelAndView getAllPhones(String message) {
+//        ModelAndView model = new ModelAndView("list-phones");
+//        model.addObject("temp", new Temp());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("phonesList", mobilePhoneService.findAll());
+//        model.addObject("message", message);
+//
+//        return model;
+//    }
+//
+//    @PostMapping({"/savePhone"})
+//    public String savePhone(@ModelAttribute("phone") MobilePhone mobilePhone) {
+//        mobilePhoneService.save(mobilePhone);
+//        return "redirect:/showUpdatePhoneForm?phoneId=" + mobilePhone.getId();
+//    }
+//
+//    @GetMapping(value = "/openPDF/{id}")
+//    public ResponseEntity<InputStreamResource> getTermsConditions(@PathVariable(value = "id") long id) throws FileNotFoundException {
+//
+//
+//        Optional<MobilePhoneHistory> mobilePhoneHistory = mobilePhoneHistoryService.findById(id);
+//        String filePath = configService.findById().get().getFolderPath();//"src/main/resources/Protocol/";
+//        String fileName = mobilePhoneHistory.get().getProtocolName() + ".pdf";
+//        File file = new File(filePath + fileName);
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("content-disposition", "inline;filename=" + fileName);
+//
+//        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+//
+//        return ResponseEntity.ok()
+//                .headers(headers)
+//                .contentLength(file.length())
+//                .contentType(MediaType.parseMediaType("application/pdf"))
+//                .body(resource);
+//    }
+//
+//    @ExceptionHandler(Throwable.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public String exception(final Throwable throwable, final Model model) {
+//        //logger.error("Exception during execution of SpringSecurity application", throwable);
+//        String errorMessage = (throwable != null ? throwable.getMessage() : "Unknown error");
+//        model.addAttribute("error", errorMessage);
+//        return "error";
+//    }
+//
+//    @GetMapping({"/showPhoneInfoForm"})
+//    public ModelAndView showPhoneInfoForm(@RequestParam long id) {
+//        ModelAndView model = new ModelAndView("info-mobilePhone-form");
+//        model.addObject("temp", new Temp());
+//        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("historyList", mobilePhoneHistoryService.findAllByIMEI(mobilePhoneService.findById(id).get().getIMEI()));
+//        model.addObject("phone", mobilePhoneService.findById(id).get());
+//        model.addObject("temp", temp);
+//
+//        return model;
+//    }
+//
+//    @PostMapping({"/list-phones"})
+//    public void searchPhones(@ModelAttribute("temp") Temp temp, Model model) {
+//        String mattern = '%' + temp.getTempString() + '%';
+//        model.addAttribute("phonesList", mobilePhoneService.search(mattern));
+//        model.addAttribute("username", userService.findUserByUsername().getFullname());
+//        getAllPhones("Znaleziono wyniki!");
+//    }
+//
+//    @GetMapping({"/addPhoneForm"})
+//    public ModelAndView addPhonePage() {
+//        ModelAndView model = new ModelAndView("add-phone-form");
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("phoneNumberList", phoneNumberService.findAll());
+//        model.addObject("phone", new MobilePhone());
+//        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
+//        return model;
+//    }
+//
+//    @GetMapping({"/showUpdatePhoneForm"})
+//    public ModelAndView showUpdatePhoneForm(@RequestParam Long phoneId) {
+//        ModelAndView model = new ModelAndView("add-phone-form");
+//        model.addObject("employeesList", employeeService.findByOrderByLastnameAsc());
+//        model.addObject("username", userService.findUserByUsername().getFullname());
+//        model.addObject("phoneNumberList", phoneNumberService.findByOrderByNumberAsc());
+//        model.addObject("phone", phoneRepo.findById(phoneId).get());
+//        return model;
+//    }
+//
+//    @PostMapping({"/actionPhone/{id}"})
+//    public String actionPhone(@PathVariable(value = "id") long id, @ModelAttribute("temp") Temp temp) throws DocumentException, IOException {
+//
+//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+//        temp.setTempBoolen(false);
+//        String message = null;
+//        try {
+//            if (mobilePhone.get().getHasUser().equals(true)) {
+//                mobilePhoneService.getPhone(mobilePhone, temp);
+//
+//            } else {
+//                mobilePhoneService.releasePhone(mobilePhone, temp);
+//
+//            }
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+//
+//        return "redirect:/showPhoneInfoForm?id=" + id;
+//    }
+//
+//
+//    @GetMapping({"/releasePhone/{id}"})
+//    public String releasePhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+//        String message = null;
+//        temp.setTempString("PROTOKÓŁ PRZEKAZANIA");
+//        temp.setTempString1("Odbierający");
+//        temp.setTempString2("Przekazujący");
+//        temp.setTempString3("Zgodnie z polityką firmy, obowiązuje całkowity zakaz podłączania kont zewnętrznych o czym zostałem poinformowany.");
+//        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
+//        temp.setDate(String.valueOf(LocalDate.now()));
+//        try {
+//
+//
+//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//                mobilePhoneHistoryService.save(mobilePhone.get(), "WYDANIE", pdfName, LocalDate.now());
+//                mobilePhone.get().setHasUser(true);
+//                mobilePhoneService.save(mobilePhone.get());
+//                message = "Wydałeś telefon !";
+//
+//            }
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//
+//
+//        }
+//
+//        return "redirect:/showPhoneInfoForm?id=" + id;
+//    }
+//
+//    @GetMapping({"/getPhone/{id}"})
+//    public String getPhone(@PathVariable(value = "id") long id) throws DocumentException, IOException {
+//
+//        String message = null;
+//        temp.setTempString("PROTOKÓŁ ZDANIA");
+//        temp.setTempString1("Przekazujący");
+//        temp.setTempString2("Odbierający");
+//        temp.setTempString3("");
+//        Optional<MobilePhone> mobilePhone = mobilePhoneService.findById(id);
+//        temp.setNotice("Telefon wraz z ładowarką oraz oryginalnym opakowaniem.");
+//        temp.setDate(String.valueOf(LocalDate.now()));
+//        try {
+//
+//
+//            if (mobilePhone.get().getEmployee() != null && mobilePhone.get().getPhoneNumber() != null) {
+//                String pdfName = mobilePhoneHistoryService.validatePdfName(LocalDate.parse(temp.getDate()));
+//                ByteArrayInputStream bis = ExportPDF.protocol(mobilePhone.get(), userService.findUserByUsername().getFullname(), temp, pdfName);
+//
+//                mobilePhoneHistoryService.save(mobilePhone.get(), "ZDANIE", pdfName, LocalDate.now());
+//                mobilePhone.get().setHasUser(false);
+//                mobilePhone.get().setEmployee(null);
+//                mobilePhone.get().setPhoneNumber(null);
+//                savePhone(mobilePhone.get());
+//
+//            }
+//
+//
+//        } catch (StackOverflowError e) {
+//            message = "Nie udało się, wszystkie nazwy są już zajetę!";
+//        }
+//
+//        return "redirect:/showPhoneInfoForm?id=" + id;
+//    }
+//
+//
+//    @GetMapping({"/deletePhone/{id}"})
+//    public String deletePhone(@PathVariable(value = "id") long id) {
+//        mobilePhoneService.deleteMobilePhone(id);
+//        getAllPhones("udało sie!");
+//        return "redirect:/list-phones";
+//    }
 
 
 //-------------------------END MOBILEPHONE---------------------------------

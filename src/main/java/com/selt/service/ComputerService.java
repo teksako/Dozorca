@@ -24,9 +24,7 @@ public class ComputerService {
         return computerRepo.findAllByEmployee_IdIs(id);
     }
 
-    public List<Computer> findAllByEmployee() {
-        return computerRepo.findAllByEmployee_LastnameIs("Kwapisiński");
-    }
+
 
     public void save(Computer computer) {
         computerRepo.save(computer);
@@ -49,7 +47,7 @@ public class ComputerService {
     }
 
     public void wakeUp(long id){
-        wakeOnLan.sentPacket("192.168.0.255",findById(id).get().getMACAdress());
+        wakeOnLan.sentPacket("255.255.255.255",findById(id).get().getMACAdress());
 
     }
 }

@@ -160,15 +160,7 @@ public class LaptopService {
         }
     }
 
-//public Optional<Employee> findAllByEmployee(Employee employee){
-//
-//return employeeRepo.findById(employee.getId());
-//}
 
-
-    public List<Laptop> findAllByEmployee() {
-        return laptopRepo.findAllByEmployee_LastnameIsLike("Kwapisiński");
-    }
 
     public void getLaptop(Optional<Laptop> laptop, Temp temp){
 

@@ -147,7 +147,5 @@ public class MobilePhoneService {
 
 
 
-    public List<MobilePhone> findAllByEmployee() {
-        return mobilePhoneRepo.findAllByEmployee_LastnameIs("Kwapisiński");
-    }
+
 }

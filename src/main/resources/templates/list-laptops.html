@@ -47,9 +47,16 @@
 
             </tr>
             </thead>
-            <tbody>
-            <tr th:each="key : ${laptopList}" style="text-align: center; "
-                th:style="${key.getDemage()} == TRUE ? 'background: orange': 'background: green'">
+            <tbody th:each="key : ${laptopList}">
+
+
+                <div th:if="${key.getHasUser()==true}">
+            <tr  style="text-align: center; " th:style="${key.getDemage()} == TRUE ? 'background: orange': 'background: green'">
+                </div>
+                <div th:unless="${key.getHasUser()==true}">
+                    <tr  style="text-align: center; "  th:style="${key.getDemage()} == TRUE ? 'background: orange': 'background: #3498db'">
+                </div>
+
                 <td th:text="${key.id}"></td>
                 <td><a th:text="${key.getEmployee()?.firstname}"></a> <a th:text="${key.getEmployee()?.lastname}"></a>
                 </td>
